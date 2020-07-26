@@ -1,0 +1,8 @@
+*.zip
+.classpath
+.gradle/
+.project
+.settings/
+/stellics.jar
+bin/
+build/

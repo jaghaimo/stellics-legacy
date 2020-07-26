@@ -1,0 +1,10 @@
+{
+    "id":"stellics",
+    "name":"Stellar Logistics",
+    "version":"0.1.0",
+    "author": "Jaghaimo",
+    "description":"Courier and warehousing services for Starsector.",
+    "gameVersion":"0.9.1a",
+    "modPlugin":"stellics.StellicsModPlugin",
+    "jars":["stellics.jar"]
+}
