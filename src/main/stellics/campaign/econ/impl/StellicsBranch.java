@@ -2,13 +2,14 @@ package stellics.campaign.econ.impl;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
-import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
+import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 
-import java.util.List;
+import stellics.StorageService;
 
 public class StellicsBranch extends BaseIndustry {
+
+    private StorageService storageService;
 
     @Override
     public void apply() {
@@ -19,41 +20,64 @@ public class StellicsBranch extends BaseIndustry {
         demand(Commodities.FUEL, size - 1);
 
         if (!isFunctional()) {
+            demand.clear();
             supply.clear();
         }
     }
 
     @Override
-    public boolean canShutDown() {
-        return false;
+    public void notifyDisrupted() {
+        super.notifyDisrupted();
+
+        if (getStorageService().isFounding(market)) {
+            return;
+        }
+
+        if (getStorageService().remove(market)) {
+            writeMessage("Stellar Logistics Branch on %s has been disrupted and ceased its operations.", market.getName());
+        }
+    }
+
+    @Override
+    protected void disruptionFinished() {
+        super.disruptionFinished();
+
+        if (getStorageService().isFounding(market)) {
+            return;
+        }
+
+        if (getStorageService().add(market)) {
+            writeMessage("Stellar Logistics Branch on %s has resumed its operations.", market.getName());
+        }
     }
 
     @Override
     public void finishBuildingOrUpgrading() {
         super.finishBuildingOrUpgrading();
 
-        if (market.getSubmarket("STELLICS_STORAGE") == null) {
-            initializeStorage();
+        if (getStorageService().add(market)) {
+            writeMessage("Stellar Logistics Branch on %s is now open.", market.getName());
         }
     }
 
     @Override
-    public boolean showShutDown() {
-        return false;
+    public void notifyBeingRemoved(MarketAPI.MarketInteractionMode mode, boolean forUpgrade) {
+        super.notifyBeingRemoved(mode, forUpgrade);
+
+        if (getStorageService().remove(market)) {
+            writeMessage("Stellar Logistics Branch on %s has been closed.", market.getName());
+        }
     }
 
-    private void initializeStorage() {
-        SubmarketAPI stellicsStorage;
-        List<MarketAPI> marketCopy = Global.getSector().getEconomy().getMarketsCopy();
-
-        for (MarketAPI marketApi : marketCopy) {
-            stellicsStorage = marketApi.getSubmarket("STELLICS_STORAGE");
-            if (stellicsStorage != null) {
-                market.addSubmarket(stellicsStorage);
-                return;
-            }
+    private StorageService getStorageService() {
+        if (storageService == null) {
+            storageService = new StorageService();
         }
 
-        market.addSubmarket("STELLICS_STORAGE");
+        return storageService;
+    }
+
+    private void writeMessage(String message, String location) {
+        Global.getSector().getCampaignUI().addMessage(String.format(message, location));
     }
 }

@@ -54,5 +54,4 @@ dependencies {
 
     // Test only
     testCompile 'junit:junit:4.12'
-    testCompile 'com.google.truth:truth:0.30'
 }
