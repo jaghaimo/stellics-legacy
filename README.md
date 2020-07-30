@@ -23,6 +23,9 @@ The storage and handling fee is calculated on a PER DAY cost of 1 credit per 1 c
 All non-pirate markets of at least size 6 are seeded with Stellar Logistics Branches.
 When used with [Nexerelin](https://fractalsoftworks.com/forum/index.php?topic=9175.0) the storage is located on the Prism Freeport (if enabled in a playthrough).
 
+To add Stellar Logistics content to an existing game use [Console Commands](https://fractalsoftworks.com/forum/index.php?topic=4106.0) and run `stellicsAdd` (only once).
+To remove Stellar Logistics content from an existing game use the `stellicsRemove` command (then save, close, and disable the mod if desired).
+
 ## Available options
 
 The following options can be edited in the settings file ([stellics_settings.json](stellics_settings.json)):

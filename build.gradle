@@ -12,6 +12,11 @@ sourceSets.test.java.srcDir 'src/test'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
+task fetchDeps(type: Exec) {
+    description 'Fetch and install dependsOn before compilation.'
+    commandLine 'sh', 'util/fetch-deps.sh'
+}
+
 build {
     doLast {
         copy {
@@ -45,6 +50,7 @@ clean {
 
 // compile time dependencies for most mods
 dependencies {
+    compile files('../Console Commands/jars/lw_Console.jar')
     // everything in starsector main folder
     if (Os.isFamily(Os.FAMILY_WINDOWS)) {
         compile fileTree(dir: '../../starsector-core/', include: '*.jar')
