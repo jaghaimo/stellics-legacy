@@ -44,7 +44,7 @@ All third-party resources are listed below with their appropriate licenses.
 | Description    | Modifications           | License     | Link |
 | -------------- | ----------------------- | ----------- | ---- |
 | Industry image | Cropped and sharpened   | Free to use. Photo by Gustavo Juliette from Pexels. | [pexels.com](https://www.pexels.com/photo/two-person-talking-on-stage-set-up-2473446/) |
-| Storage image  | Adjusted to match style | Free for personal and commercial purpose with attribution. Icons made by [Freepik](http://www.freepik.com/) from [Flaticon](https://www.flaticon.com/i). | [flaticon.com](https://www.flaticon.com/free-icon/packages_2979704) |
+| Storage image  | Adjusted to match style | Free for personal and commercial purpose with attribution. Icons made by [bqlqn](https://www.flaticon.com/authors/bqlqn) from [Flaticon](https://www.flaticon.com/). | [flaticon.com](https://www.flaticon.com/free-icon/box_3037005) |
 
 ## Special Thanks
 
