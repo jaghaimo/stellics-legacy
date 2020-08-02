@@ -35,6 +35,10 @@ public class StorageService {
         return findFirst() != null;
     }
 
+    public boolean has(MarketAPI market) {
+        return market.hasSubmarket(Constants.STORAGE);
+    }
+
     public boolean isFounding(MarketAPI market) {
         String marketId = "";
 

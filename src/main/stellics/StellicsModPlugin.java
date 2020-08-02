@@ -94,7 +94,7 @@ public class StellicsModPlugin extends BaseModPlugin {
     }
 
     private void seedMarket(MarketAPI market, double seedProbability) {
-        if (seedProbability > Math.random()) {
+        if (seedProbability > Math.random() && !storageService.has(market)) {
             market.addIndustry(Constants.BRANCH);
             storageService.add(market);
         }
@@ -103,8 +103,12 @@ public class StellicsModPlugin extends BaseModPlugin {
     private void seedPrism(boolean seedPrism) {
         MarketAPI market = Global.getSector().getEconomy().getMarket("nex_prismFreeport");
 
+        if (market == null) {
+            return;
+        }
+
         // we have a Nexerelin game with Prism Freeport enabled, and we want to use it
-        if (market != null && seedPrism) {
+        if (seedPrism && !storageService.has(market)) {
             seedMarket(market, 1);
         }
     }
