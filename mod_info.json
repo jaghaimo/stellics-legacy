@@ -1,7 +1,7 @@
 {
     "id":"stellics",
     "name":"Stellar Logistics",
-    "version":"0.4.0",
+    "version":"0.5.0",
     "author": "Jaghaimo",
     "description":"Courier and warehousing services for Starsector.",
     "gameVersion":"0.9.1a",
