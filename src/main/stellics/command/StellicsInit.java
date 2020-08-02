@@ -5,7 +5,7 @@ import org.lazywizard.console.Console;
 
 import stellics.StellicsModPlugin;
 
-public class StellicsAdd implements BaseCommand {
+public class StellicsInit implements BaseCommand {
 
     public CommandResult runCommand(String args, CommandContext context) {
 

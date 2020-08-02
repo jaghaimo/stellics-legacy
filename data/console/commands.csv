@@ -1,3 +1,2 @@
 command,class,tags,syntax,help
-StellicsAdd,stellics.command.StellicsAdd,"campaign",stellicsadd,"Add Stellar Logistics content to an existing game."
-StellicsRemove,stellics.command.StellicsRemove,"campaign",stellicsremove,"Remove Stellar Logistics content from an existing game."
+StellicsInit,stellics.command.StellicsInit,"campaign",stellicsinit,"Add Stellar Logistics content to an existing game."
