@@ -6,6 +6,7 @@ import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 
 import stellics.StorageService;
+import stellics.campaign.intel.StellicsIntel;
 
 public class StellicsBranch extends BaseIndustry {
 
@@ -34,7 +35,7 @@ public class StellicsBranch extends BaseIndustry {
         }
 
         if (getStorageService().remove(market)) {
-            writeMessage("Stellar Logistics Branch on %s has been disrupted and ceased its operations.", market.getName());
+            queueIntel(StellicsIntel.Action.DISRUPT);
         }
     }
 
@@ -47,7 +48,7 @@ public class StellicsBranch extends BaseIndustry {
         }
 
         if (getStorageService().add(market)) {
-            writeMessage("Stellar Logistics Branch on %s has resumed its operations.", market.getName());
+            queueIntel(StellicsIntel.Action.RESUME);
         }
     }
 
@@ -56,7 +57,7 @@ public class StellicsBranch extends BaseIndustry {
         super.finishBuildingOrUpgrading();
 
         if (getStorageService().add(market)) {
-            writeMessage("Stellar Logistics Branch on %s is now open.", market.getName());
+            queueIntel(StellicsIntel.Action.OPEN);
         }
     }
 
@@ -65,7 +66,7 @@ public class StellicsBranch extends BaseIndustry {
         super.notifyBeingRemoved(mode, forUpgrade);
 
         if (getStorageService().remove(market)) {
-            writeMessage("Stellar Logistics Branch on %s has been closed.", market.getName());
+            queueIntel(StellicsIntel.Action.CLOSE);
         }
     }
 
@@ -77,7 +78,8 @@ public class StellicsBranch extends BaseIndustry {
         return storageService;
     }
 
-    private void writeMessage(String message, String location) {
-        Global.getSector().getCampaignUI().addMessage(String.format(message, location));
+    private void queueIntel(StellicsIntel.Action action) {
+        StellicsIntel intel = new StellicsIntel(market, action);
+        Global.getSector().getIntelManager().queueIntel(intel);
     }
 }
