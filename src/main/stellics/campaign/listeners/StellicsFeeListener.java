@@ -29,7 +29,7 @@ public class StellicsFeeListener implements EconomyTickListener {
             return;
         }
 
-        int tickFee = calculateSpaceUsed(stellicsStorage.getCargo()) * 30 / economyIterPerMonth;
+        int tickFee = calculateSpaceUsed(stellicsStorage.getCargo()) / economyIterPerMonth;
         updateCurrentReport(tickFee);
     }
 

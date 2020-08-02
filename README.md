@@ -9,22 +9,22 @@ The company behind it - titular Stellar Logistics - offers access to its courier
 Pay one-time access fee and enjoy unlimited access to your storage from any branch in the sector.
 Do note however that you will have to pay for the capacity of your storage as it is a paid-for service.
 
-Stellar Logistics Branch enables the Stellar Logistics Warehouse sub-market (storage) on the market (e.g. planet, station) it is built.player to use an unique storage.
+Stellar Logistics Branch enables the Stellar Logistics Warehouse sub-market (storage) on the market (e.g. planet, station) it is built.
 Actual storage is located on the market that build the first branch.
 Disrupting a branch will temporarily remove the market from the courier network.
 
 ## Fee calculation
 
-Stellar Logistics Warehouse Services are not meant for the poor as convenience cost appropriately.
-The storage and handling fee is calculated on a PER DAY cost of 1 credit per 1 cargo space.
+Stellar Logistics Warehouse Services, when not disrupted, offer full availability and accessibility.
+The storage and handling fee is is 1 credit per 1 cargo space (per month) as the company does not inquire about the contents of leased warehouses.
+As such it is the perfect service to store high-value cargo.
 
 ## Vanilla and Nexerelin integration
 
 All non-pirate markets of at least size 6 are seeded with Stellar Logistics Branches.
 When used with [Nexerelin](https://fractalsoftworks.com/forum/index.php?topic=9175.0) the storage is located on the Prism Freeport (if enabled in a playthrough).
 
-To add Stellar Logistics content to an existing game use [Console Commands](https://fractalsoftworks.com/forum/index.php?topic=4106.0) and run `stellicsAdd` (only once).
-To remove Stellar Logistics content from an existing game use the `stellicsRemove` command (then save, close, and disable the mod if desired).
+To add Stellar Logistics content to an existing game use [Console Commands](https://fractalsoftworks.com/forum/index.php?topic=4106.0) and run `stellicsInit`.
 
 ## Available options
 
