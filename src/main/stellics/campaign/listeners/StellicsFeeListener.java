@@ -14,6 +14,8 @@ import stellics.Constants;
 // This listener should be attached to the founding market only (market that build the first branch)
 public class StellicsFeeListener implements EconomyTickListener {
 
+    private int upkeep;
+
     private MarketAPI market;
 
     public StellicsFeeListener(MarketAPI marketApi) {
@@ -21,40 +23,53 @@ public class StellicsFeeListener implements EconomyTickListener {
     }
 
     public void reportEconomyTick(int iterIndex) {
-        int economyIterPerMonth = (int) Global.getSettings().getFloat("economyIterPerMonth");
-
         SubmarketAPI stellicsStorage = market.getSubmarket(Constants.STORAGE);
 
         if (stellicsStorage == null) {
             return;
         }
 
-        int tickFee = calculateSpaceUsed(stellicsStorage.getCargo()) / economyIterPerMonth;
-        updateCurrentReport(tickFee);
+        int spaceUsed = calculateSpaceUsed(stellicsStorage.getCargo());
+        updateUpkeep(spaceUsed);
+        updateCurrentReport(spaceUsed);
     }
 
     public void reportEconomyMonthEnd() {
+        upkeep = 0;
     }
 
     private int calculateSpaceUsed(CargoAPI cargo) {
-        int cargoSize = 0;
+        int cargoSpace = 0;
 
         for (CargoStackAPI stack : cargo.getStacksCopy()) {
-            cargoSize += stack.getCargoSpace();
+            cargoSpace += stack.getCargoSpace();
         }
 
-        return cargoSize;
+        return cargoSpace;
     }
 
-    private void updateCurrentReport(int tickFee) {
+    private void updateUpkeep(int spaceUsed) {
+        int currentUpkeep = 0;
+        int economyIterPerMonth = (int) Global.getSettings().getFloat("economyIterPerMonth");
+
+        // first 1000 costs 6 per unit, 1001-10000 costs 3 per unit, 10001+ costs 1 per unit
+        currentUpkeep += 3 * Math.min(spaceUsed, 1000);
+        currentUpkeep += 2 * Math.min(spaceUsed, 10000);
+        currentUpkeep += 1 * spaceUsed;
+
+        // divide by number of ticks per month
+        upkeep += currentUpkeep / economyIterPerMonth;
+    }
+
+    private void updateCurrentReport(int spaceUsed) {
         MonthlyReport report = SharedData.getData().getCurrentReport();
         MonthlyReport.FDNode coloniesNode = report.getNode(MonthlyReport.OUTPOSTS);
         MonthlyReport.FDNode stellicsNode = report.getNode(coloniesNode, "stellics_fee");
 
-        stellicsNode.name = "Stellar Logistics Warehouse (cargo)";
+        stellicsNode.name = "Stellar Logistics Warehouse (" + spaceUsed + " storage units)";
         stellicsNode.mapEntity = market.getPrimaryEntity();
         stellicsNode.icon = "graphics/icons/reports/generic_expense.png";
         stellicsNode.income = 0;
-        stellicsNode.upkeep += tickFee;
+        stellicsNode.upkeep = upkeep;
     }
 }

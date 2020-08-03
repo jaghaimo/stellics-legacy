@@ -16,8 +16,9 @@ Disrupting a branch will temporarily remove the market from the courier network.
 ## Fee calculation
 
 Stellar Logistics Warehouse Services, when not disrupted, offer full availability and accessibility.
-The storage and handling fee is is 1 credit per 1 cargo space (per month) as the company does not inquire about the contents of leased warehouses.
+The storage and handling fee depends on the size of the leased warehouse and not the value of stored cargo.
 As such it is the perfect service to store high-value cargo.
+Depending on the warehouse size the cost will vary between 1 and 6 credits per cargo hold per month.
 
 ## Vanilla and Nexerelin integration
 
