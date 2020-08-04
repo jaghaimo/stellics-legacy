@@ -12,10 +12,10 @@ import com.fs.starfarer.api.util.Misc;
 public class StellicsIntel extends MessageIntel {
 
     public enum Action {
-        OPEN("Branch is now open.", "open"),
+        OPEN("Branch has been opened.", "opened"),
         CLOSE("Branch has been closed.", "closed"),
-        DISRUPT("Branch has been disrupted as is no longer operational.", "disrupted"),
-        RESUME("Branch has resumed its operations.", "operations");
+        DISRUPT("Branch has been temporarily closed.", "temporarily closed"),
+        RESUME("Branch has been reopened.", "reopened");
 
         String message;
 
