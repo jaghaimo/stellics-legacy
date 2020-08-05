@@ -1,0 +1,25 @@
+* Thu Aug 09 2020 - 0.5.2
+- Make upkeep cost persistent across save/load
+- Replace vanilla storage tab with a custom one
+- Raise upkeep fee slighly (1 to 9 per unit)
+
+* Wed Aug 08 2020 - 0.5.1
+- Update Version Checker file with forum link for GA
+- Rebalance storage fee
+
+* Sun Aug 02 2020 - 0.5.0
+- Add proper intel update regarding Stellics Branch (open, closed, disrupted)
+- Remove broken Console command (stellicsRemove)
+
+* Thu Jul 30 2020 - 0.4.0
+- Add Console Commands support (add and remove content)
+
+* Tue Jul 28 2020 - 0.3.0
+- Reworked storage fee
+- Procgen for Vanilla and Nex
+
+* Mon Jul 27 2020 - 0.2.0
+- Initial storage fee
+
+* Sun Jul 26 2020 - 0.1.0
+- Very naive but working PoC

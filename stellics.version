@@ -1,12 +1,12 @@
 {
     "masterVersionFile":"https://raw.githubusercontent.com/jaghaimo/stellics/master/stellics.version",
     "modName":"Stellar Logistics",
-    "modThreadId":0,
+    "modThreadId":18948,
     "modVersion":
     {
         "major":0,
         "minor":5,
-        "patch":0
+        "patch":2
     }
 }
 
