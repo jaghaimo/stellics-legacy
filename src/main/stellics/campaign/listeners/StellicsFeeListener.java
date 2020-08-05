@@ -14,8 +14,6 @@ import stellics.Constants;
 // This listener should be attached to the founding market only (market that build the first branch)
 public class StellicsFeeListener implements EconomyTickListener {
 
-    private int upkeep;
-
     private MarketAPI market;
 
     public StellicsFeeListener(MarketAPI marketApi) {
@@ -30,12 +28,11 @@ public class StellicsFeeListener implements EconomyTickListener {
         }
 
         int spaceUsed = calculateSpaceUsed(stellicsStorage.getCargo());
-        updateUpkeep(spaceUsed);
-        updateCurrentReport(spaceUsed);
+        int upkeep = calculateUpkeep(spaceUsed);
+        updateCurrentReport(spaceUsed, upkeep);
     }
 
     public void reportEconomyMonthEnd() {
-        upkeep = 0;
     }
 
     private int calculateSpaceUsed(CargoAPI cargo) {
@@ -48,20 +45,20 @@ public class StellicsFeeListener implements EconomyTickListener {
         return cargoSpace;
     }
 
-    private void updateUpkeep(int spaceUsed) {
+    private int calculateUpkeep(int spaceUsed) {
         int currentUpkeep = 0;
         int economyIterPerMonth = (int) Global.getSettings().getFloat("economyIterPerMonth");
 
-        // first 1000 costs 6 per unit, 1001-10000 costs 3 per unit, 10001+ costs 1 per unit
-        currentUpkeep += 3 * Math.min(spaceUsed, 1000);
-        currentUpkeep += 2 * Math.min(spaceUsed, 10000);
+        // first 1000 costs 9 per unit, 1001-10000 costs 5 per unit, 10001+ costs 1 per unit
+        currentUpkeep += 4 * Math.min(spaceUsed, 1000);
+        currentUpkeep += 4 * Math.min(spaceUsed, 10000);
         currentUpkeep += 1 * spaceUsed;
 
         // divide by number of ticks per month
-        upkeep += currentUpkeep / economyIterPerMonth;
+        return currentUpkeep / economyIterPerMonth;
     }
 
-    private void updateCurrentReport(int spaceUsed) {
+    private void updateCurrentReport(int spaceUsed, int upkeep) {
         MonthlyReport report = SharedData.getData().getCurrentReport();
         MonthlyReport.FDNode coloniesNode = report.getNode(MonthlyReport.OUTPOSTS);
         MonthlyReport.FDNode stellicsNode = report.getNode(coloniesNode, "stellics_fee");
@@ -70,6 +67,6 @@ public class StellicsFeeListener implements EconomyTickListener {
         stellicsNode.mapEntity = market.getPrimaryEntity();
         stellicsNode.icon = "graphics/icons/reports/generic_expense.png";
         stellicsNode.income = 0;
-        stellicsNode.upkeep = upkeep;
+        stellicsNode.upkeep += upkeep;
     }
 }
