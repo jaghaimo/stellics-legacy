@@ -1,13 +1,13 @@
 package stellics.campaign.listeners;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CargoAPI;
-import com.fs.starfarer.api.campaign.CargoStackAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.MonthlyReport;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.impl.campaign.shared.SharedData;
+
+import org.lazywizard.lazylib.campaign.CargoUtils;
 
 import stellics.Constants;
 
@@ -27,22 +27,12 @@ public class StellicsFeeListener implements EconomyTickListener {
             return;
         }
 
-        int spaceUsed = calculateSpaceUsed(stellicsStorage.getCargo());
+        int spaceUsed = (int) CargoUtils.getSpaceTakenByCargo(stellicsStorage.getCargo());
         int upkeep = calculateUpkeep(spaceUsed);
         updateCurrentReport(spaceUsed, upkeep);
     }
 
     public void reportEconomyMonthEnd() {
-    }
-
-    private int calculateSpaceUsed(CargoAPI cargo) {
-        int cargoSpace = 0;
-
-        for (CargoStackAPI stack : cargo.getStacksCopy()) {
-            cargoSpace += stack.getCargoSpace();
-        }
-
-        return cargoSpace;
     }
 
     private int calculateUpkeep(int spaceUsed) {
@@ -63,7 +53,7 @@ public class StellicsFeeListener implements EconomyTickListener {
         MonthlyReport.FDNode coloniesNode = report.getNode(MonthlyReport.OUTPOSTS);
         MonthlyReport.FDNode stellicsNode = report.getNode(coloniesNode, "stellics_fee");
 
-        stellicsNode.name = "Stellar Logistics Warehouse (" + spaceUsed + " storage units)";
+        stellicsNode.name = "Stellar Logistics Warehouse (" + spaceUsed + " units)";
         stellicsNode.mapEntity = market.getPrimaryEntity();
         stellicsNode.icon = "graphics/icons/reports/generic_expense.png";
         stellicsNode.income = 0;
