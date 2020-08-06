@@ -1,9 +1,14 @@
-* Thu Aug 09 2020 - 0.5.2
+* Fri Aug 07 2020 - 0.6.0
+- Change default seeds to Indies (avoids affecting custom factions)
+- Add upper limit for submarkets (avoids market oversaturation)
+- Add new ability to find the nearest Stellar Logistics Branch
+
+* Thu Aug 06 2020 - 0.5.2
 - Make upkeep cost persistent across save/load
 - Replace vanilla storage tab with a custom one
 - Raise upkeep fee slighly (1 to 9 per unit)
 
-* Wed Aug 08 2020 - 0.5.1
+* Wed Aug 05 2020 - 0.5.1
 - Update Version Checker file with forum link for GA
 - Rebalance storage fee
 
