@@ -51,6 +51,7 @@ clean {
 // compile time dependencies for most mods
 dependencies {
     compile files('../Console Commands/jars/lw_Console.jar')
+    compile files('../LazyLib/jars/LazyLib.jar')
     // everything in starsector main folder
     if (Os.isFamily(Os.FAMILY_WINDOWS)) {
         compile fileTree(dir: '../../starsector-core/', include: '*.jar')

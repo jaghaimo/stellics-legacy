@@ -1,0 +1,2 @@
+name,id,type,tags,activationDays,activationCooldown,durationDays,deactivationDays,deactivationCooldown,unlockedAtStart,defaultForAIFleet,musicSuppression,uiOn,uiOff,uiLoop,worldOn,worldOff,worldLoop,icon,plugin,ai,desc,sortOrder
+Request Stellar Logistics Location,stellics_location,DURATION,,0,,0.25,0.1,0.75,TRUE,FALSE,0.5,,,,,,,graphics/icons/abilities/stellics_location.png,stellics.campaign.abilities.StellicsLocation,,"Request the location of the nearest Stellar Logistics Branch.",1000

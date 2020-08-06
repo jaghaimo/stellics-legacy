@@ -3,13 +3,14 @@ package stellics.campaign.intel;
 import java.awt.Color;
 import java.util.Set;
 
+import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
-public class StellicsIntel extends MessageIntel {
+public class StellicsBranchIntel extends MessageIntel {
 
     public enum Action {
         OPEN("Branch has been opened.", "opened"),
@@ -39,23 +40,20 @@ public class StellicsIntel extends MessageIntel {
 
     private Action action;
 
-    public StellicsIntel(MarketAPI m, Action a) {
+    public StellicsBranchIntel(MarketAPI m, Action a) {
         market = m;
         action = a;
     }
 
     @Override
     public void createIntelInfo(TooltipMakerAPI info, ListInfoMode mode) {
-        String location = market.getName();
-        String system = market.getStarSystem().getName();
-
         Color colorTitle = market.getFaction().getBaseUIColor();
         Color colorText = getBulletColorForMode(mode);
         Color colorHighlight = Misc.getHighlightColor();
 
         info.addPara(getTitle(), colorTitle, 0f);
         bullet(info);
-        info.addPara(action.getMessage(), 3f, colorText, colorHighlight, location, system, action.getHighlight());
+        info.addPara(action.getMessage(), 3f, colorText, colorHighlight, action.getHighlight());
     }
 
     @Override
@@ -75,6 +73,13 @@ public class StellicsIntel extends MessageIntel {
         tags.add(market.getFactionId());
 
         return tags;
+    }
+
+    @Override
+    public SectorEntityToken getMapLocation(SectorMapAPI map) {
+        super.getMapLocation(map);
+
+        return market.getPrimaryEntity();
     }
 
     @Override

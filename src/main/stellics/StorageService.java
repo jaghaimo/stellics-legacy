@@ -1,8 +1,12 @@
 package stellics;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.LocationAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
+
+import org.lazywizard.lazylib.MathUtils;
+import org.lwjgl.util.vector.Vector2f;
 
 import java.util.List;
 
@@ -25,6 +29,45 @@ public class StorageService {
         }
 
         return true;
+    }
+
+    public MarketAPI findNearestMarket() {
+        MarketAPI market = null;
+        List<MarketAPI> marketCopy = Global.getSector().getEconomy().getMarketsCopy();
+
+        Vector2f playerLocationHs = Global.getSector().getPlayerFleet().getLocationInHyperspace();
+        Vector2f playerLocation = Global.getSector().getPlayerFleet().getLocation();
+
+        float minDistanceHs = Float.MAX_VALUE;
+        float minDistance = Float.MAX_VALUE;
+
+        for (MarketAPI m : marketCopy) {
+            // skip systems with no submarket
+            if (!has(m)) {
+                continue;
+            }
+
+            float curDistanceHs = MathUtils.getDistanceSquared(m.getLocationInHyperspace(), playerLocationHs);
+            float curDistance = MathUtils.getDistanceSquared(m.getLocation(), playerLocation);
+
+            // this market is in a closer system
+            if (curDistanceHs < minDistanceHs) {
+                minDistanceHs = curDistanceHs;
+                minDistance = curDistance;
+                market = m;
+                continue;
+            }
+
+            // same system as best one but closer
+            if (curDistanceHs == minDistanceHs && curDistance < minDistance) {
+                minDistanceHs = curDistanceHs;
+                minDistance = curDistance;
+                market = m;
+                continue;
+            }
+        }
+
+        return market;
     }
 
     public SubmarketAPI get() {

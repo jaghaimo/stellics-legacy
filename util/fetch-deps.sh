@@ -8,3 +8,9 @@ if [ ! -d "Console Commands" ]; then
     unzip Console_Commands*
     rm -f Console_Commands*.zip
 fi
+
+if [ ! -d "LazyLib" ]; then
+    wget https://github.com/LazyWizard/lazylib/releases/download/2.4f/LazyLib_2.4f.zip
+    unzip LazyLib*
+    rm -f LazyLib*.zip
+fi
