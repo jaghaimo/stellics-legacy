@@ -22,18 +22,15 @@ Depending on the warehouse size the cost will vary between 1 and 6 credits per c
 
 ## Vanilla and Nexerelin integration
 
-All non-pirate markets of at least size 6 are seeded with Stellar Logistics Branches.
+All Independent markets of at least size 4 are seeded with Stellar Logistics Branches.
 When used with [Nexerelin](https://fractalsoftworks.com/forum/index.php?topic=9175.0) the storage is located on the Prism Freeport (if enabled in a playthrough).
 
 To add Stellar Logistics content to an existing game use [Console Commands](https://fractalsoftworks.com/forum/index.php?topic=4106.0) and run `stellicsInit`.
 
-## Available options
+## Seeding options
 
-The following options can be edited in the settings file ([stellics_settings.json](stellics_settings.json)):
-* `seedPrism` - `true` to enable, `false` to disable storage being located on Prism Freeport
-* `seedFactions` - `0` to disable, `1` to seed Independents, `2` to seed all non-Pirate factions, and `3` to seed all factions
-* `seedFactionsMinimalSize` - minimal size of the market to seed
-* `seedFactionsProbability` - probability of a market to be seeded (`0` none, `1` all)
+Seeding options can be edited in the settings file ([stellics_settings.json](stellics_settings.json)).
+These control which markets can, and will, have Stellar Logistics Branch and Warehouse created.
 
 ## Licenses and Resources
 

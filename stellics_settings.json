@@ -1,10 +1,21 @@
 {
-    # Put Branch and Storage on Prism Freeport (ignored if Nexerelin or Prism Freeport is not present)
+    # Put Branch and Storage on Prism Freeport.
+    # Ignored if Nexerelin or Prism Freeport is not present.
     "seedPrism": true,
-    # Factions to put Branch and Storage on (0: none, 1: independent, 2: all but pirates, 3: all)
-    "seedFactions": 2,
+
+    # Factions to put Branch and Storage on:
+    # 0: none, 1: independent, 2: all but pirates, 3: all
+    "seedFactions": 1,
+
     # Minimal size for planet to have Branch and Storage put on
-    "seedFactionsMinimalSize": 6,
-    # Probability of an eligibile market beeing seeded (0.6 means 60% of eligibile markets will spawn with Stellar Logistics presence)
-    "seedFactionsProbability": 1
+    "seedFactionsMinimalSize": 4,
+
+    # Probability of an eligibile market beeing seeded:
+    # 0.6 means 60% of eligibile markets will spawn with Stellar Logistics presence
+    "seedFactionsProbability": 1,
+
+    # Do not seed on markets with that many submarkets.
+    # Avoids Storage overflowing to next line.
+    # Value will depend on your screen size.
+    "seedFactionsMaxSubmarkets": 4
 }
