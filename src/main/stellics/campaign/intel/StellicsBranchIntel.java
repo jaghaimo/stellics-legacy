@@ -58,19 +58,20 @@ public class StellicsBranchIntel extends MessageIntel {
 
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
-        info.addImage(market.getFaction().getCrest(), width, 128, 10f);
+        info.addImage(market.getFaction().getLogo(), width, 128, 10f);
         info.addPara(action.getMessage(), 10f);
     }
 
     @Override
     public String getIcon() {
-        return market.getFaction().getCrest();
+        return market.getFaction().getLogo();
     }
 
     @Override
     public Set<String> getIntelTags(SectorMapAPI map) {
         Set<String> tags = super.getIntelTags(map);
         tags.add(market.getFactionId());
+        tags.add("StellNET");
 
         return tags;
     }

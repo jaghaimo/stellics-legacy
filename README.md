@@ -1,6 +1,6 @@
 # Stellar Logistics
 
-Courier and warehousing services for Starsector.
+Courier, warehousing, and information services for Starsector.
 
 Stellar Logistics adds a new structure (Stellar Logistics Branch) and sub-market (Stellar Logistics Warehouse).
 
@@ -12,6 +12,10 @@ Do note however that you will have to pay for the capacity of your storage as it
 Stellar Logistics Branch enables the Stellar Logistics Warehouse sub-market (storage) on the market (e.g. planet, station) it is built.
 Actual storage is located on the market that build the first branch.
 Disrupting a branch will temporarily remove the market from the courier network.
+
+StellNET is a Stellar Logistics operated sector-wide network that allows to:
+* Look for nearest operational Stellar Logistics Branch
+* Query markets for weapons, ships, or officers
 
 ## Fee calculation
 
@@ -43,6 +47,7 @@ All third-party resources are listed below with their appropriate licenses.
 | -------------- | ----------------------- | ----------- | ---- |
 | Industry image | Cropped and sharpened   | Free to use. Photo by Gustavo Juliette from Pexels. | [pexels.com](https://www.pexels.com/photo/two-person-talking-on-stage-set-up-2473446/) |
 | Storage image  | Adjusted to match style | Free for personal and commercial purpose with attribution. Icons made by [bqlqn](https://www.flaticon.com/authors/bqlqn) from [Flaticon](https://www.flaticon.com/). | [flaticon.com](https://www.flaticon.com/free-icon/box_3037005) |
+| Ability image  | Cropped and sharpened   | Free to use. Photo by SpaceX from Pexels. | [pexels.com](https://www.pexels.com/photo/discovery-earth-nasa-research-23789/) |
 
 ## Special Thanks
 
