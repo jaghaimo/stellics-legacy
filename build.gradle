@@ -1,5 +1,3 @@
-import org.apache.tools.ant.taskdefs.condition.Os
-
 repositories {
     mavenCentral()
 }
@@ -26,18 +24,6 @@ build {
     }
 }
 
-task run(type: Exec) {
-    description 'Run Starsector'
-    dependsOn build
-    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-        workingDir '../../starsector-core'
-        commandLine 'cmd', '/c', 'start', 'starsector.bat'
-    } else {
-        workingDir '../..'
-        commandLine 'sh', 'starsector.sh'
-    }
-}
-
 task release(type: Exec) {
     description 'Create releaseable zip file.'
     commandLine 'sh', 'util/create-release.sh'
@@ -48,16 +34,9 @@ clean {
     delete fileTree('.') { include '*.jar' }
 }
 
-// compile time dependencies for most mods
+// compile time dependencies
 dependencies {
-    compile files('../Console Commands/jars/lw_Console.jar')
-    compile files('../LazyLib/jars/LazyLib.jar')
-    // everything in starsector main folder
-    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-        compile fileTree(dir: '../../starsector-core/', include: '*.jar')
-    } else {
-        compile fileTree(dir: '../../', include: '*.jar')
-    }
+    compile fileTree('libs/')
 
     // Test only
     testCompile 'junit:junit:4.12'
