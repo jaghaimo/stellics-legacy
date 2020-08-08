@@ -1,3 +1,7 @@
+* Sat Aug 08 2020 - 0.7.0
+- Rework nearest branch ability into StellNET
+- Add officer search to StellNET
+
 * Fri Aug 07 2020 - 0.6.0
 - Change default seeds to Indies (avoids affecting custom factions)
 - Add upper limit for submarkets (avoids market oversaturation)
