@@ -19,6 +19,7 @@ import org.lwjgl.input.Keyboard;
 
 import stellics.Constants;
 import stellics.campaign.intel.StellicsLocationIntel;
+import stellics.campaign.intel.StellicsOfficerIntel;
 import stellics.helper.MarketHelper;
 
 public class StellicsIntelDialogPlugin implements InteractionDialogPlugin {
@@ -29,6 +30,11 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin {
         WEAPONS(),
         SHIPS(),
         OFFICERS(),
+        TIMID(),
+        CAUTIOUS(),
+        STEADY(),
+        AGGRESSIVE(),
+        RECKLESS(),
         EXIT()
     }
 
@@ -36,6 +42,12 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin {
     private TextPanelAPI textPanel;
     private OptionPanelAPI options;
     private VisualPanelAPI visual;
+
+    private MarketHelper marketHelper;
+
+    public StellicsIntelDialogPlugin() {
+        marketHelper = new MarketHelper();
+    }
 
     @Override
     public void advance(float arg0) {
@@ -83,13 +95,25 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin {
 
         switch (option) {
             case INIT:
-                initHandler(option);
+                initHandler();
                 return;
 
             case WEAPONS:
             case SHIPS:
-            case OFFICERS:
                 break;
+
+            case OFFICERS:
+                officersHandler();
+                return;
+
+            case TIMID:
+            case CAUTIOUS:
+            case STEADY:
+            case AGGRESSIVE:
+            case RECKLESS:
+                officersHandler(option.name().toLowerCase());
+                initHandler();
+                return;
 
             case BRANCH:
                 branchHandler();
@@ -108,7 +132,7 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin {
         textPanel.addPara(text, colorHighlight);
     }
 
-    private void initHandler(OptionId option) {
+    private void initHandler() {
         addTitle("StellNET");
         textPanel.addPara("Welcome to Stellar Network!");
         textPanel.addPara("Which of our services would you like to use?");
@@ -117,23 +141,50 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin {
         options.addOption("Locate nearest Stellar Logisticts Branch", OptionId.BRANCH);
         // options.addOption("Query markets for weapons", OptionId.WEAPONS);
         // options.addOption("Query markets for ships", OptionId.SHIPS);
-        // options.addOption("Find officers for hire", OptionId.OFFICERS);
+        options.addOption("Find officers for hire", OptionId.OFFICERS);
         options.addOption("Disconnect from StellNET", OptionId.EXIT);
         options.setShortcut(OptionId.EXIT, Keyboard.KEY_ESCAPE, false, false, false, false);
     }
 
     private void branchHandler() {
-        MarketHelper marketHelper = new MarketHelper();
         List<MarketAPI> markets = marketHelper.findMarketsWithSubmarket(Constants.STORAGE);
         MarketAPI market = marketHelper.findNearestMarket(markets);
         addTitle("Locate Nearest Branch");
 
-        if (market != null) {
-            StellicsLocationIntel intel = new StellicsLocationIntel(market);
-            Global.getSector().getIntelManager().addIntel(intel);
-            textPanel.addPara("Provided intel with nearest operational Stellar Logistics Branch.");
-        } else {
+        if (market == null) {
             textPanel.addPara("Could not find any operational Stellar Logistic Branches.");
+            return;
         }
+
+        StellicsLocationIntel intel = new StellicsLocationIntel(market);
+        Global.getSector().getIntelManager().addIntel(intel);
+        textPanel.addPara("Provided intel for the nearest operational Stellar Logistics Branch.");
+    }
+
+    private void officersHandler() {
+        addTitle("Find Officers");
+        textPanel.addPara("What personality should the officer have?");
+
+        options.clearOptions();
+        options.addOption("Timid", OptionId.TIMID, "timid");
+        options.addOption("Cautious", OptionId.CAUTIOUS, "cautious");
+        options.addOption("Steady", OptionId.STEADY, "steady");
+        options.addOption("Aggressive", OptionId.AGGRESSIVE, "aggressive");
+        options.addOption("Reckless", OptionId.RECKLESS, "reckless");
+        options.addOption("Go back", OptionId.INIT);
+    }
+
+    private void officersHandler(String personality) {
+        List<MarketAPI> markets = marketHelper.findMarketsWithOfficers(personality);
+        MarketAPI market = marketHelper.findNearestMarket(markets);
+
+        if (market == null) {
+            textPanel.addPara("Could not find any " + personality + " officers.");
+            return;
+        }
+
+        StellicsOfficerIntel intel = new StellicsOfficerIntel(market, personality);
+        Global.getSector().getIntelManager().addIntel(intel);
+        textPanel.addPara("Provided intel for the nearest " + personality + " officer available for hire.");
     }
 }
