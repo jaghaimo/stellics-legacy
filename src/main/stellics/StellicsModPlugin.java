@@ -6,6 +6,8 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 
 import org.json.JSONObject;
 
+import stellics.helper.StorageHelper;
+
 public class StellicsModPlugin extends BaseModPlugin {
 
     private final String SETTINGS_FILE = "stellics_settings.json";
@@ -14,7 +16,7 @@ public class StellicsModPlugin extends BaseModPlugin {
 
     private StellicsSettings stellicsSettings;
 
-    private StorageService storageService;
+    private StorageHelper storageHelper;
 
     @Override
     public void onApplicationLoad() throws Exception {
@@ -24,7 +26,7 @@ public class StellicsModPlugin extends BaseModPlugin {
     @Override
     public void onNewGameAfterEconomyLoad() {
         stellicsSettings = new StellicsSettings(settings);
-        storageService = new StorageService();
+        storageHelper = new StorageHelper();
 
         seedPrism();
         seedFactions();
@@ -32,8 +34,8 @@ public class StellicsModPlugin extends BaseModPlugin {
 
     @Override
     public void onGameLoad(boolean newGame) {
-        storageService = new StorageService();
-        storageService.registerFeeListener();
+        storageHelper = new StorageHelper();
+        storageHelper.registerFeeListener();
     }
 
     private void seedFaction(MarketAPI market) {
@@ -77,9 +79,9 @@ public class StellicsModPlugin extends BaseModPlugin {
     }
 
     private void seedMarket(MarketAPI market, double seedProbability) {
-        if (seedProbability > Math.random() && !storageService.has(market)) {
+        if (seedProbability > Math.random() && !storageHelper.has(market)) {
             market.addIndustry(Constants.BRANCH);
-            storageService.add(market);
+            storageHelper.add(market);
         }
     }
 
@@ -91,7 +93,7 @@ public class StellicsModPlugin extends BaseModPlugin {
         }
 
         // we have a Nexerelin game with Prism Freeport enabled, and we want to use it
-        if (stellicsSettings.isSeedPrism() && !storageService.has(market)) {
+        if (stellicsSettings.isSeedPrism() && !storageHelper.has(market)) {
             seedMarket(market, 1);
         }
     }

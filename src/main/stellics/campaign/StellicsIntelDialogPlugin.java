@@ -1,10 +1,10 @@
 package stellics.campaign;
 
 import java.awt.Color;
+import java.util.List;
 import java.util.Map;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.InteractionDialogImageVisual;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.InteractionDialogPlugin;
 import com.fs.starfarer.api.campaign.OptionPanelAPI;
@@ -12,14 +12,14 @@ import com.fs.starfarer.api.campaign.TextPanelAPI;
 import com.fs.starfarer.api.campaign.VisualPanelAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
-import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.util.Misc;
 
 import org.lwjgl.input.Keyboard;
 
-import stellics.StorageService;
+import stellics.Constants;
 import stellics.campaign.intel.StellicsLocationIntel;
+import stellics.helper.MarketHelper;
 
 public class StellicsIntelDialogPlugin implements InteractionDialogPlugin {
 
@@ -52,6 +52,7 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin {
 
     @Override
     public Map<String, MemoryAPI> getMemoryMap() {
+
         return null;
     }
 
@@ -122,8 +123,9 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin {
     }
 
     private void branchHandler() {
-        StorageService storageService = new StorageService();
-        MarketAPI market = storageService.findNearestMarket();
+        MarketHelper marketHelper = new MarketHelper();
+        List<MarketAPI> markets = marketHelper.findMarketsWithSubmarket(Constants.STORAGE);
+        MarketAPI market = marketHelper.findNearestMarket(markets);
         addTitle("Locate Nearest Branch");
 
         if (market != null) {

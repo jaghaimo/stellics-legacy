@@ -5,12 +5,12 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 
-import stellics.StorageService;
+import stellics.helper.StorageHelper;
 import stellics.campaign.intel.StellicsBranchIntel;
 
 public class StellicsBranch extends BaseIndustry {
 
-    private StorageService storageService;
+    private StorageHelper storageHelper;
 
     @Override
     public void apply() {
@@ -30,11 +30,11 @@ public class StellicsBranch extends BaseIndustry {
     public void notifyDisrupted() {
         super.notifyDisrupted();
 
-        if (getStorageService().isFounding(market)) {
+        if (getStorageHelper().isFounding(market)) {
             return;
         }
 
-        if (getStorageService().remove(market)) {
+        if (getStorageHelper().remove(market)) {
             queueIntel(StellicsBranchIntel.Action.DISRUPT);
         }
     }
@@ -43,11 +43,11 @@ public class StellicsBranch extends BaseIndustry {
     protected void disruptionFinished() {
         super.disruptionFinished();
 
-        if (getStorageService().isFounding(market)) {
+        if (getStorageHelper().isFounding(market)) {
             return;
         }
 
-        if (getStorageService().add(market)) {
+        if (getStorageHelper().add(market)) {
             queueIntel(StellicsBranchIntel.Action.RESUME);
         }
     }
@@ -56,7 +56,7 @@ public class StellicsBranch extends BaseIndustry {
     public void finishBuildingOrUpgrading() {
         super.finishBuildingOrUpgrading();
 
-        if (getStorageService().add(market)) {
+        if (getStorageHelper().add(market)) {
             queueIntel(StellicsBranchIntel.Action.OPEN);
         }
     }
@@ -65,17 +65,17 @@ public class StellicsBranch extends BaseIndustry {
     public void notifyBeingRemoved(MarketAPI.MarketInteractionMode mode, boolean forUpgrade) {
         super.notifyBeingRemoved(mode, forUpgrade);
 
-        if (getStorageService().remove(market)) {
+        if (getStorageHelper().remove(market)) {
             queueIntel(StellicsBranchIntel.Action.CLOSE);
         }
     }
 
-    private StorageService getStorageService() {
-        if (storageService == null) {
-            storageService = new StorageService();
+    private StorageHelper getStorageHelper() {
+        if (storageHelper == null) {
+            storageHelper = new StorageHelper();
         }
 
-        return storageService;
+        return storageHelper;
     }
 
     private void queueIntel(StellicsBranchIntel.Action action) {
