@@ -16,6 +16,7 @@ public class StellicsInit implements BaseCommand {
             Console.showMessage("Added Stellar Logistics content to existing markets.");
         } catch (Exception exception) {
             Console.showMessage("Failed to add Stellar Logistics content to existing markets!");
+
             return CommandResult.ERROR;
         }
 

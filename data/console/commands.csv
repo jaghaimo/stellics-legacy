@@ -1,2 +1,4 @@
 command,class,tags,syntax,help
 StellicsInit,stellics.command.StellicsInit,"campaign",stellicsinit,"Add Stellar Logistics content to an existing game."
+StellicsExport,stellics.command.StellicsExport,"campaign",stellicsexport,"Export contents of Stellar Logistics Warehouse to a CSV file."
+StellicsImport,stellics.command.StellicsImport,"campaign",stellicsimport,"Import contents of CSV file to Stellar Logistics Warehouse."
