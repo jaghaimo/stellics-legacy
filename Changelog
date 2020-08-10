@@ -1,3 +1,6 @@
+* Mon Aug 10 2020 - 0.7.2
+- Fix same-system search for the nearest market
+
 * Sun Aug 09 2020 - 0.7.1
 - Add stellicsExport and stellicsImport commands
 - Fix broken save-game compatibility due to ability changes

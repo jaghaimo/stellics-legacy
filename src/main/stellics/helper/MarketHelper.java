@@ -1,6 +1,7 @@
 package stellics.helper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.fs.starfarer.api.Global;
@@ -8,8 +9,7 @@ import com.fs.starfarer.api.campaign.CommDirectoryEntryAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
 
-import org.lazywizard.lazylib.MathUtils;
-import org.lwjgl.util.vector.Vector2f;
+import stellics.campaign.econ.MarketComparator;
 
 public class MarketHelper {
 
@@ -30,6 +30,8 @@ public class MarketHelper {
             }
         }
 
+        sortMarkets(markets);
+
         return markets;
     }
 
@@ -42,31 +44,22 @@ public class MarketHelper {
             }
         }
 
+        sortMarkets(markets);
+
         return markets;
     }
 
-    public MarketAPI findNearestMarket(List<MarketAPI> markets) {
-        MarketAPI market = null;
+    public MarketAPI getNearestMarket(List<MarketAPI> markets) {
+        if (!markets.isEmpty()) {
+            sortMarkets(markets);
 
-        Vector2f playerLocationHs = Global.getSector().getPlayerFleet().getLocationInHyperspace();
-        Vector2f playerLocation = Global.getSector().getPlayerFleet().getLocation();
-
-        float minDistanceHs = Float.MAX_VALUE;
-        float minDistance = Float.MAX_VALUE;
-
-        for (MarketAPI m : markets) {
-            float curDistanceHs = MathUtils.getDistanceSquared(m.getLocationInHyperspace(), playerLocationHs);
-            float curDistance = MathUtils.getDistanceSquared(m.getLocation(), playerLocation);
-
-            if (curDistanceHs < minDistanceHs) {
-                minDistanceHs = curDistanceHs;
-                market = m;
-            } else if (curDistanceHs == minDistanceHs && curDistance < minDistance) {
-                minDistance = curDistance;
-                market = m;
-            }
+            return markets.get(0);
         }
 
-        return market;
+        return null;
+    }
+
+    public void sortMarkets(List<MarketAPI> markets) {
+        Collections.sort(markets, new MarketComparator());
     }
 }

@@ -148,7 +148,7 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin {
 
     private void branchHandler() {
         List<MarketAPI> markets = marketHelper.findMarketsWithSubmarket(Constants.STORAGE);
-        MarketAPI market = marketHelper.findNearestMarket(markets);
+        MarketAPI market = marketHelper.getNearestMarket(markets);
         addTitle("Locate Nearest Branch");
 
         if (market == null) {
@@ -166,17 +166,18 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin {
         textPanel.addPara("What personality should the officer have?");
 
         options.clearOptions();
-        options.addOption("Timid", OptionId.TIMID, "timid");
-        options.addOption("Cautious", OptionId.CAUTIOUS, "cautious");
-        options.addOption("Steady", OptionId.STEADY, "steady");
-        options.addOption("Aggressive", OptionId.AGGRESSIVE, "aggressive");
-        options.addOption("Reckless", OptionId.RECKLESS, "reckless");
+        options.addOption("Timid", OptionId.TIMID);
+        options.addOption("Cautious", OptionId.CAUTIOUS);
+        options.addOption("Steady", OptionId.STEADY);
+        options.addOption("Aggressive", OptionId.AGGRESSIVE);
+        options.addOption("Reckless", OptionId.RECKLESS);
         options.addOption("Go back", OptionId.INIT);
     }
 
     private void officersHandler(String personality) {
         List<MarketAPI> markets = marketHelper.findMarketsWithOfficers(personality);
-        MarketAPI market = marketHelper.findNearestMarket(markets);
+        MarketAPI market = marketHelper.getNearestMarket(markets);
+        addTitle("Find Officers");
 
         if (market == null) {
             textPanel.addPara("Could not find any " + personality + " officers.");

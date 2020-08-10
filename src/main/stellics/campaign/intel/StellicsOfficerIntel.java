@@ -1,63 +1,54 @@
 package stellics.campaign.intel;
 
-import java.awt.Color;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fs.starfarer.api.campaign.CommDirectoryEntryAPI;
-import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
-import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.ui.LabelAPI;
-import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
-public class StellicsOfficerIntel extends MessageIntel {
+public class StellicsOfficerIntel extends StellicsStellnetIntel {
 
-    MarketAPI market;
-
-    String personality;
+    private String personality;
 
     public StellicsOfficerIntel(MarketAPI m, String p) {
-        market = m;
+        super(m);
         personality = p;
     }
 
     @Override
-    public void createIntelInfo(TooltipMakerAPI info, ListInfoMode mode) {
-        String location = market.getName();
-        String system = market.getStarSystem().getName();
-
-        Color colorTitle = getTitleColor(mode);
-        Color colorText = getBulletColorForMode(mode);
-        Color colorHighlight = Misc.getHighlightColor();
-
-        info.addPara(getTitle(), colorTitle, 0f);
-        bullet(info);
-        info.addPara(getMessage(location, system), 3f, colorText, colorHighlight, location, system);
-    }
-
-    @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
-        String location = market.getName();
-        String system = market.getStarSystem().getName();
+        super.createSmallDescription(info, width, height);
         String size = String.valueOf(market.getSize());
         String faction = market.getFaction().getDisplayNameWithArticle();
-
-        Color colorText = Misc.getTextColor();
-        Color colorFaction = market.getFaction().getColor();
-        Color colorHighlight = Misc.getHighlightColor();
-
-        info.addImage(market.getFaction().getLogo(), width, 128, 10f);
-        info.addPara(getMessage(location, system), 10f, colorText, colorHighlight, location, system);
-
         LabelAPI label = info.addPara(
-                "This market has the following officers available for hire:",
+                "It is a size " + size + " market owned by " + faction + ".",
                 10f);
         label.setHighlight(size, faction);
-        label.setHighlightColors(colorHighlight, colorFaction);
-        bullet(info);
+        label.setHighlightColors(Misc.getHighlightColor(), market.getFaction().getColor());
+        listOfficers(info);
+        unindent(info);
+    }
+
+    protected void addToInfo(TooltipMakerAPI info, float pad) {
+        String location = market.getName();
+        String system = market.getStarSystem().getName();
+        info.addPara(
+                "Nearest " + personality + " officer can be found on " + location + " in " + system + ".",
+                pad,
+                Misc.getTextColor(),
+                Misc.getHighlightColor(),
+                personality,
+                location,
+                system
+                );
+    }
+
+    private List<String> getAllOfficers() {
+        ArrayList<String> officers = new ArrayList<String>();
 
         for (CommDirectoryEntryAPI entry : market.getCommDirectory().getEntriesCopy()) {
             PersonAPI person = (PersonAPI) entry.getEntryData();
@@ -67,42 +58,24 @@ public class StellicsOfficerIntel extends MessageIntel {
             }
 
             String curPersonality = person.getPersonalityAPI().getDisplayName().toLowerCase();
-            info.addPara(
-                person.getRank() + " " + person.getNameString() + ", " + curPersonality,
-                3f
-                );
+            officers.add(person.getRank() + " " + person.getNameString() + ", " + curPersonality);
         }
+
+        return officers;
     }
 
-    @Override
-    public String getIcon() {
-        return market.getFaction().getCrest();
-    }
+    private void listOfficers(TooltipMakerAPI info) {
+        List<String> officers = getAllOfficers();
 
-    @Override
-    public SectorEntityToken getMapLocation(SectorMapAPI map) {
-        return market.getPrimaryEntity();
-    }
+        if (officers.isEmpty()) {
+            return;
+        }
 
-    @Override
-    public String getSmallDescriptionTitle() {
-        return getTitle();
-    }
+        info.addPara("This market has the following officers available for hire:", 10f);
 
-    @Override
-    public Set<String> getIntelTags(SectorMapAPI map) {
-        Set<String> tags = super.getIntelTags(map);
-        tags.add(market.getFactionId());
-        tags.add("StellNET");
-
-        return tags;
-    }
-
-    private String getMessage(String location, String system) {
-        return "Nearest " + personality + " officer available for hire is located on " + location + " in " + system + ".";
-    }
-
-    private String getTitle() {
-        return "StellNET Intel";
+        for (String officer : officers) {
+            bullet(info);
+            info.addPara(officer, 3f);
+        }
     }
 }
