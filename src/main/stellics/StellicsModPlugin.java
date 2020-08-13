@@ -1,11 +1,19 @@
 package stellics;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.comm.IntelInfoPlugin;
+import com.fs.starfarer.api.campaign.comm.IntelManagerAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 
 import org.json.JSONObject;
 
+import stellics.campaign.intel.StellicsBranchIntel;
+import stellics.campaign.intel.StellicsLocationIntel;
+import stellics.campaign.intel.StellicsOfficerIntel;
 import stellics.helper.StorageHelper;
 
 public class StellicsModPlugin extends BaseModPlugin {
@@ -36,6 +44,19 @@ public class StellicsModPlugin extends BaseModPlugin {
     public void onGameLoad(boolean newGame) {
         storageHelper = new StorageHelper();
         storageHelper.registerFeeListener();
+
+        removeDeprecatedIntel(StellicsBranchIntel.class);
+        removeDeprecatedIntel(StellicsLocationIntel.class);
+        removeDeprecatedIntel(StellicsOfficerIntel.class);
+    }
+
+    private void removeDeprecatedIntel(Class<?> c) {
+        IntelManagerAPI manager = Global.getSector().getIntelManager();
+        List<IntelInfoPlugin> intels = new ArrayList<IntelInfoPlugin>(manager.getIntel(c));
+
+        for (IntelInfoPlugin i : intels) {
+            manager.removeIntel(i);
+        }
     }
 
     private void seedFaction(MarketAPI market) {

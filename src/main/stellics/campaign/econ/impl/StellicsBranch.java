@@ -6,7 +6,8 @@ import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 
 import stellics.helper.StorageHelper;
-import stellics.campaign.intel.StellicsBranchIntel;
+import stellics.campaign.intel.StellnetIntel;
+import stellics.campaign.intel.entity.Branch;
 
 public class StellicsBranch extends BaseIndustry {
 
@@ -35,7 +36,7 @@ public class StellicsBranch extends BaseIndustry {
         }
 
         if (getStorageHelper().remove(market)) {
-            queueIntel(StellicsBranchIntel.Action.DISRUPT);
+            queueIntel(Branch.Action.DISRUPT);
         }
     }
 
@@ -48,7 +49,7 @@ public class StellicsBranch extends BaseIndustry {
         }
 
         if (getStorageHelper().add(market)) {
-            queueIntel(StellicsBranchIntel.Action.RESUME);
+            queueIntel(Branch.Action.RESUME);
         }
     }
 
@@ -57,7 +58,7 @@ public class StellicsBranch extends BaseIndustry {
         super.finishBuildingOrUpgrading();
 
         if (getStorageHelper().add(market)) {
-            queueIntel(StellicsBranchIntel.Action.OPEN);
+            queueIntel(Branch.Action.OPEN);
         }
     }
 
@@ -66,7 +67,7 @@ public class StellicsBranch extends BaseIndustry {
         super.notifyBeingRemoved(mode, forUpgrade);
 
         if (getStorageHelper().remove(market)) {
-            queueIntel(StellicsBranchIntel.Action.CLOSE);
+            queueIntel(Branch.Action.CLOSE);
         }
     }
 
@@ -78,8 +79,9 @@ public class StellicsBranch extends BaseIndustry {
         return storageHelper;
     }
 
-    private void queueIntel(StellicsBranchIntel.Action action) {
-        StellicsBranchIntel intel = new StellicsBranchIntel(market, action);
+    private void queueIntel(Branch.Action action) {
+        Branch branch = new Branch(market, action);
+        StellnetIntel intel = new StellnetIntel(market.getFaction(), market.getPrimaryEntity(), branch);
         Global.getSector().getIntelManager().queueIntel(intel);
     }
 }

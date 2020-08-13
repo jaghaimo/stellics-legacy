@@ -12,16 +12,6 @@ if [ ! -f "libs/lw_Console.jar" ]; then
     cp $tmp_dir/*/jars/lw_Console.jar libs/
 fi
 
-# LazyLib
-if [ ! -f "libs/LazyLib.jar" ]; then
-    tmp_dir=$(mktemp -d -t libs-ll-XXXXXXXXXX)
-    pushd $tmp_dir
-    wget https://github.com/LazyWizard/lazylib/releases/download/2.4f/LazyLib_2.4f.zip
-    unzip *
-    popd
-    cp $tmp_dir/*/jars/LazyLib.jar libs/
-fi
-
 # Starsector
 if [ ! -f "libs/starfarer.api.jar" ]; then
     tmp_dir=$(mktemp -d -t libs-ss-XXXXXXXXXX)

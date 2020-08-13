@@ -10,11 +10,14 @@ sourceSets.test.java.srcDir 'src/test'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
+// fetch dependencies for the project
 task fetchDeps(type: Exec) {
     description 'Fetch and install dependsOn before compilation.'
-    commandLine 'sh', 'util/fetch-deps.sh'
+    commandLine 'bash', 'util/fetch-deps.sh'
 }
+compileJava.dependsOn fetchDeps
 
+// build everything and make a jar
 build {
     doLast {
         copy {
@@ -24,6 +27,7 @@ build {
     }
 }
 
+// create a zip release
 task release(type: Exec) {
     description 'Create releaseable zip file.'
     commandLine 'sh', 'util/create-release.sh'
@@ -38,6 +42,6 @@ clean {
 dependencies {
     compile fileTree('libs/')
 
-    // Test only
+    // test only
     testCompile 'junit:junit:4.12'
 }

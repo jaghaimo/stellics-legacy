@@ -1,13 +1,13 @@
 package stellics.campaign.listeners;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.CargoAPI;
+import com.fs.starfarer.api.campaign.CargoStackAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.MonthlyReport;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.impl.campaign.shared.SharedData;
-
-import org.lazywizard.lazylib.campaign.CargoUtils;
 
 import stellics.Constants;
 
@@ -27,12 +27,22 @@ public class StellicsFeeListener implements EconomyTickListener {
             return;
         }
 
-        int spaceUsed = (int) CargoUtils.getSpaceTakenByCargo(stellicsStorage.getCargo());
+        int spaceUsed = calculateSpaceUsed(stellicsStorage.getCargo());
         int upkeep = calculateUpkeep(spaceUsed);
         updateCurrentReport(spaceUsed, upkeep);
     }
 
     public void reportEconomyMonthEnd() {
+    }
+
+    private int calculateSpaceUsed(CargoAPI cargo) {
+        int cargoSpace = 0;
+
+        for (CargoStackAPI stack : cargo.getStacksCopy()) {
+            cargoSpace += stack.getCargoSpace();
+        }
+
+        return cargoSpace;
     }
 
     private int calculateUpkeep(int spaceUsed) {

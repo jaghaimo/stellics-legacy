@@ -1,7 +1,5 @@
 package stellics.command;
 
-import java.util.Scanner;
-
 import com.fs.starfarer.api.campaign.CargoAPI.CargoItemType;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
