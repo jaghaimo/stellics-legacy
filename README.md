@@ -29,7 +29,7 @@ StellNET is a Stellar Logistics operated sector-wide hyperspace network that all
 Stellar Logistics Warehouse Services, when not disrupted, offer full availability and accessibility.
 The storage and handling fee depends on the size of the leased warehouse and not the value of stored cargo.
 As such it is the perfect service to store high-value cargo.
-Depending on the warehouse size the cost will vary between 1 and 6 credits per cargo hold per month.
+Depending on the warehouse size the cost will vary between 1 and 9 credits per cargo hold per month.
 
 ### Vanilla and Nexerelin integration
 

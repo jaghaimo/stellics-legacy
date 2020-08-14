@@ -10,8 +10,11 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 
 public class Officer extends Stellnet {
 
+    private List<String> officers = new ArrayList<String>();
+
     public Officer(String p, MarketAPI m) {
         super(p + " officer", m);
+        addOfficers();
     }
 
     @Override
@@ -22,7 +25,6 @@ public class Officer extends Stellnet {
     @Override
     public void createSmallDescription(TooltipMakerAPI info) {
         super.createSmallDescription(info);
-        List<String> officers = getAllOfficers();
 
         if (officers.isEmpty()) {
             return;
@@ -36,9 +38,7 @@ public class Officer extends Stellnet {
         }
     }
 
-    private List<String> getAllOfficers() {
-        ArrayList<String> officers = new ArrayList<String>();
-
+    private void addOfficers() {
         for (CommDirectoryEntryAPI entry : market.getCommDirectory().getEntriesCopy()) {
             PersonAPI person = (PersonAPI) entry.getEntryData();
 
@@ -49,7 +49,5 @@ public class Officer extends Stellnet {
             String curPersonality = person.getPersonalityAPI().getDisplayName().toLowerCase();
             officers.add(person.getRank() + " " + person.getNameString() + ", " + curPersonality);
         }
-
-        return officers;
     }
 }

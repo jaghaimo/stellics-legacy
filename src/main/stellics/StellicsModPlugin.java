@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import stellics.campaign.intel.StellicsBranchIntel;
 import stellics.campaign.intel.StellicsLocationIntel;
 import stellics.campaign.intel.StellicsOfficerIntel;
+import stellics.campaign.intel.StellnetIntel;
 import stellics.helper.StorageHelper;
 
 public class StellicsModPlugin extends BaseModPlugin {
@@ -48,6 +49,7 @@ public class StellicsModPlugin extends BaseModPlugin {
         removeDeprecatedIntel(StellicsBranchIntel.class);
         removeDeprecatedIntel(StellicsLocationIntel.class);
         removeDeprecatedIntel(StellicsOfficerIntel.class);
+        removeDeprecatedIntel(StellnetIntel.class);
     }
 
     private void removeDeprecatedIntel(Class<?> c) {
