@@ -1,5 +1,6 @@
 * unreleased - 0.8.1
 - Fix officer intel changing after hiring one
+- Refactor StellNET queries, limit results to non-hostiles
 
 * Thu Aug 13 2020 - 0.8.0
 - New intel implementation that disappears after 14 days

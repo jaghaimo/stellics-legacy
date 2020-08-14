@@ -6,21 +6,20 @@ import java.util.List;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoStackAPI;
-import com.fs.starfarer.api.campaign.CommDirectoryEntryAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
-import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.submarkets.BaseSubmarketPlugin;
 
 import stellics.campaign.econ.MarketComparator;
+import stellics.campaign.econ.MarketFilter;
 import stellics.Constants;
 
 public class MarketHelper {
 
-    public static List<CargoStackAPI> findItemsInMarkets(String category) {
+    public static List<CargoStackAPI> findItems(List<MarketAPI> markets, String category) {
         List<CargoStackAPI> cargoStacks = new ArrayList<CargoStackAPI>();
 
-        for (MarketAPI m : Global.getSector().getEconomy().getMarketsCopy()) {
+        for (MarketAPI m : markets) {
             for (SubmarketAPI s : m.getSubmarketsCopy()) {
                 try {
                     ((BaseSubmarketPlugin) s.getPlugin()).updateCargoPrePlayerInteraction();
@@ -39,56 +38,17 @@ public class MarketHelper {
         return cargoStacks;
     }
 
-    public static List<MarketAPI> findMarketsWithItem(CargoStackAPI cargoStack) {
+    public static List<MarketAPI> findMarkets(List<MarketFilter> filters) {
         List<MarketAPI> markets = new ArrayList<MarketAPI>();
 
-        foundMarket:
+        skipMarket:
         for (MarketAPI m : Global.getSector().getEconomy().getMarketsCopy()) {
-            for (SubmarketAPI s : m.getSubmarketsCopy()) {
-                for (CargoStackAPI c : s.getCargo().getStacksCopy()) {
-                    // ideally this should be done based on some unique identifier
-                    if (cargoStack.getDisplayName().equals(c.getDisplayName())) {
-                        markets.add(m);
-                        continue foundMarket;
-                    }
+            for (MarketFilter f : filters) {
+                if (!f.match(m)) {
+                    continue skipMarket;
                 }
             }
-        }
-
-        return markets;
-    }
-
-    public static List<MarketAPI> findMarketsWithIndustry(String industry, boolean notDisrupted) {
-        List<MarketAPI> markets = new ArrayList<MarketAPI>();
-
-        for (MarketAPI m : Global.getSector().getEconomy().getMarketsCopy()) {
-            if (m.hasIndustry(industry)) {
-                if (notDisrupted && m.getIndustry(industry).isDisrupted()) {
-                    continue;
-                }
-
-                markets.add(m);
-            }
-        }
-
-        return markets;
-    }
-
-    public static List<MarketAPI> findMarketsWithOfficers(String personality) {
-        List<MarketAPI> markets = new ArrayList<MarketAPI>();
-
-        for (MarketAPI m : Global.getSector().getEconomy().getMarketsCopy()) {
-            for (CommDirectoryEntryAPI entry: m.getCommDirectory().getEntriesCopy()) {
-                PersonAPI person = (PersonAPI) entry.getEntryData();
-
-                if (!person.getPostId().equals("mercenary")) {
-                    continue;
-                }
-
-                if (personality.equals(person.getPersonalityAPI().getId())) {
-                    markets.add(m);
-                }
-            }
+            markets.add(m);
         }
 
         return markets;
@@ -96,7 +56,7 @@ public class MarketHelper {
 
     public static MarketAPI getNearestMarket(List<MarketAPI> markets) {
         if (!markets.isEmpty()) {
-            sortMarkets(markets);
+            Collections.sort(markets, new MarketComparator());
 
             return markets.get(0);
         }
@@ -119,9 +79,5 @@ public class MarketHelper {
             default:
                 return false;
         }
-    }
-
-    private static void sortMarkets(List<MarketAPI> markets) {
-        Collections.sort(markets, new MarketComparator());
     }
 }

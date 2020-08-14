@@ -1,5 +1,6 @@
 package stellics.helper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fs.starfarer.api.Global;
@@ -7,18 +8,13 @@ import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.CargoStackAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 
-import stellics.campaign.intel.BaseStellnetIntel;
-import stellics.campaign.intel.BatchStellnetIntel;
-import stellics.campaign.intel.EmptyIntel;
-import stellics.campaign.intel.IntelEntity;
-import stellics.campaign.intel.StellnetIntel;
-import stellics.campaign.intel.entity.Cargo;
-import stellics.campaign.intel.entity.Industry;
-import stellics.campaign.intel.entity.Officer;
+import stellics.campaign.econ.*;
+import stellics.campaign.intel.*;
+import stellics.campaign.intel.entity.*;
 
 public class IntelHelper {
 
-    public static BaseStellnetIntel getCargoIntel(CargoAPI cargo) {
+    public static BaseStellnetIntel getCargoIntel(List<MarketFilter> filters, CargoAPI cargo) {
         if (cargo.isEmpty()) {
             return new EmptyIntel("Query cancelled - no items selected.");
         }
@@ -28,9 +24,11 @@ public class IntelHelper {
 
         for (CargoStackAPI cargoStack : cargo.getStacksCopy()) {
             String cargoName = cargoStack.getDisplayName();
+            List<MarketFilter> f = new ArrayList<MarketFilter>(filters);
+            f.add(new HasCargoFilter(cargoStack));
 
             try {
-                List<MarketAPI> markets = MarketHelper.findMarketsWithItem(cargoStack);
+                List<MarketAPI> markets = MarketHelper.findMarkets(f);
                 MarketAPI market = MarketHelper.getNearestMarket(markets);
                 IntelEntity entity = new Cargo(cargoName, market);
                 BaseStellnetIntel intel = new StellnetIntel(market.getFaction(), market.getPrimaryEntity(), entity);
@@ -44,9 +42,10 @@ public class IntelHelper {
         return batchStellnetIntel;
     }
 
-    public static BaseStellnetIntel getIndustryIntel(String industryId, boolean notDisrupted) {
+    public static BaseStellnetIntel getIndustryIntel(List<MarketFilter> filters, String industryId, boolean notDisrupted) {
         try {
-            List<MarketAPI> markets = MarketHelper.findMarketsWithIndustry(industryId, notDisrupted);
+            filters.add(new HasIndustryFilter(industryId, notDisrupted));
+            List<MarketAPI> markets = MarketHelper.findMarkets(filters);
             MarketAPI market = MarketHelper.getNearestMarket(markets);
             String industryName = market.getIndustry(industryId).getCurrentName();
             IntelEntity intel = new Industry(industryName, market);
@@ -60,9 +59,10 @@ public class IntelHelper {
         }
     }
 
-    public static BaseStellnetIntel getOfficerIntel(String personality) {
+    public static BaseStellnetIntel getOfficerIntel(List<MarketFilter> filters, String personality) {
         try {
-            List<MarketAPI> markets = MarketHelper.findMarketsWithOfficers(personality);
+            filters.add(new HasOfficerFilter(personality));
+            List<MarketAPI> markets = MarketHelper.findMarkets(filters);
             MarketAPI market = MarketHelper.getNearestMarket(markets);
             IntelEntity intel = new Officer(personality, market);
 

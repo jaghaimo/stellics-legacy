@@ -1,6 +1,7 @@
 package stellics.campaign;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import com.fs.starfarer.api.campaign.InteractionDialogPlugin;
 import com.fs.starfarer.api.campaign.OptionPanelAPI;
 import com.fs.starfarer.api.campaign.TextPanelAPI;
 import com.fs.starfarer.api.campaign.VisualPanelAPI;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -21,6 +23,8 @@ import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.input.Keyboard;
 
 import stellics.Constants;
+import stellics.campaign.econ.MarketFilter;
+import stellics.campaign.econ.NonHostileFilter;
 import stellics.campaign.intel.*;
 import stellics.helper.IntelHelper;
 import stellics.helper.MarketHelper;
@@ -134,7 +138,7 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, Cargo
 
     @Override
     public void pickedCargo(CargoAPI cargo) {
-        addIntel(IntelHelper.getCargoIntel(cargo));
+        addIntel(IntelHelper.getCargoIntel(getFilters(), cargo));
     }
 
     @Override
@@ -153,7 +157,7 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, Cargo
 
     protected void branchHandler() {
         addTitle("Locate Nearest Branch");
-        addIntel(IntelHelper.getIndustryIntel(Constants.BRANCH, true));
+        addIntel(IntelHelper.getIndustryIntel(getFilters(), Constants.BRANCH, true));
     }
 
     protected void officersHandler() {
@@ -173,7 +177,7 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, Cargo
     protected void officersHandler(OptionId option) {
         String personality = option.name().toLowerCase();
         addTitle("Find Officers");
-        addIntel(IntelHelper.getOfficerIntel(personality));
+        addIntel(IntelHelper.getOfficerIntel(getFilters(), personality));
     }
 
     protected void queryHandler() {
@@ -191,7 +195,8 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, Cargo
 
     protected void queryHandler(OptionId option) {
         String category = option.name().toLowerCase();
-        CargoAPI cargo = getCargo(MarketHelper.findItemsInMarkets(category));
+        List<MarketAPI> markets = MarketHelper.findMarkets(getFilters());
+        CargoAPI cargo = getCargo(MarketHelper.findItems(markets, category));
 
         if (cargo.isEmpty()) {
             askForMore("No markets selling " + category + "s found.");
@@ -233,5 +238,12 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, Cargo
         cargo.sort();
 
         return cargo;
+    }
+
+    private List<MarketFilter> getFilters() {
+        List<MarketFilter> filters = new ArrayList<MarketFilter>();
+        filters.add(new NonHostileFilter());
+
+        return filters;
     }
 }
