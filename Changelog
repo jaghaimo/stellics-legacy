@@ -1,4 +1,5 @@
 * unreleased - 0.9.0
+- Move hardcoded fee addends to settings.json
 - Enable fleet storage (fee based on ship's size)
 - Make storage work with addIndustry console command
 - Refactor StellNET queries, limit results to non-hostiles

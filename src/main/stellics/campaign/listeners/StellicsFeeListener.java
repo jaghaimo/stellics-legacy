@@ -6,7 +6,6 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.MonthlyReport;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
-import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.shared.SharedData;
 
 import stellics.Constants;
@@ -30,49 +29,12 @@ public class StellicsFeeListener implements EconomyTickListener {
 
         CargoAPI cargo = stellicsStorage.getCargo();
         int economyIterPerMonth = (int) Global.getSettings().getFloat("economyIterPerMonth");
-        int cargoUpkeep = calculateCargoUpkeep(cargo) / economyIterPerMonth;
-        int fleetUpkeep = calculateFleetUpkeep(cargo) / economyIterPerMonth;
+        int cargoUpkeep = CargoHelper.calculateCargoUpkeep(cargo) / economyIterPerMonth;
+        int fleetUpkeep = CargoHelper.calculateFleetUpkeep(cargo) / economyIterPerMonth;
         updateCurrentReport(cargoUpkeep + fleetUpkeep);
     }
 
     public void reportEconomyMonthEnd() {
-    }
-
-    private int calculateCargoUpkeep(CargoAPI cargo) {
-        int spaceUsed = CargoHelper.calculateSpaceUsed(cargo);
-        int currentUpkeep = 0;
-
-        // first 1000 costs 9 per unit, 1001-10000 costs 5 per unit, 10001+ costs 1 per unit
-        currentUpkeep += 4 * Math.min(spaceUsed, 1000);
-        currentUpkeep += 4 * Math.min(spaceUsed, 10000);
-        currentUpkeep += 1 * spaceUsed;
-
-        // divide by number of ticks per month
-        return currentUpkeep;
-    }
-
-    private int calculateFleetUpkeep(CargoAPI cargo) {
-       int currentUpkeep = 0;
-
-       for (FleetMemberAPI ship : cargo.getMothballedShips().getMembersListCopy()) {
-           int shipUpkeep = 0;
-
-           // base upkeep depends on ship class
-           if (ship.isFrigate()) shipUpkeep = 100;
-           if (ship.isDestroyer()) shipUpkeep = 1000;
-           if (ship.isCruiser()) shipUpkeep = 10000;
-           if (ship.isCapital()) shipUpkeep = 100000;
-
-           // reduction for civilians
-           if (ship.isCivilian()) shipUpkeep /= 2;
-
-           // increase for carriers
-           if (ship.isCarrier()) shipUpkeep *= 2;
-
-           currentUpkeep += shipUpkeep;
-       }
-
-       return currentUpkeep;
     }
 
     private void updateCurrentReport(int upkeep) {
