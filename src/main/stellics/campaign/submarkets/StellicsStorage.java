@@ -39,11 +39,6 @@ public class StellicsStorage extends StoragePlugin {
     }
 
     @Override
-    public boolean showInFleetScreen() {
-        return false;
-    }
-
-    @Override
     protected void createTooltipAfterDescription(TooltipMakerAPI tooltip, boolean expanded) {
     }
 }

@@ -1,7 +1,8 @@
-* unreleased - 0.8.1
-- Fix officer intel changing after hiring one
-- Refactor StellNET queries, limit results to non-hostiles
+* unreleased - 0.9.0
+- Enable fleet storage (fee based on ship's size)
 - Make storage work with addIndustry console command
+- Refactor StellNET queries, limit results to non-hostiles
+- Fix officer intel changing after hiring one
 
 * Thu Aug 13 2020 - 0.8.0
 - New intel implementation that disappears after 14 days

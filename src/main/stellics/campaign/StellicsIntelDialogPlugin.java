@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.CargoPickerListener;
 import com.fs.starfarer.api.campaign.CargoStackAPI;
@@ -26,6 +25,7 @@ import stellics.Constants;
 import stellics.campaign.econ.MarketFilter;
 import stellics.campaign.econ.NonHostileFilter;
 import stellics.campaign.intel.*;
+import stellics.helper.CargoHelper;
 import stellics.helper.IntelHelper;
 import stellics.helper.MarketHelper;
 
@@ -196,7 +196,7 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, Cargo
     protected void queryHandler(OptionId option) {
         String category = option.name().toLowerCase();
         List<MarketAPI> markets = MarketHelper.findMarkets(getFilters());
-        CargoAPI cargo = getCargo(MarketHelper.findItems(markets, category));
+        CargoAPI cargo = CargoHelper.getCargo(MarketHelper.findItems(markets, category));
 
         if (cargo.isEmpty()) {
             askForMore("No markets selling " + category + "s found.");
@@ -226,18 +226,6 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, Cargo
     private void addTitle(String text) {
         Color colorHighlight = Misc.getHighlightColor();
         textPanel.addPara(text, colorHighlight);
-    }
-
-    private CargoAPI getCargo(List<CargoStackAPI> cargoStacks) {
-        CargoAPI cargo = Global.getFactory().createCargo(true);
-
-        for (CargoStackAPI cargoStack : cargoStacks) {
-            cargo.addFromStack(cargoStack);
-        }
-
-        cargo.sort();
-
-        return cargo;
     }
 
     private List<MarketFilter> getFilters() {
