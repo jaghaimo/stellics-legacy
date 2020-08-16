@@ -1,6 +1,7 @@
 package stellics.campaign.intel.entity;
 
 import com.fs.starfarer.api.campaign.FactionAPI;
+import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -27,8 +28,14 @@ public class Stellnet implements IntelEntity {
     }
 
     public String getIntelInfo() {
-        return "Nearest " + entity + " can be found on " + market.getName() + " in "
-                + market.getStarSystem().getName() + ".";
+        String name = market.getName();
+        StarSystemAPI starSystem = market.getStarSystem();
+
+        if (starSystem != null) {
+            name += " in " + starSystem.getName();
+        }
+
+        return "Nearest " + entity + " can be found on " + name;
     }
 
     public void createSmallDescription(TooltipMakerAPI info) {
