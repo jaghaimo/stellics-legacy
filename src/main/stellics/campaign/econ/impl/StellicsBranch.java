@@ -28,7 +28,6 @@ public class StellicsBranch extends BaseIndustry {
     @Override
     public void reapply() {
         super.reapply();
-        StorageHelper.remove(market);
 
         if (isFunctional()) {
             StorageHelper.add(market);

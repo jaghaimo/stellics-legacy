@@ -1,5 +1,5 @@
 {
-    ## Cargo upkeep base cost ##
+    ## Cargo upkeep cost ##
     # First 1000 items cost 9 per month
     "cargoTier1Cost": 9,
     "cargoTier1Quantity": 1000,
@@ -9,14 +9,15 @@
     # Everything above that costs 1 per month
     "cargoTier3Cost": 1,
 
-    ## Fleet upkeep base cost ##
-    "fleetFrigateCost": 100,
-    "fleetDestroyerCost": 1000,
-    "fleetCruiserCost": 10000,
-    "fleetCapitalCost": 100000,
-    # Ship type multipliers
-    "fleetCivilianMulti": 0.5,
-    "fleetCarrierMulti": 2,
+    ## Fleet upkeep cost ##
+    # First 1000 ordenance points cost 90 per month
+    "fleetTier1Cost": 90,
+    "fleetTier1Quantity": 1000,
+    # Next 10000 ordenance points cost 50 per month
+    "fleetTier2Cost": 50,
+    "fleetTier2Quantity": 10000,
+    # Everything above that costs 10 per month
+    "fleetTier3Cost": 10,
 
     "graphics":{
         "illustrations":{

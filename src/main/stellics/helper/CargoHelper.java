@@ -9,57 +9,35 @@ import com.fs.starfarer.api.fleet.FleetMemberAPI;
 
 public class CargoHelper {
 
-    public static int calculateCargoUpkeep(CargoAPI cargo) {
-        int spaceUsed = CargoHelper.calculateSpaceUsed(cargo);
-        int currentUpkeep = 0;
-
-        int tier1cost = Global.getSettings().getInt("cargoTier1Cost");
-        int tier2cost = Global.getSettings().getInt("cargoTier2Cost");
-        int tier3cost = Global.getSettings().getInt("cargoTier3Cost");
-
-        int tier1quantity = Global.getSettings().getInt("cargoTier1Quantity");
-        int tier2quantity = Global.getSettings().getInt("cargoTier2Quantity");
-
-        currentUpkeep += (tier1cost - tier2cost - tier3cost) * Math.min(spaceUsed, tier1quantity);
-        currentUpkeep += (tier2cost - tier3cost) * Math.min(spaceUsed, tier2quantity);
-        currentUpkeep += tier3cost * spaceUsed;
-
-        return currentUpkeep;
+    private static enum CostType {
+        CARGO,
+        FLEET
     }
 
-    public static int calculateFleetUpkeep(CargoAPI cargo) {
-        int currentUpkeep = 0;
+    public static int calculateCargoUpkeep(CargoAPI cargo) {
+        int spaceUsed = CargoHelper.calculateCargoSpace(cargo);
 
-        int tier1cost = Global.getSettings().getInt("fleetFrigateCost");
-        int tier2cost = Global.getSettings().getInt("fleetDestroyerCost");
-        int tier3cost = Global.getSettings().getInt("fleetCruiserCost");
-        int tier4cost = Global.getSettings().getInt("fleetCapitalCost");
+        return getCost(spaceUsed, CostType.CARGO);
+    }
 
-        float civilianMulti = Global.getSettings().getFloat("fleetCivilianMulti");
-        float carrierMulti = Global.getSettings().getFloat("fleetCarrierMulti");
+    public static int calculateShipUpkeep(CargoAPI cargo) {
+        int spaceUsed = CargoHelper.calculateShipSpace(cargo);
+
+        return getCost(spaceUsed, CostType.FLEET);
+    }
+
+    // Space is a sum of ordenance points
+    public static int calculateShipSpace(CargoAPI cargo) {
+        int fleetCost = 0;
 
         for (FleetMemberAPI ship : cargo.getMothballedShips().getMembersListCopy()) {
-            int shipUpkeep = 0;
-
-            // base upkeep depends on ship class
-            if (ship.isFrigate()) shipUpkeep = tier1cost;
-            if (ship.isDestroyer()) shipUpkeep = tier2cost;
-            if (ship.isCruiser()) shipUpkeep = tier3cost;
-            if (ship.isCapital()) shipUpkeep = tier4cost;
-
-            // reduction for civilians
-            if (ship.isCivilian()) shipUpkeep *= civilianMulti;
-
-            // increase for carriers
-            if (ship.isCarrier()) shipUpkeep *= carrierMulti;
-
-            currentUpkeep += shipUpkeep;
+            fleetCost += ship.getHullSpec().getOrdnancePoints(null);
         }
 
-        return currentUpkeep;
+        return fleetCost;
     }
 
-    public static int calculateSpaceUsed(CargoAPI cargo) {
+    public static int calculateCargoSpace(CargoAPI cargo) {
         int cargoSpace = 0;
 
         for (CargoStackAPI stack : cargo.getStacksCopy()) {
@@ -81,4 +59,22 @@ public class CargoHelper {
         return cargo;
     }
 
+    private static int getCost(int spaceUsed, CostType type) {
+        int currentUpkeep = 0;
+
+        String prefix = type.name().toLowerCase();
+
+        int tier1cost = Global.getSettings().getInt(prefix + "Tier1Cost");
+        int tier2cost = Global.getSettings().getInt(prefix + "Tier2Cost");
+        int tier3cost = Global.getSettings().getInt(prefix + "Tier3Cost");
+
+        int tier1quantity = Global.getSettings().getInt(prefix + "Tier1Quantity");
+        int tier2quantity = Global.getSettings().getInt(prefix + "Tier2Quantity");
+
+        currentUpkeep += (tier1cost - tier2cost) * Math.min(spaceUsed, tier1quantity);
+        currentUpkeep += (tier2cost - tier3cost) * Math.min(spaceUsed, tier2quantity);
+        currentUpkeep += tier3cost * spaceUsed;
+
+        return currentUpkeep;
+    }
 }

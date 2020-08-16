@@ -30,8 +30,8 @@ public class StellicsFeeListener implements EconomyTickListener {
         CargoAPI cargo = stellicsStorage.getCargo();
         int economyIterPerMonth = (int) Global.getSettings().getFloat("economyIterPerMonth");
         int cargoUpkeep = CargoHelper.calculateCargoUpkeep(cargo) / economyIterPerMonth;
-        int fleetUpkeep = CargoHelper.calculateFleetUpkeep(cargo) / economyIterPerMonth;
-        updateCurrentReport(cargoUpkeep + fleetUpkeep);
+        int shipUpkeep = CargoHelper.calculateShipUpkeep(cargo) / economyIterPerMonth;
+        updateCurrentReport(cargoUpkeep + shipUpkeep);
     }
 
     public void reportEconomyMonthEnd() {

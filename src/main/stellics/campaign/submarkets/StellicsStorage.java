@@ -6,6 +6,7 @@ import com.fs.starfarer.api.campaign.SubmarketPlugin;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.submarkets.StoragePlugin;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import com.fs.starfarer.api.util.Misc;
 
 import stellics.helper.CargoHelper;
 
@@ -45,13 +46,15 @@ public class StellicsStorage extends StoragePlugin {
     protected void createTooltipAfterDescription(TooltipMakerAPI tooltip, boolean expanded) {
         CargoAPI cargo = submarket.getCargo();
         int cargoCost = CargoHelper.calculateCargoUpkeep(cargo);
-        int fleetCost = CargoHelper.calculateFleetUpkeep(cargo);
+        int shipCost = CargoHelper.calculateShipUpkeep(cargo);
 
-        tooltip.addPara("Total monthly storage cost: " + cargoCost + fleetCost, 3f);
+        if (cargoCost + shipCost > 0) {
+            tooltip.addPara("Monthly fees and expenses:", 10f);
+            tooltip.beginGridFlipped(300, 1, 80, 10);
+            tooltip.addToGrid(0, 0, "Ships in storage", Misc.getDGSCredits(shipCost));
+            tooltip.addToGrid(0, 1, "Cargo in storage", Misc.getDGSCredits(cargoCost));
+            tooltip.addGrid(3f);
 
-        if (expanded) {
-            tooltip.addPara("Monthly cargo storage cost: " + cargoCost, 3f);
-            tooltip.addPara("Monthly fleet storage cost: " + fleetCost, 3f);
         }
     }
 }
