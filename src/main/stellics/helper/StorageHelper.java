@@ -11,7 +11,7 @@ import stellics.campaign.listeners.StellicsFeeListener;
 
 public class StorageHelper {
 
-    public boolean add(MarketAPI market) {
+    public static boolean add(MarketAPI market) {
         if (market.hasSubmarket(Constants.STORAGE)) {
             return false;
         }
@@ -28,19 +28,19 @@ public class StorageHelper {
         return true;
     }
 
-    public SubmarketAPI get() {
+    public static SubmarketAPI get() {
         return findFirst();
     }
 
-    public boolean exists() {
+    public static boolean exists() {
         return findFirst() != null;
     }
 
-    public boolean has(MarketAPI market) {
+    public static boolean has(MarketAPI market) {
         return market.hasSubmarket(Constants.STORAGE);
     }
 
-    public boolean isFounding(MarketAPI market) {
+    public static boolean isFounding(MarketAPI market) {
         String marketId = "";
 
         // first branch will "own" a submarket
@@ -51,7 +51,7 @@ public class StorageHelper {
         return market.getId().equals(marketId);
     }
 
-    public void registerFeeListener() {
+    public static void registerFeeListener() {
         SubmarketAPI submarket = get();
 
         if (submarket == null) {
@@ -62,7 +62,7 @@ public class StorageHelper {
         Global.getSector().getListenerManager().addListener(new StellicsFeeListener(market), true);
     }
 
-    public boolean remove(MarketAPI market) {
+    public static boolean remove(MarketAPI market) {
         boolean hasRemoved = false;
 
         if (market.hasSubmarket(Constants.STORAGE)) {
@@ -73,7 +73,7 @@ public class StorageHelper {
         return hasRemoved;
     }
 
-    private SubmarketAPI findFirst() {
+    private static SubmarketAPI findFirst() {
         SubmarketAPI stellicsStorage;
         List<MarketAPI> marketCopy = Global.getSector().getEconomy().getMarketsCopy();
 

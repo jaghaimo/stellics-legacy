@@ -11,8 +11,6 @@ import stellics.campaign.intel.entity.Branch;
 
 public class StellicsBranch extends BaseIndustry {
 
-    private StorageHelper storageHelper;
-
     @Override
     public void apply() {
         super.apply(true);
@@ -28,14 +26,24 @@ public class StellicsBranch extends BaseIndustry {
     }
 
     @Override
+    public void reapply() {
+        super.reapply();
+        StorageHelper.remove(market);
+
+        if (isFunctional()) {
+            StorageHelper.add(market);
+        }
+    }
+
+    @Override
     public void notifyDisrupted() {
         super.notifyDisrupted();
 
-        if (getStorageHelper().isFounding(market)) {
+        if (StorageHelper.isFounding(market)) {
             return;
         }
 
-        if (getStorageHelper().remove(market)) {
+        if (StorageHelper.remove(market)) {
             queueIntel(Branch.Action.DISRUPT);
         }
     }
@@ -44,11 +52,11 @@ public class StellicsBranch extends BaseIndustry {
     protected void disruptionFinished() {
         super.disruptionFinished();
 
-        if (getStorageHelper().isFounding(market)) {
+        if (StorageHelper.isFounding(market)) {
             return;
         }
 
-        if (getStorageHelper().add(market)) {
+        if (StorageHelper.add(market)) {
             queueIntel(Branch.Action.RESUME);
         }
     }
@@ -57,7 +65,7 @@ public class StellicsBranch extends BaseIndustry {
     public void finishBuildingOrUpgrading() {
         super.finishBuildingOrUpgrading();
 
-        if (getStorageHelper().add(market)) {
+        if (StorageHelper.add(market)) {
             queueIntel(Branch.Action.OPEN);
         }
     }
@@ -66,17 +74,9 @@ public class StellicsBranch extends BaseIndustry {
     public void notifyBeingRemoved(MarketAPI.MarketInteractionMode mode, boolean forUpgrade) {
         super.notifyBeingRemoved(mode, forUpgrade);
 
-        if (getStorageHelper().remove(market)) {
+        if (StorageHelper.remove(market)) {
             queueIntel(Branch.Action.CLOSE);
         }
-    }
-
-    private StorageHelper getStorageHelper() {
-        if (storageHelper == null) {
-            storageHelper = new StorageHelper();
-        }
-
-        return storageHelper;
     }
 
     private void queueIntel(Branch.Action action) {
