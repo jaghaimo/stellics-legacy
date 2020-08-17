@@ -1,54 +1,56 @@
-* unreleased - 0.9.0
-- Hint total cost of your cargo and fleet storage on tab hover
-- Move hardcoded fee addends to settings.json
-- Enable fleet storage (fee based on ship's size)
-- Make storage work with addIndustry console command
-- Refactor StellNET queries, limit results to non-hostiles
-- Fix officer intel changing after hiring one
+* Mon Aug 17 2020 - 0.9.0
+- Feature: Add merging CSV support for faction whitelist and blacklist
+- Feature: Enable fleet storage (fee based on ship's ordnance points)
+- Improvement: Show monthly cost of cargo and ship storage on tab hover
+- Improvement: Move hardcoded fee addends to settings.json
+- Improvement: Refactor StellNET queries, limit results to non-hostiles
+- Bugfix: Make storage work with addIndustry console command
+- Bugfix: Fix officer intel changing after hiring one
+- Bugfix: Do not crash when the nearest market is in hyperspace
 
 * Thu Aug 13 2020 - 0.8.0
-- New intel implementation that disappears after 14 days
-- Add cargo (weapons, fighters, modspecs, blueprints) search to StellNET
-- Remove old "unkillable" intels on game load
+- Feature: Add cargo (weapons, fighters, modspecs, blueprints) search to StellNET
+- Improvement: New intel implementation that disappears after 14 days
+- Bugfix: Remove old "unkillable" intels on game load
 
 * Mon Aug 10 2020 - 0.7.2
-- Fix same-system search for the nearest market
+- Bugfix: Fix same-system search for the nearest market
 
 * Sun Aug 09 2020 - 0.7.1
-- Add stellicsExport and stellicsImport commands
-- Fix broken save-game compatibility due to ability changes
+- Feature: Add stellicsExport and stellicsImport commands
+- Bugfix: Fix broken save-game compatibility due to ability changes
 
 * Sat Aug 08 2020 - 0.7.0
-- Rework nearest branch ability into StellNET
-- Add officer search to StellNET
+- Feature: Add officer search to StellNET
+- Improvement: Rework nearest branch ability into StellNET
 
 * Fri Aug 07 2020 - 0.6.0
-- Change default seeds to Indies (avoids affecting custom factions)
-- Add upper limit for submarkets (avoids market oversaturation)
-- Add new ability to find the nearest Stellar Logistics Branch
+- Feature: Add new ability to find the nearest Stellar Logistics Branch
+- Improvement: Change default seeds to Indies (avoids affecting custom factions)
+- Improvement: Add upper limit for submarkets (avoids market oversaturation)
 
 * Thu Aug 06 2020 - 0.5.2
-- Make upkeep cost persistent across save/load
-- Replace vanilla storage tab with a custom one
-- Raise upkeep fee slighly (1 to 9 per unit)
+- Improvement: Replace vanilla storage tab image with a custom one
+- Improvement: Raise upkeep fee slighly (1 to 9 per unit)
+- Bugfix: Make upkeep cost persistent across save/load
 
 * Wed Aug 05 2020 - 0.5.1
-- Update Version Checker file with forum link for GA
-- Rebalance storage fee
+- Improvement: Update Version Checker file with forum link for GA
+- Improvement: Rebalance storage fee
 
 * Sun Aug 02 2020 - 0.5.0
-- Add proper intel update regarding Stellics Branch (open, closed, disrupted)
-- Remove broken Console command (stellicsRemove)
+- Improvement: Add proper intel update regarding Stellics Branch (open, closed, disrupted)
+- Bugfix: Remove broken Console command (stellicsRemove)
 
 * Thu Jul 30 2020 - 0.4.0
-- Add Console Commands support (add and remove content)
+- Feature: Add Console Commands support (add and remove content)
 
 * Tue Jul 28 2020 - 0.3.0
-- Reworked storage fee
-- Procgen for Vanilla and Nex
+- Feature: Procgen for Vanilla and Nex
+- Improvement: Reworked storage fee
 
 * Mon Jul 27 2020 - 0.2.0
-- Initial storage fee
+- Feature: Initial storage fee
 
 * Sun Jul 26 2020 - 0.1.0
-- Very naive but working PoC
+- Feature: Very naive but working PoC
