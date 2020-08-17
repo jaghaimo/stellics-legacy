@@ -1,7 +1,9 @@
 package stellics;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
@@ -9,6 +11,7 @@ import com.fs.starfarer.api.campaign.comm.IntelInfoPlugin;
 import com.fs.starfarer.api.campaign.comm.IntelManagerAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import stellics.campaign.intel.StellicsBranchIntel;
@@ -22,10 +25,7 @@ public class StellicsModPlugin extends BaseModPlugin {
     private final String SETTINGS_FILE = "stellics_settings.json";
 
     private JSONObject settings;
-
     private StellicsSettings stellicsSettings;
-
-    private StorageHelper storageHelper;
 
     @Override
     public void onApplicationLoad() throws Exception {
@@ -34,8 +34,9 @@ public class StellicsModPlugin extends BaseModPlugin {
 
     @Override
     public void onNewGameAfterEconomyLoad() {
-        stellicsSettings = new StellicsSettings(settings);
-        storageHelper = new StorageHelper();
+        stellicsSettings = new StellicsSettings(settings,
+                loadFactionList("data/config/stellics/faction_blacklist.csv"),
+                loadFactionList("data/config/stellics/faction_whitelist.csv"));
 
         seedPrism();
         seedFactions();
@@ -43,13 +44,28 @@ public class StellicsModPlugin extends BaseModPlugin {
 
     @Override
     public void onGameLoad(boolean newGame) {
-        storageHelper = new StorageHelper();
-        storageHelper.registerFeeListener();
+        StorageHelper.registerFeeListener();
 
         removeDeprecatedIntel(StellicsBranchIntel.class);
         removeDeprecatedIntel(StellicsLocationIntel.class);
         removeDeprecatedIntel(StellicsOfficerIntel.class);
         removeDeprecatedIntel(StellnetIntel.class);
+    }
+
+    private Set<String> loadFactionList(String path) {
+        Set<String> factionList = new HashSet<>();
+
+        try {
+            JSONArray config = Global.getSettings().getMergedSpreadsheetDataForMod("id", path, "stellics");
+            for (int i = 0; i < config.length(); i++) {
+                JSONObject row = config.getJSONObject(i);
+                String factionId = row.getString("id");
+                factionList.add(factionId);
+            }
+        } catch (Exception exception) {
+        }
+
+        return factionList;
     }
 
     private void removeDeprecatedIntel(Class<?> c) {
@@ -61,50 +77,40 @@ public class StellicsModPlugin extends BaseModPlugin {
         }
     }
 
-    private void seedFaction(MarketAPI market) {
+    private boolean canSeed(MarketAPI market) {
+        String faction = market.getFactionId();
         int marketSize = market.getSize();
-
-        if (stellicsSettings.getSeedMinimalSize() > marketSize) {
-            return;
-        }
-
         int submarketCount = market.getSubmarketsCopy().size();
 
+        if (!stellicsSettings.canSeed(faction)) {
+            return false;
+        }
+
+        if (stellicsSettings.getSeedMinimalSize() > marketSize) {
+            return false;
+        }
+
         if (stellicsSettings.getSeedMaxSubmarkets() < submarketCount) {
-            return;
+            return false;
         }
 
-        String faction = market.getFactionId();
-        int seedFactions = stellicsSettings.getSeedFactions();
-        double seedProbability = stellicsSettings.getSeedProbability();
-
-        if (seedFactions == 1 && faction.equals("independent")) {
-            seedMarket(market, seedProbability);
-        } else if (seedFactions == 2 && !faction.equals("pirates")) {
-            seedMarket(market, seedProbability);
-        } else if (seedFactions == 3) {
-            seedMarket(market, seedProbability);
-        }
+        return true;
     }
 
     private void seedFactions() {
-        // don't add branches and storages to any factions
-        if (stellicsSettings.getSeedFactions() == 0) {
-            return;
-        }
-
         // spread branches and storages across the galaxy
-        for (MarketAPI marketCopy : Global.getSector().getEconomy().getMarketsCopy()) {
-            // we need an actual market instead of copy
-            MarketAPI market = Global.getSector().getEconomy().getMarket(marketCopy.getId());
-            seedFaction(market);
+        for (MarketAPI market: Global.getSector().getEconomy().getMarketsCopy()) {
+            if (canSeed(market)) {
+                double seedProbability = stellicsSettings.getSeedProbability();
+                seedMarket(market, seedProbability);
+            }
         }
     }
 
     private void seedMarket(MarketAPI market, double seedProbability) {
-        if (seedProbability > Math.random() && !storageHelper.has(market)) {
+        if (seedProbability > Math.random() && !StorageHelper.has(market)) {
             market.addIndustry(Constants.BRANCH);
-            storageHelper.add(market);
+            StorageHelper.add(market);
         }
     }
 
@@ -116,7 +122,7 @@ public class StellicsModPlugin extends BaseModPlugin {
         }
 
         // we have a Nexerelin game with Prism Freeport enabled, and we want to use it
-        if (stellicsSettings.isSeedPrism() && !storageHelper.has(market)) {
+        if (stellicsSettings.isSeedPrism() && !StorageHelper.has(market)) {
             seedMarket(market, 1);
         }
     }

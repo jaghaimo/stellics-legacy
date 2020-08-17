@@ -3,9 +3,15 @@
     # Ignored if Nexerelin or Prism Freeport is not present.
     "seedPrism": true,
 
-    # Factions to put Branch and Storage on:
-    # 0: none, 1: independent, 2: all but pirates, 3: all
-    "seedFactions": 1,
+    # Should the faction blacklist be considered?
+    # true: never consider blacklisted factions
+    # false: do not reject factions from blacklist
+    "seedFactionsUseBlacklist": true,
+
+    # Should the faction whitelists be considered?
+    # true: only consider whitelisted factions
+    # false: consider all factions
+    "seedFactionsUseWhitelist": true,
 
     # Minimal size for planet to have Branch and Storage put on
     "seedFactionsMinimalSize": 4,
