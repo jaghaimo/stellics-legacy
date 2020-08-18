@@ -31,15 +31,6 @@ import stellics.helper.MarketHelper;
 
 public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, CargoPickerListener {
 
-    private enum OptionId {
-        // main page
-        INIT, BRANCH, OFFICERS, QUERY, EXIT,
-        // officers page
-        TIMID, CAUTIOUS, STEADY, AGGRESSIVE, RECKLESS,
-        // query page
-        WEAPON, FIGHTER, MODSPEC, BLUEPRINT
-    }
-
     private InteractionDialogAPI dialog;
     private TextPanelAPI textPanel;
     private OptionPanelAPI options;
@@ -71,12 +62,12 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, Cargo
         visual = dialog.getVisualPanel();
 
         visual.showImagePortion("illustrations", "stellnet", 640, 400, 0, 0, 480, 300);
-        dialog.setOptionOnEscape("Disconnect from StellNET", OptionId.EXIT);
+        dialog.setOptionOnEscape("Disconnect from StellNET", IntelOption.EXIT);
 
         addTitle("StellNET");
         textPanel.addPara("Welcome to Stellar Network!");
         textPanel.addPara("Which of our services would you like to use?");
-        optionSelected(null, OptionId.INIT);
+        optionSelected(null, IntelOption.INIT);
     }
 
     @Override
@@ -89,7 +80,7 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, Cargo
             return;
         }
 
-        OptionId option = (OptionId) optionData;
+        IntelOption option = (IntelOption) optionData;
 
         switch (option) {
             case INIT:
@@ -100,12 +91,16 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, Cargo
                 branchHandler();
                 break;
 
-            case OFFICERS:
+            case OFFICER:
                 officersHandler();
                 break;
 
             case QUERY:
                 queryHandler();
+                break;
+
+            case SHIP:
+                shipHandler();
                 break;
 
             case EXIT:
@@ -128,6 +123,14 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, Cargo
             case BLUEPRINT:
                 queryHandler(option);
                 break;
+
+            // find ships handling
+            case FRIGATE:
+            case DESTROYER:
+            case CRUISER:
+            case CAPITAL:
+                shipHandler(option);
+                break;
         }
     }
 
@@ -147,12 +150,8 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, Cargo
     }
 
     protected void initHandler() {
-        options.clearOptions();
-        options.addOption("Locate nearest branch", OptionId.BRANCH);
-        options.addOption("Find officers", OptionId.OFFICERS);
-        options.addOption("Query markets", OptionId.QUERY);
-        options.addOption("Disconnect from StellNET", OptionId.EXIT);
-        options.setShortcut(OptionId.EXIT, Keyboard.KEY_ESCAPE, false, false, false, false);
+        addOptions(IntelOption.BRANCH, IntelOption.OFFICER, IntelOption.QUERY, IntelOption.EXIT);
+        options.setShortcut(IntelOption.EXIT, Keyboard.KEY_ESCAPE, false, false, false, false);
     }
 
     protected void branchHandler() {
@@ -164,17 +163,12 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, Cargo
         addTitle("Find Officers");
         textPanel.addPara("What personality should the officer have?");
 
-        options.clearOptions();
-        options.addOption("Timid", OptionId.TIMID);
-        options.addOption("Cautious", OptionId.CAUTIOUS);
-        options.addOption("Steady", OptionId.STEADY);
-        options.addOption("Aggressive", OptionId.AGGRESSIVE);
-        options.addOption("Reckless", OptionId.RECKLESS);
-        options.addOption("Go back", OptionId.INIT);
-        options.setShortcut(OptionId.INIT, Keyboard.KEY_ESCAPE, false, false, false, false);
+        addOptions(IntelOption.TIMID, IntelOption.CAUTIOUS, IntelOption.STEADY, IntelOption.AGGRESSIVE,
+                IntelOption.RECKLESS, IntelOption.INIT);
+        options.setShortcut(IntelOption.INIT, Keyboard.KEY_ESCAPE, false, false, false, false);
     }
 
-    protected void officersHandler(OptionId option) {
+    protected void officersHandler(IntelOption option) {
         String personality = option.name().toLowerCase();
         addTitle("Find Officers");
         addIntel(IntelHelper.getOfficerIntel(getFilters(), personality));
@@ -184,16 +178,12 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, Cargo
         addTitle("Query Markets");
         textPanel.addPara("What category of items are you interested in?");
 
-        options.clearOptions();
-        options.addOption("Weapons", OptionId.WEAPON);
-        options.addOption("Fighters", OptionId.FIGHTER);
-        options.addOption("Modspecs", OptionId.MODSPEC);
-        options.addOption("Blueprints", OptionId.BLUEPRINT);
-        options.addOption("Go back", OptionId.INIT);
-        options.setShortcut(OptionId.INIT, Keyboard.KEY_ESCAPE, false, false, false, false);
+        addOptions(IntelOption.WEAPON, IntelOption.FIGHTER, IntelOption.MODSPEC, IntelOption.BLUEPRINT,
+                IntelOption.INIT);
+        options.setShortcut(IntelOption.INIT, Keyboard.KEY_ESCAPE, false, false, false, false);
     }
 
-    protected void queryHandler(OptionId option) {
+    protected void queryHandler(IntelOption option) {
         String category = option.name().toLowerCase();
         List<MarketAPI> markets = MarketHelper.findMarkets(getFilters());
         CargoAPI cargo = CargoHelper.getCargo(MarketHelper.findItems(markets, category));
@@ -204,6 +194,26 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, Cargo
         }
 
         dialog.showCargoPickerDialog("Pick item to search for", "Query", "Cancel", false, 0f, cargo, this);
+    }
+
+    protected void shipHandler() {
+        addTitle("Ship Finder");
+        textPanel.addPara("What type of ships are you interested in?");
+
+        addOptions(IntelOption.FRIGATE, IntelOption.DESTROYER, IntelOption.CRUISER, IntelOption.CAPITAL,
+                IntelOption.INIT);
+        options.setShortcut(IntelOption.INIT, Keyboard.KEY_ESCAPE, false, false, false, false);
+    }
+
+    protected void shipHandler(IntelOption option) {
+    }
+
+    private void addOptions(IntelOption... intelOptions) {
+        options.clearOptions();
+
+        for (IntelOption option : intelOptions) {
+            options.addOption(option.getName(), option);
+        }
     }
 
     private void addIntel(BaseStellnetIntel intel) {
