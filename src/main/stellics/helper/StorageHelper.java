@@ -12,7 +12,7 @@ import stellics.campaign.listeners.StellicsFeeListener;
 public class StorageHelper {
 
     public static boolean add(MarketAPI market) {
-        if (market.hasSubmarket(Constants.STORAGE)) {
+        if (market.hasSubmarket(Constants.STORAGE) || !market.hasIndustry(Constants.BRANCH)) {
             return false;
         }
 
@@ -65,7 +65,7 @@ public class StorageHelper {
     public static boolean remove(MarketAPI market) {
         boolean hasRemoved = false;
 
-        if (market.hasSubmarket(Constants.STORAGE)) {
+        if (market.hasSubmarket(Constants.STORAGE) && !isFounding(market)) {
             market.removeSubmarket(Constants.STORAGE);
             hasRemoved = true;
         }
@@ -79,6 +79,7 @@ public class StorageHelper {
 
         for (MarketAPI marketApi : marketCopy) {
             stellicsStorage = marketApi.getSubmarket(Constants.STORAGE);
+
             if (stellicsStorage != null) {
                 return stellicsStorage;
             }

@@ -1,3 +1,7 @@
+* unreleased - 0.9.1
+- Improvement: Add command to find and fix orphaned storage submarkets
+- Bugfix: Harden code for adding storage submarkets
+
 * Mon Aug 17 2020 - 0.9.0
 - Feature: Add merging CSV support for faction whitelist and blacklist
 - Feature: Enable fleet storage (fee based on ship's ordnance points)

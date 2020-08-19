@@ -19,19 +19,17 @@ public class StellicsBranch extends BaseIndustry {
         demand(Commodities.CREW, size - 1);
         demand(Commodities.FUEL, size - 1);
 
-        if (!isFunctional()) {
+        if (isFunctional()) {
+            StorageHelper.add(market);
+        } else {
             demand.clear();
             supply.clear();
         }
     }
 
     @Override
-    public void reapply() {
-        super.reapply();
-
-        if (isFunctional()) {
-            StorageHelper.add(market);
-        }
+    public void unapply() {
+        StorageHelper.remove(market);
     }
 
     @Override
@@ -42,9 +40,7 @@ public class StellicsBranch extends BaseIndustry {
             return;
         }
 
-        if (StorageHelper.remove(market)) {
-            queueIntel(Branch.Action.DISRUPT);
-        }
+        queueIntel(Branch.Action.DISRUPT);
     }
 
     @Override
@@ -55,18 +51,14 @@ public class StellicsBranch extends BaseIndustry {
             return;
         }
 
-        if (StorageHelper.add(market)) {
-            queueIntel(Branch.Action.RESUME);
-        }
+        queueIntel(Branch.Action.RESUME);
     }
 
     @Override
     public void finishBuildingOrUpgrading() {
         super.finishBuildingOrUpgrading();
 
-        if (StorageHelper.add(market)) {
-            queueIntel(Branch.Action.OPEN);
-        }
+        queueIntel(Branch.Action.OPEN);
     }
 
     @Override
