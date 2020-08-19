@@ -8,6 +8,7 @@ import java.util.Map;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.CargoPickerListener;
 import com.fs.starfarer.api.campaign.CargoStackAPI;
+import com.fs.starfarer.api.campaign.FleetMemberPickerListener;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.InteractionDialogPlugin;
 import com.fs.starfarer.api.campaign.OptionPanelAPI;
@@ -16,6 +17,7 @@ import com.fs.starfarer.api.campaign.VisualPanelAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
+import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
@@ -29,7 +31,8 @@ import stellics.helper.CargoHelper;
 import stellics.helper.IntelHelper;
 import stellics.helper.MarketHelper;
 
-public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, CargoPickerListener {
+public class StellicsIntelDialogPlugin
+        implements InteractionDialogPlugin, CargoPickerListener, FleetMemberPickerListener {
 
     private InteractionDialogAPI dialog;
     private TextPanelAPI textPanel;
@@ -145,12 +148,22 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, Cargo
     }
 
     @Override
+    public void cancelledFleetMemberPicking() {
+        askForMore();
+    }
+
+    @Override
+    public void pickedFleetMembers(List<FleetMemberAPI> fleet) {
+        addIntel(IntelHelper.getFleetIntel(getFilters(), fleet));
+    }
+
+    @Override
     public void recreateTextPanel(TooltipMakerAPI panel, CargoAPI cargo, CargoStackAPI pickedUp,
             boolean pickedUpFromSource, CargoAPI combined) {
     }
 
     protected void initHandler() {
-        addOptions(IntelOption.BRANCH, IntelOption.OFFICER, IntelOption.QUERY, IntelOption.EXIT);
+        addOptions(IntelOption.BRANCH, IntelOption.OFFICER, IntelOption.QUERY, IntelOption.SHIP, IntelOption.EXIT);
         options.setShortcut(IntelOption.EXIT, Keyboard.KEY_ESCAPE, false, false, false, false);
     }
 
@@ -193,7 +206,7 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, Cargo
             return;
         }
 
-        dialog.showCargoPickerDialog("Pick item to search for", "Query", "Cancel", false, 0f, cargo, this);
+        dialog.showCargoPickerDialog("Pick an item to search for", "Query", "Cancel", false, 0f, cargo, this);
     }
 
     protected void shipHandler() {
@@ -206,6 +219,17 @@ public class StellicsIntelDialogPlugin implements InteractionDialogPlugin, Cargo
     }
 
     protected void shipHandler(IntelOption option) {
+        String size = option.name().toLowerCase();
+        List<MarketAPI> markets = MarketHelper.findMarkets(getFilters());
+        List<FleetMemberAPI> fleet = MarketHelper.findShips(markets, size);
+
+        if (fleet.isEmpty()) {
+            askForMore("No markets selling " + size + " ships found.");
+            return;
+        }
+
+        dialog.showFleetMemberPickerDialog("Pick a ship to search for", "Query", "Cancel", 8, 12, 64f, true, true,
+                fleet, this);
     }
 
     private void addOptions(IntelOption... intelOptions) {

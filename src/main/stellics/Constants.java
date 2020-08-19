@@ -11,4 +11,9 @@ public class Constants {
     public final static String SPECIAL = "special";
     public final static String WEAPON = "weapon";
     public final static String FIGHTER = "fighter";
+
+    public final static String FRIGATE = "frigate";
+    public final static String DESTROYER = "destroyer";
+    public final static String CRUISER = "cruiser";
+    public final static String CAPITAL = "capital";
 }

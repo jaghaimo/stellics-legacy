@@ -7,12 +7,41 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.CargoStackAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.fleet.FleetMemberAPI;
 
 import stellics.campaign.econ.*;
 import stellics.campaign.intel.*;
 import stellics.campaign.intel.entity.*;
 
 public class IntelHelper {
+
+    public static BaseStellnetIntel getFleetIntel(List<MarketFilter> filters, List<FleetMemberAPI> fleet) {
+        if (fleet.isEmpty()) {
+            return new EmptyIntel("Query cancelled - no ships selected.");
+        }
+
+        BatchStellnetIntel batchStellnetIntel = new BatchStellnetIntel();
+
+        for (FleetMemberAPI ship : fleet) {
+            String shipName = ship.getShipName();
+            String shipClass = ship.getHullSpec().getHullName();
+            List<MarketFilter> f = new ArrayList<MarketFilter>(filters);
+            f.add(new HasShipFilter(ship));
+
+            try {
+                List<MarketAPI> markets = MarketHelper.findMarkets(f);
+                MarketAPI market = MarketHelper.getNearestMarket(markets);
+                IntelEntity entity = new Ship(shipName, shipClass, market);
+                BaseStellnetIntel intel = new StellnetIntel(market.getFaction(), market.getPrimaryEntity(), entity);
+                batchStellnetIntel.add(intel);
+            } catch (Exception exception) {
+                BaseStellnetIntel intel = new EmptyIntel("Could not find any market selling " + shipName + ".");
+                batchStellnetIntel.add(intel);
+            }
+        }
+
+        return batchStellnetIntel;
+    }
 
     public static BaseStellnetIntel getCargoIntel(List<MarketFilter> filters, CargoAPI cargo) {
         if (cargo.isEmpty()) {
@@ -42,7 +71,8 @@ public class IntelHelper {
         return batchStellnetIntel;
     }
 
-    public static BaseStellnetIntel getIndustryIntel(List<MarketFilter> filters, String industryId, boolean notDisrupted) {
+    public static BaseStellnetIntel getIndustryIntel(List<MarketFilter> filters, String industryId,
+            boolean notDisrupted) {
         try {
             filters.add(new HasIndustryFilter(industryId, notDisrupted));
             List<MarketAPI> markets = MarketHelper.findMarkets(filters);

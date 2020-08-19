@@ -8,8 +8,10 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoStackAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
+import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.submarkets.BaseSubmarketPlugin;
 
+import stellics.campaign.econ.FleetComparator;
 import stellics.campaign.econ.MarketComparator;
 import stellics.campaign.econ.MarketFilter;
 import stellics.Constants;
@@ -38,11 +40,34 @@ public class MarketHelper {
         return cargoStacks;
     }
 
+    public static List<FleetMemberAPI> findShips(List<MarketAPI> markets, String size) {
+        List<FleetMemberAPI> fleet = new ArrayList<FleetMemberAPI>();
+
+        for (MarketAPI m : markets) {
+            for (SubmarketAPI s : m.getSubmarketsCopy()) {
+                try {
+                    ((BaseSubmarketPlugin) s.getPlugin()).updateCargoPrePlayerInteraction();
+                } catch (Exception exception) {
+                    continue;
+                }
+
+                for (FleetMemberAPI f : s.getCargo().getMothballedShips().getMembersListCopy()) {
+                    if (doesMatchSize(f, size)) {
+                        fleet.add(f);
+                    }
+                }
+            }
+        }
+
+        Collections.sort(fleet, new FleetComparator());
+
+        return fleet;
+    }
+
     public static List<MarketAPI> findMarkets(List<MarketFilter> filters) {
         List<MarketAPI> markets = new ArrayList<MarketAPI>();
 
-        skipMarket:
-        for (MarketAPI m : Global.getSector().getEconomy().getMarketsCopy()) {
+        skipMarket: for (MarketAPI m : Global.getSector().getEconomy().getMarketsCopy()) {
             for (MarketFilter f : filters) {
                 if (!f.match(m)) {
                     continue skipMarket;
@@ -75,6 +100,25 @@ public class MarketHelper {
             case Constants.MODSPEC:
             case Constants.BLUEPRINT:
                 return c.isSpecialStack() && c.getSpecialDataIfSpecial().getId().equals(category);
+
+            default:
+                return false;
+        }
+    }
+
+    private static boolean doesMatchSize(FleetMemberAPI f, String size) {
+        switch (size) {
+            case Constants.FRIGATE:
+                return f.isFrigate();
+
+            case Constants.DESTROYER:
+                return f.isDestroyer();
+
+            case Constants.CRUISER:
+                return f.isCruiser();
+
+            case Constants.CAPITAL:
+                return f.isCapital();
 
             default:
                 return false;
