@@ -1,7 +1,10 @@
-* unreleased - 0.9.1
+* Thu Aug 20 2020 - 0.9.1
 - Feature: Add ship (frigate, destroyer, cruiser, capital) search to StellNET
-- Improvement: Add command to find and fix orphaned storage submarkets
+- Feature: Add command to find and fix orphaned storage submarkets
+- Improvement: Limit intel to open and black markets only (ignore military and custom)
 - Bugfix: Harden code for adding storage submarkets
+- Bugfix: Fix another crash with hyperspace market intel
+- Bugfix: Fix blueprint market query
 
 * Mon Aug 17 2020 - 0.9.0
 - Feature: Add merging CSV support for faction whitelist and blacklist

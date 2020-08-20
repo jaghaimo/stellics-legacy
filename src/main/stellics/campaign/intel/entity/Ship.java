@@ -27,7 +27,7 @@ public class Ship extends Stellnet {
             name += " in " + starSystem.getName();
         }
 
-        return "The " + entity + ", " + shipClass + "-class can be found on " + name;
+        return entity + ", the " + shipClass + "-class ship can be found on " + name;
     }
 
     @Override

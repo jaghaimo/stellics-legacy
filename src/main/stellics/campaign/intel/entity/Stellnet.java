@@ -28,19 +28,12 @@ public class Stellnet implements IntelEntity {
     }
 
     public String getIntelInfo() {
-        String name = market.getName();
-        StarSystemAPI starSystem = market.getStarSystem();
-
-        if (starSystem != null) {
-            name += " in " + starSystem.getName();
-        }
-
-        return "Nearest " + entity + " can be found on " + name;
+        return "Nearest " + entity + " can be found on " + market.getName() + getStarSystemName(" in ");
     }
 
     public void createSmallDescription(TooltipMakerAPI info) {
         LabelAPI label1 = info.addPara(getIntelInfo(), 10f);
-        label1.setHighlight(entity, market.getName(), market.getStarSystem().getName());
+        label1.setHighlight(entity, market.getName(), getStarSystemName(""));
         label1.setHighlightColor(Misc.getHighlightColor());
 
 
@@ -53,5 +46,15 @@ public class Stellnet implements IntelEntity {
                 10f);
         label2.setHighlight(size, factionName);
         label2.setHighlightColors(Misc.getHighlightColor(), faction.getColor());
+    }
+
+    public String getStarSystemName(String prefix) {
+        StarSystemAPI starSystem = market.getStarSystem();
+
+        if (starSystem != null) {
+            return prefix + starSystem.getName();
+        }
+
+        return "";
     }
 }

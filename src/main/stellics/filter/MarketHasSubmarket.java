@@ -1,12 +1,12 @@
-package stellics.campaign.econ;
+package stellics.filter;
 
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 
-public class HasSubmarketFilter implements MarketFilter {
+public class MarketHasSubmarket implements MarketFilter {
 
     private String submarket;
 
-    public HasSubmarketFilter(String s) {
+    public MarketHasSubmarket(String s) {
         submarket = s;
     }
 

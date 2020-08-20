@@ -1,12 +1,12 @@
-package stellics.campaign.econ;
+package stellics.filter;
 
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 
-public class NoIndustryFilter implements MarketFilter {
+public class MarketHasNoIndustry implements MarketFilter {
 
     private String industry;
 
-    public NoIndustryFilter(String i) {
+    public MarketHasNoIndustry(String i) {
         industry = i;
     }
 

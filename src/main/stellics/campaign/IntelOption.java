@@ -4,7 +4,7 @@ public enum IntelOption {
 
     // main page
     INIT("Go back"), BRANCH("Locate nearest branch"), OFFICER("Find officers"), QUERY("Query markets"),
-    SHIP("Find ships"), EXIT("Disconnect from StellNET"),
+    SHIP("Locate ships"), EXIT("Disconnect from StellNET"),
 
     // officers page
     TIMID("Timid"), CAUTIOUS("Cautious"), STEADY("Steady"), AGGRESSIVE("Aggresive"), RECKLESS("Reckless"),

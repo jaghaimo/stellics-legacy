@@ -4,35 +4,35 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoStackAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.submarkets.BaseSubmarketPlugin;
 
+import stellics.Constants;
 import stellics.campaign.econ.FleetComparator;
 import stellics.campaign.econ.MarketComparator;
-import stellics.campaign.econ.MarketFilter;
-import stellics.Constants;
+import stellics.campaign.econ.SubmarketComparator;
+import stellics.filter.SubmarketFilter;
 
 public class MarketHelper {
 
-    public static List<CargoStackAPI> findItems(List<MarketAPI> markets, String category) {
+    public static List<CargoStackAPI> findItems(List<MarketAPI> markets, List<SubmarketFilter> filters,
+            String category) {
         List<CargoStackAPI> cargoStacks = new ArrayList<CargoStackAPI>();
+        List<SubmarketAPI> submarkets = EconomyHelper.getSubmarkets(markets, filters);
 
-        for (MarketAPI m : markets) {
-            for (SubmarketAPI s : m.getSubmarketsCopy()) {
-                try {
-                    ((BaseSubmarketPlugin) s.getPlugin()).updateCargoPrePlayerInteraction();
-                } catch (Exception exception) {
-                    continue;
-                }
+        for (SubmarketAPI s : submarkets) {
+            try {
+                ((BaseSubmarketPlugin) s.getPlugin()).updateCargoPrePlayerInteraction();
+            } catch (Exception exception) {
+                continue;
+            }
 
-                for (CargoStackAPI c : s.getCargo().getStacksCopy()) {
-                    if (doesMatchCategory(c, category)) {
-                        cargoStacks.add(c);
-                    }
+            for (CargoStackAPI c : s.getCargo().getStacksCopy()) {
+                if (doesMatchCategory(c, category)) {
+                    cargoStacks.add(c);
                 }
             }
         }
@@ -40,21 +40,20 @@ public class MarketHelper {
         return cargoStacks;
     }
 
-    public static List<FleetMemberAPI> findShips(List<MarketAPI> markets, String size) {
+    public static List<FleetMemberAPI> findShips(List<MarketAPI> markets, List<SubmarketFilter> filters, String size) {
         List<FleetMemberAPI> fleet = new ArrayList<FleetMemberAPI>();
+        List<SubmarketAPI> submarkets = EconomyHelper.getSubmarkets(markets, filters);
 
-        for (MarketAPI m : markets) {
-            for (SubmarketAPI s : m.getSubmarketsCopy()) {
-                try {
-                    ((BaseSubmarketPlugin) s.getPlugin()).updateCargoPrePlayerInteraction();
-                } catch (Exception exception) {
-                    continue;
-                }
+        for (SubmarketAPI s : submarkets) {
+            try {
+                ((BaseSubmarketPlugin) s.getPlugin()).updateCargoPrePlayerInteraction();
+            } catch (Exception exception) {
+                continue;
+            }
 
-                for (FleetMemberAPI f : s.getCargo().getMothballedShips().getMembersListCopy()) {
-                    if (doesMatchSize(f, size)) {
-                        fleet.add(f);
-                    }
+            for (FleetMemberAPI f : s.getCargo().getMothballedShips().getMembersListCopy()) {
+                if (doesMatchSize(f, size)) {
+                    fleet.add(f);
                 }
             }
         }
@@ -62,21 +61,6 @@ public class MarketHelper {
         Collections.sort(fleet, new FleetComparator());
 
         return fleet;
-    }
-
-    public static List<MarketAPI> findMarkets(List<MarketFilter> filters) {
-        List<MarketAPI> markets = new ArrayList<MarketAPI>();
-
-        skipMarket: for (MarketAPI m : Global.getSector().getEconomy().getMarketsCopy()) {
-            for (MarketFilter f : filters) {
-                if (!f.match(m)) {
-                    continue skipMarket;
-                }
-            }
-            markets.add(m);
-        }
-
-        return markets;
     }
 
     public static MarketAPI getNearestMarket(List<MarketAPI> markets) {
@@ -89,6 +73,17 @@ public class MarketHelper {
         return null;
     }
 
+    public static SubmarketAPI getNearestSubmarket(List<SubmarketAPI> submarkets) {
+        if (!submarkets.isEmpty()) {
+            Collections.sort(submarkets, new SubmarketComparator());
+
+            return submarkets.get(0);
+        }
+
+        return null;
+    }
+
+    // TODO: CargoStackAPI filter
     private static boolean doesMatchCategory(CargoStackAPI c, String category) {
         switch (category) {
             case Constants.WEAPON:
@@ -98,14 +93,17 @@ public class MarketHelper {
                 return c.isFighterWingStack();
 
             case Constants.MODSPEC:
-            case Constants.BLUEPRINT:
                 return c.isSpecialStack() && c.getSpecialDataIfSpecial().getId().equals(category);
+
+            case Constants.BLUEPRINT:
+                return c.isSpecialStack() && c.getSpecialDataIfSpecial().getId().endsWith("_bp");
 
             default:
                 return false;
         }
     }
 
+    // TODO: FleetMemeberFilter
     private static boolean doesMatchSize(FleetMemberAPI f, String size) {
         switch (size) {
             case Constants.FRIGATE:

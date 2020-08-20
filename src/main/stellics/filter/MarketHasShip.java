@@ -1,14 +1,14 @@
-package stellics.campaign.econ;
+package stellics.filter;
 
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 
-public class HasShipFilter implements MarketFilter {
+public class MarketHasShip implements MarketFilter {
 
     private FleetMemberAPI ship;
 
-    public HasShipFilter(FleetMemberAPI s) {
+    public MarketHasShip(FleetMemberAPI s) {
         ship = s;
     }
 

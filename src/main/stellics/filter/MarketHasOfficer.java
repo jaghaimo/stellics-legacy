@@ -1,14 +1,14 @@
-package stellics.campaign.econ;
+package stellics.filter;
 
 import com.fs.starfarer.api.campaign.CommDirectoryEntryAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
 
-public class HasOfficerFilter implements MarketFilter {
+public class MarketHasOfficer implements MarketFilter {
 
     private String personality;
 
-    public HasOfficerFilter(String p) {
+    public MarketHasOfficer(String p) {
         personality = p;
     }
 

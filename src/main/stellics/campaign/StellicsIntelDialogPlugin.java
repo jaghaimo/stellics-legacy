@@ -1,7 +1,6 @@
 package stellics.campaign;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,15 +23,19 @@ import com.fs.starfarer.api.util.Misc;
 import org.lwjgl.input.Keyboard;
 
 import stellics.Constants;
-import stellics.campaign.econ.MarketFilter;
-import stellics.campaign.econ.NonHostileFilter;
-import stellics.campaign.intel.*;
+import stellics.campaign.intel.BaseStellnetIntel;
+import stellics.filter.FilterManager;
+import stellics.filter.MarketNonHostile;
+import stellics.filter.SubmarketNonCustom;
 import stellics.helper.CargoHelper;
+import stellics.helper.EconomyHelper;
 import stellics.helper.IntelHelper;
 import stellics.helper.MarketHelper;
 
 public class StellicsIntelDialogPlugin
         implements InteractionDialogPlugin, CargoPickerListener, FleetMemberPickerListener {
+
+    private FilterManager filterManager;
 
     private InteractionDialogAPI dialog;
     private TextPanelAPI textPanel;
@@ -59,6 +62,10 @@ public class StellicsIntelDialogPlugin
 
     @Override
     public void init(InteractionDialogAPI d) {
+        filterManager = new FilterManager();
+        filterManager.add(new MarketNonHostile());
+        filterManager.add(new SubmarketNonCustom());
+
         dialog = d;
         textPanel = dialog.getTextPanel();
         options = dialog.getOptionPanel();
@@ -144,7 +151,7 @@ public class StellicsIntelDialogPlugin
 
     @Override
     public void pickedCargo(CargoAPI cargo) {
-        addIntel(IntelHelper.getCargoIntel(getFilters(), cargo));
+        addIntel(IntelHelper.getCargoIntel(filterManager, cargo));
     }
 
     @Override
@@ -154,7 +161,7 @@ public class StellicsIntelDialogPlugin
 
     @Override
     public void pickedFleetMembers(List<FleetMemberAPI> fleet) {
-        addIntel(IntelHelper.getFleetIntel(getFilters(), fleet));
+        addIntel(IntelHelper.getFleetIntel(filterManager, fleet));
     }
 
     @Override
@@ -169,7 +176,7 @@ public class StellicsIntelDialogPlugin
 
     protected void branchHandler() {
         addTitle("Locate Nearest Branch");
-        addIntel(IntelHelper.getIndustryIntel(getFilters(), Constants.BRANCH, true));
+        addIntel(IntelHelper.getIndustryIntel(filterManager.getMarketFiltersCopy(), Constants.BRANCH, true));
     }
 
     protected void officersHandler() {
@@ -184,7 +191,7 @@ public class StellicsIntelDialogPlugin
     protected void officersHandler(IntelOption option) {
         String personality = option.name().toLowerCase();
         addTitle("Find Officers");
-        addIntel(IntelHelper.getOfficerIntel(getFilters(), personality));
+        addIntel(IntelHelper.getOfficerIntel(filterManager.getMarketFiltersCopy(), personality));
     }
 
     protected void queryHandler() {
@@ -198,8 +205,9 @@ public class StellicsIntelDialogPlugin
 
     protected void queryHandler(IntelOption option) {
         String category = option.name().toLowerCase();
-        List<MarketAPI> markets = MarketHelper.findMarkets(getFilters());
-        CargoAPI cargo = CargoHelper.getCargo(MarketHelper.findItems(markets, category));
+        List<MarketAPI> markets = EconomyHelper.getMarkets(filterManager.getMarketFiltersCopy());
+        CargoAPI cargo = CargoHelper
+                .getCargo(MarketHelper.findItems(markets, filterManager.getSubmarketFiltersCopy(), category));
 
         if (cargo.isEmpty()) {
             askForMore("No markets selling " + category + "s found.");
@@ -220,8 +228,8 @@ public class StellicsIntelDialogPlugin
 
     protected void shipHandler(IntelOption option) {
         String size = option.name().toLowerCase();
-        List<MarketAPI> markets = MarketHelper.findMarkets(getFilters());
-        List<FleetMemberAPI> fleet = MarketHelper.findShips(markets, size);
+        List<MarketAPI> markets = EconomyHelper.getMarkets(filterManager.getMarketFiltersCopy());
+        List<FleetMemberAPI> fleet = MarketHelper.findShips(markets, filterManager.getSubmarketFiltersCopy(), size);
 
         if (fleet.isEmpty()) {
             askForMore("No markets selling " + size + " ships found.");
@@ -260,12 +268,5 @@ public class StellicsIntelDialogPlugin
     private void addTitle(String text) {
         Color colorHighlight = Misc.getHighlightColor();
         textPanel.addPara(text, colorHighlight);
-    }
-
-    private List<MarketFilter> getFilters() {
-        List<MarketFilter> filters = new ArrayList<MarketFilter>();
-        filters.add(new NonHostileFilter());
-
-        return filters;
     }
 }

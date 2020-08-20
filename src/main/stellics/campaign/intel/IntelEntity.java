@@ -10,5 +10,7 @@ public interface IntelEntity {
 
     public String getIntelInfo();
 
+    public String getStarSystemName(String prefix);
+
     public void createSmallDescription(TooltipMakerAPI info);
 }

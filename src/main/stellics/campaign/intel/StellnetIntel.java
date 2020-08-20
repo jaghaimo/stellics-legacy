@@ -5,7 +5,6 @@ import java.util.Set;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
-import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.TextPanelAPI;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.ui.SectorMapAPI;
@@ -22,7 +21,7 @@ public class StellnetIntel extends BaseIntelPlugin implements BaseStellnetIntel 
         faction = f;
         sectorEntityToken = s;
         intel = i;
-        endingTimeRemaining = 7f;
+        endingTimeRemaining = 14f;
     }
 
     @Override
@@ -30,7 +29,7 @@ public class StellnetIntel extends BaseIntelPlugin implements BaseStellnetIntel 
         info.addPara(intel.getIntelTitle(), getTitleColor(mode), 0f);
         bullet(info);
         info.addPara(intel.getIntelInfo(), 3f, getBulletColorForMode(mode), Misc.getHighlightColor(), intel.getEntity(),
-                sectorEntityToken.getName(), getStarSystemName());
+                sectorEntityToken.getName(), intel.getStarSystemName(""));
     }
 
     @Override
@@ -70,11 +69,10 @@ public class StellnetIntel extends BaseIntelPlugin implements BaseStellnetIntel 
 
     @Override
     protected void advanceImpl(float amount) {
-        // week of active + week day of ending
         float days = Global.getSector().getClock().convertToDays(amount);
         endingTimeRemaining -= days;
+
         if (!isEnding() && endingTimeRemaining <= 0) {
-            endingTimeRemaining = 7f;
             ending = true;
         }
     }
@@ -91,15 +89,5 @@ public class StellnetIntel extends BaseIntelPlugin implements BaseStellnetIntel 
 
     public void updateTextPanel(TextPanelAPI textPanel) {
         textPanel.addPara(intel.getIntelInfo());
-    }
-
-    private String getStarSystemName() {
-        StarSystemAPI starSystem = sectorEntityToken.getStarSystem();
-
-        if (starSystem != null) {
-            return starSystem.getName();
-        }
-
-        return "";
     }
 }
