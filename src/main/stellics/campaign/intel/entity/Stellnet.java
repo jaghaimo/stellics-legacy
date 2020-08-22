@@ -32,18 +32,15 @@ public class Stellnet implements IntelEntity {
     }
 
     public void createSmallDescription(TooltipMakerAPI info) {
-        LabelAPI label1 = info.addPara(getIntelInfo(), 10f);
+        LabelAPI label1 = info.addPara(getIntelInfo() + ".", 10f);
         label1.setHighlight(entity, market.getName(), getStarSystemName(""));
         label1.setHighlightColor(Misc.getHighlightColor());
-
 
         String size = String.valueOf(market.getSize());
         FactionAPI faction = market.getFaction();
         String factionName = faction.getDisplayNameWithArticle();
 
-        LabelAPI label2 = info.addPara(
-                "It is a size " + size + " market owned by " + factionName + ".",
-                10f);
+        LabelAPI label2 = info.addPara("It is a size " + size + " market owned by " + factionName + ".", 10f);
         label2.setHighlight(size, factionName);
         label2.setHighlightColors(Misc.getHighlightColor(), faction.getColor());
     }

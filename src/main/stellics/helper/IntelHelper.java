@@ -39,7 +39,6 @@ public class IntelHelper {
 
         for (FleetMemberAPI ship : fleet) {
             String shipName = ship.getShipName();
-            String shipClass = ship.getHullSpec().getHullName();
             List<MarketFilter> mFilter = filterManager.getMarketFiltersCopy();
             mFilter.add(new MarketHasShip(ship));
 
@@ -48,7 +47,7 @@ public class IntelHelper {
                 List<SubmarketAPI> submarkets = EconomyHelper.getSubmarkets(markets, sFilter);
                 SubmarketAPI submarket = MarketHelper.getNearestSubmarket(submarkets);
                 MarketAPI market = submarket.getMarket();
-                IntelEntity entity = new Ship(shipName, shipClass, market);
+                IntelEntity entity = new Ship(shipName, ship, market);
                 BaseStellnetIntel intel = new StellnetIntel(market.getFaction(), market.getPrimaryEntity(), entity);
                 batchStellnetIntel.add(intel);
             } catch (Exception exception) {

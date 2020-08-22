@@ -80,6 +80,7 @@ public class StellnetIntel extends BaseIntelPlugin implements BaseStellnetIntel 
     @Override
     protected void notifyEnded() {
         Global.getSector().getIntelManager().removeIntel(this);
+        Global.getSector().removeScript(this);
     }
 
     public void trigger() {

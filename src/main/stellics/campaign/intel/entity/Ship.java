@@ -1,16 +1,17 @@
 package stellics.campaign.intel.entity;
 
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.campaign.StarSystemAPI;
+import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import com.fs.starfarer.api.util.Misc;
 
 public class Ship extends Stellnet {
 
-    private String shipClass;
+    private FleetMemberAPI ship;
 
-    public Ship(String e, String s, MarketAPI m) {
+    public Ship(String e, FleetMemberAPI s, MarketAPI m) {
         super(e, m);
-        shipClass = s;
+        ship = s;
     }
 
     @Override
@@ -20,14 +21,11 @@ public class Ship extends Stellnet {
 
     @Override
     public String getIntelInfo() {
-        String name = market.getName();
-        StarSystemAPI starSystem = market.getStarSystem();
+        String name = market.getName() + getStarSystemName(" in ");
+        String shipClass = ship.getHullSpec().getHullName();
+        String shipCost = Misc.getDGSCredits(ship.getBaseBuyValue());
 
-        if (starSystem != null) {
-            name += " in " + starSystem.getName();
-        }
-
-        return entity + ", the " + shipClass + "-class ship can be found on " + name;
+        return entity + ", the " + shipClass + "-class ship can be bought on " + name + " for " + shipCost;
     }
 
     @Override
