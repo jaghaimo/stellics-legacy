@@ -8,13 +8,13 @@ import com.fs.starfarer.api.impl.campaign.abilities.BaseDurationAbility;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
-import stellics.campaign.StellicsIntelDialogPlugin;
+import stellics.campaign.StellnetDialogPlugin;
 
 public class StellicsNetwork extends BaseDurationAbility {
 
     @Override
     protected void activateImpl() {
-        InteractionDialogPlugin dialog = new StellicsIntelDialogPlugin();
+        InteractionDialogPlugin dialog = new StellnetDialogPlugin();
         Global.getSector().getCampaignUI().showInteractionDialog(dialog, null);
     }
 
