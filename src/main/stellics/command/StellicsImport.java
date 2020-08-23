@@ -20,8 +20,7 @@ public class StellicsImport implements BaseCommand {
     public CommandResult runCommand(String args, CommandContext context) {
 
         try {
-            StorageHelper storageHelper = new StorageHelper();
-            SubmarketAPI storage = storageHelper.get();
+            SubmarketAPI storage = StorageHelper.get();
             JSONArray stellicsCsv = Global.getSettings().loadCSV("stellics.csv");
             importCsv(stellicsCsv, storage.getCargo());
             Console.showMessage("Imported Stellar Logistics Warehouse.");

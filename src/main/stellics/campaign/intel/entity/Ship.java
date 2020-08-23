@@ -1,8 +1,8 @@
 package stellics.campaign.intel.entity;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
-import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
 public class Ship extends Stellnet {
@@ -15,6 +15,11 @@ public class Ship extends Stellnet {
     }
 
     @Override
+    public String getIcon() {
+        return Global.getSettings().getSpriteName("intel", "ship");
+    }
+
+    @Override
     public String getIntelTitle() {
         return "StellNET Ship Intel";
     }
@@ -22,14 +27,9 @@ public class Ship extends Stellnet {
     @Override
     public String getIntelInfo() {
         String name = market.getName() + getStarSystemName(" in ");
-        String shipClass = ship.getHullSpec().getHullName();
+        String shipClass = ship.getHullSpec().getHullNameWithDashClass();
         String shipCost = Misc.getDGSCredits(ship.getBaseBuyValue());
 
-        return entity + ", the " + shipClass + "-class ship can be bought on " + name + " for " + shipCost;
-    }
-
-    @Override
-    public void createSmallDescription(TooltipMakerAPI info) {
-        super.createSmallDescription(info);
+        return entity + ", the " + shipClass + " ship can be bought on " + name + " for " + shipCost;
     }
 }

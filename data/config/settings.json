@@ -22,6 +22,12 @@
     "graphics":{
         "illustrations":{
             "stellnet":"graphics/illustrations/stellnet.jpg"
+        },
+        "intel":{
+            "branch":"graphics/icons/intel/branch.png",
+            "cargo":"graphics/icons/intel/cargo.png",
+            "officer":"graphics/icons/intel/officer.png",
+            "ship":"graphics/icons/intel/ship.png"
         }
     }
 }

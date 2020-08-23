@@ -1,6 +1,5 @@
 package stellics.helper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fs.starfarer.api.Global;
@@ -19,13 +18,13 @@ import stellics.campaign.intel.entity.Cargo;
 import stellics.campaign.intel.entity.Industry;
 import stellics.campaign.intel.entity.Officer;
 import stellics.campaign.intel.entity.Ship;
+import stellics.filter.FilterManager;
+import stellics.filter.MarketFilter;
+import stellics.filter.MarketHasCargoStack;
 import stellics.filter.MarketHasIndustry;
 import stellics.filter.MarketHasOfficer;
 import stellics.filter.MarketHasShip;
 import stellics.filter.SubmarketFilter;
-import stellics.filter.FilterManager;
-import stellics.filter.MarketFilter;
-import stellics.filter.MarketHasCargoStack;
 
 public class IntelHelper {
 

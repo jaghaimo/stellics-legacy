@@ -3,6 +3,7 @@ package stellics.campaign.intel.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CommDirectoryEntryAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
@@ -12,9 +13,14 @@ public class Officer extends Stellnet {
 
     private List<String> officers = new ArrayList<String>();
 
-    public Officer(String p, MarketAPI m) {
-        super(p + " officer", m);
+    public Officer(String e, MarketAPI m) {
+        super(e + " officer", m);
         addOfficers();
+    }
+
+    @Override
+    public String getIcon() {
+        return Global.getSettings().getSpriteName("intel", "officer");
     }
 
     @Override

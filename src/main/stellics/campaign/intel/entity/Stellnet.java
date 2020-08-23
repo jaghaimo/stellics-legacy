@@ -23,6 +23,10 @@ public class Stellnet implements IntelEntity {
         return entity;
     }
 
+    public String getIcon() {
+        return market.getFaction().getCrest();
+    }
+
     public String getIntelTitle() {
         return "StellNET Intel";
     }

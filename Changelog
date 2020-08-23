@@ -1,3 +1,6 @@
+* unreleased - 0.9.2
+- Improvement: Use different intel icons depending on intel type
+
 * Thu Aug 20 2020 - 0.9.1
 - Feature: Add ship (frigate, destroyer, cruiser, capital) search to StellNET
 - Feature: Add command to find and fix orphaned storage submarkets

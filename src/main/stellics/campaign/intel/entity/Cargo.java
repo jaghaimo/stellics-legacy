@@ -1,21 +1,21 @@
 package stellics.campaign.intel.entity;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.ui.TooltipMakerAPI;
 
 public class Cargo extends Stellnet {
 
-    public Cargo(String c, MarketAPI m) {
-        super(c, m);
+    public Cargo(String e, MarketAPI m) {
+        super(e, m);
+    }
+
+    @Override
+    public String getIcon() {
+        return Global.getSettings().getSpriteName("intel", "cargo");
     }
 
     @Override
     public String getIntelTitle() {
         return "StellNET Cargo Intel";
-    }
-
-    @Override
-    public void createSmallDescription(TooltipMakerAPI info) {
-        super.createSmallDescription(info);
     }
 }

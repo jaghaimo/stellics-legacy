@@ -1,10 +1,10 @@
 {
-    "id":"stellics",
-    "name":"Stellar Logistics",
-    "version":"0.9.1",
-    "author": "Jaghaimo",
-    "description":"Centralized storage and information services for Starsector.",
-    "gameVersion":"0.9.1a",
-    "modPlugin":"stellics.StellicsModPlugin",
-    "jars":["stellics.jar"]
+  "id": "stellics",
+  "name": "Stellar Logistics",
+  "version": "0.9.2",
+  "author": "Jaghaimo",
+  "description": "Centralized storage and information services for Starsector.",
+  "gameVersion": "0.9.1a",
+  "modPlugin": "stellics.StellicsModPlugin",
+  "jars": ["stellics.jar"]
 }

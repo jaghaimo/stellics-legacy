@@ -6,6 +6,8 @@ public interface IntelEntity {
 
     public String getEntity();
 
+    public String getIcon();
+
     public String getIntelTitle();
 
     public String getIntelInfo();

@@ -5,8 +5,7 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 public class Branch extends Industry {
 
     public enum Action {
-        OPEN("Branch has been opened.", "opened"),
-        CLOSE("Branch has been closed.", "closed"),
+        OPEN("Branch has been opened.", "opened"), CLOSE("Branch has been closed.", "closed"),
         DISRUPT("Branch has been temporarily closed.", "temporarily closed"),
         RESUME("Branch has been reopened.", "reopened");
 

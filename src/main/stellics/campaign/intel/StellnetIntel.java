@@ -40,7 +40,7 @@ public class StellnetIntel extends BaseIntelPlugin implements BaseStellnetIntel 
 
     @Override
     public String getIcon() {
-        return faction.getCrest();
+        return intel.getIcon();
     }
 
     @Override

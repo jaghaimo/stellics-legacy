@@ -18,8 +18,7 @@ public class StellicsExport implements BaseCommand {
     public CommandResult runCommand(String args, CommandContext context) {
 
         try {
-            StorageHelper storageHelper = new StorageHelper();
-            SubmarketAPI storage = storageHelper.get();
+            SubmarketAPI storage = StorageHelper.get();
             PrintWriter stellicsCsv = new PrintWriter("stellics.csv");
             stellicsCsv.println("type,id,quantity");
             exportCsv(stellicsCsv, storage.getCargo().getStacksCopy());
