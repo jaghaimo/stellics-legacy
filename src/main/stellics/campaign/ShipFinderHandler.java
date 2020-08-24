@@ -4,11 +4,9 @@ import java.util.List;
 
 import com.fs.starfarer.api.campaign.FleetMemberPickerListener;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
-import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 
 import stellics.filter.FilterManager;
-import stellics.helper.EconomyHelper;
 import stellics.helper.IntelHelper;
 import stellics.helper.MarketHelper;
 
@@ -26,7 +24,6 @@ public class ShipFinderHandler implements FleetMemberPickerListener {
 
     @Override
     public void cancelledFleetMemberPicking() {
-        plugin.askForMore();
     }
 
     @Override
@@ -36,11 +33,10 @@ public class ShipFinderHandler implements FleetMemberPickerListener {
 
     public void handle(StellnetDialogOption option) {
         String size = option.name().substring(5).toLowerCase();
-        List<MarketAPI> markets = EconomyHelper.getMarkets(filterManager.getMarketFiltersCopy());
-        List<FleetMemberAPI> fleet = MarketHelper.findShips(markets, filterManager.getSubmarketFiltersCopy(), size);
+        List<FleetMemberAPI> fleet = MarketHelper.findShips(filterManager, option);
 
         if (fleet.isEmpty()) {
-            plugin.askForMore("No markets selling " + size + " ships found.");
+            plugin.addText("No markets selling desired " + size + "s found.");
             return;
         }
 

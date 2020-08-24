@@ -10,18 +10,21 @@ import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.submarkets.BaseSubmarketPlugin;
 
-import stellics.Constants;
+import stellics.campaign.StellnetDialogOption;
 import stellics.campaign.econ.FleetComparator;
 import stellics.campaign.econ.MarketComparator;
 import stellics.campaign.econ.SubmarketComparator;
-import stellics.filter.SubmarketFilter;
+import stellics.filter.CargoStackFilter;
+import stellics.filter.FilterManager;
+import stellics.filter.FleetMemberFilter;
 
 public class MarketHelper {
 
-    public static List<CargoStackAPI> findItems(List<MarketAPI> markets, List<SubmarketFilter> filters,
-            String category) {
+    public static List<CargoStackAPI> findItems(FilterManager filterManager, StellnetDialogOption option) {
+        List<MarketAPI> markets = EconomyHelper.getMarkets(filterManager.listMarketFilters());
+        List<SubmarketAPI> submarkets = EconomyHelper.getSubmarkets(markets, filterManager.listSubmarketFilters());
+        List<CargoStackFilter> cargoStackFilters = filterManager.listCargoFilters(option);
         List<CargoStackAPI> cargoStacks = new ArrayList<CargoStackAPI>();
-        List<SubmarketAPI> submarkets = EconomyHelper.getSubmarkets(markets, filters);
 
         for (SubmarketAPI s : submarkets) {
             try {
@@ -30,19 +33,17 @@ public class MarketHelper {
                 continue;
             }
 
-            for (CargoStackAPI c : s.getCargo().getStacksCopy()) {
-                if (doesMatchCategory(c, category)) {
-                    cargoStacks.add(c);
-                }
-            }
+            cargoStacks.addAll(EconomyHelper.getCargoStacks(s.getCargo(), cargoStackFilters));
         }
 
         return cargoStacks;
     }
 
-    public static List<FleetMemberAPI> findShips(List<MarketAPI> markets, List<SubmarketFilter> filters, String size) {
-        List<FleetMemberAPI> fleet = new ArrayList<FleetMemberAPI>();
-        List<SubmarketAPI> submarkets = EconomyHelper.getSubmarkets(markets, filters);
+    public static List<FleetMemberAPI> findShips(FilterManager filterManager, StellnetDialogOption option) {
+        List<MarketAPI> markets = EconomyHelper.getMarkets(filterManager.listMarketFilters());
+        List<SubmarketAPI> submarkets = EconomyHelper.getSubmarkets(markets, filterManager.listSubmarketFilters());
+        List<FleetMemberFilter> fleetMemeberFilters = filterManager.listFleetFilters(option);
+        List<FleetMemberAPI> fleetMembers = new ArrayList<FleetMemberAPI>();
 
         for (SubmarketAPI s : submarkets) {
             try {
@@ -51,16 +52,12 @@ public class MarketHelper {
                 continue;
             }
 
-            for (FleetMemberAPI f : s.getCargo().getMothballedShips().getMembersListCopy()) {
-                if (doesMatchSize(f, size)) {
-                    fleet.add(f);
-                }
-            }
+            fleetMembers.addAll(EconomyHelper.getFleetMembers(s.getCargo().getMothballedShips(), fleetMemeberFilters));
         }
 
-        Collections.sort(fleet, new FleetComparator());
+        Collections.sort(fleetMembers, new FleetComparator());
 
-        return fleet;
+        return fleetMembers;
     }
 
     public static MarketAPI getNearestMarket(List<MarketAPI> markets) {
@@ -81,45 +78,5 @@ public class MarketHelper {
         }
 
         return null;
-    }
-
-    // TODO: CargoStackAPI filter
-    private static boolean doesMatchCategory(CargoStackAPI c, String category) {
-        switch (category) {
-            case Constants.WEAPON:
-                return c.isWeaponStack();
-
-            case Constants.FIGHTER:
-                return c.isFighterWingStack();
-
-            case Constants.MODSPEC:
-                return c.isSpecialStack() && c.getSpecialDataIfSpecial().getId().equals(category);
-
-            case Constants.BLUEPRINT:
-                return c.isSpecialStack() && c.getSpecialDataIfSpecial().getId().endsWith("_bp");
-
-            default:
-                return false;
-        }
-    }
-
-    // TODO: FleetMemeberFilter
-    private static boolean doesMatchSize(FleetMemberAPI f, String size) {
-        switch (size) {
-            case Constants.FRIGATE:
-                return f.isFrigate();
-
-            case Constants.DESTROYER:
-                return f.isDestroyer();
-
-            case Constants.CRUISER:
-                return f.isCruiser();
-
-            case Constants.CAPITAL:
-                return f.isCapital();
-
-            default:
-                return false;
-        }
     }
 }

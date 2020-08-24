@@ -30,17 +30,13 @@ public enum StellnetDialogOption {
     SHIP_FILTERS("Filters"), SHIP_FRIGATE("Frigates"), SHIP_DESTROYER("Destroyers"), SHIP_CRUISER("Cruisers"),
     SHIP_CAPITAL("Capitals"), SHIP_BACK("Go back"),
 
-    // ship min d-mod count filter
-    SHIP_MIN_DMOD_ANY("At least 0 d-mods"), SHIP_MIN_DMOD_ONE("At least 1 d-mod"),
-    SHIP_MIN_DMOD_TWO("At least 2 d-mods"), SHIP_MIN_DMOD_THREE("At least 3 d-mods"),
-    SHIP_MIN_DMOD_FOUR("At least 4 d-mods"),
-
     // ship max d-mod count filter
-    SHIP_MAX_DMOD_ANY("At most 0 d-mods"), SHIP_MAX_DMOD_ONE("At most 1 d-mod"), SHIP_MAX_DMOD_TWO("At most 2 d-mods"),
-    SHIP_MAX_DMOD_THREE("At most 3 d-mods"), SHIP_MAX_DMOD_FOUR("At most 4 d-mods"),
+    SHIP_DAMAGED_YES("Include damaged ships"), SHIP_DAMAGED_NO("Exclude damaged ships"),
+    SHIP_DAMAGED_ONLY("Only damaged ships"),
 
     // ship carrier ship filter
-    SHIP_CARRIER_YES("Include carriers"), SHIP_CARRIER_NO("Exclude carriers"), SHIP_CARRIER_ONLY("Only carriers"),
+    SHIP_CARRIER_YES("Include carrier ships"), SHIP_CARRIER_NO("Exclude carrier ships"),
+    SHIP_CARRIER_ONLY("Only carrier ships"),
 
     // ship civilian ship filter
     SHIP_CIVILIAN_YES("Include civilian ships"), SHIP_CIVILIAN_NO("Exclude civilian ships"),

@@ -34,11 +34,11 @@ public class IntelHelper {
         }
 
         BatchStellnetIntel batchStellnetIntel = new BatchStellnetIntel();
-        List<SubmarketFilter> sFilter = filterManager.getSubmarketFiltersCopy();
+        List<SubmarketFilter> sFilter = filterManager.listSubmarketFilters();
 
         for (FleetMemberAPI ship : fleet) {
             String shipName = ship.getShipName();
-            List<MarketFilter> mFilter = filterManager.getMarketFiltersCopy();
+            List<MarketFilter> mFilter = filterManager.listMarketFilters();
             mFilter.add(new MarketHasShip(ship));
 
             try {
@@ -65,11 +65,11 @@ public class IntelHelper {
 
         cargo.sort();
         BatchStellnetIntel batchStellnetIntel = new BatchStellnetIntel();
-        List<SubmarketFilter> sFilter = filterManager.getSubmarketFiltersCopy();
+        List<SubmarketFilter> sFilter = filterManager.listSubmarketFilters();
 
         for (CargoStackAPI cargoStack : cargo.getStacksCopy()) {
             String cargoName = cargoStack.getDisplayName();
-            List<MarketFilter> mFilter = filterManager.getMarketFiltersCopy();
+            List<MarketFilter> mFilter = filterManager.listMarketFilters();
             mFilter.add(new MarketHasCargoStack(cargoStack));
 
             try {

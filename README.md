@@ -19,8 +19,9 @@ You can still access your storage from other branches though.
 
 StellNET is a Stellar Logistics operated sector-wide hyperspace network that allows you to:
 * Look for nearest operational Stellar Logistics Branch,
-* Query markets for weapons, fighter wings, modspecs, or blueprints, and
-* Search for officers with a given personality.
+* Query markets for weapons, fighter wings, modspecs, or blueprints,
+* Search for officers with a given personality, and
+* Locate ships in markets.
 
 ## Technical details
 
@@ -30,6 +31,7 @@ Stellar Logistics Warehouse Services, when not disrupted, offer full availabilit
 The storage and handling fee depends on the size of the leased warehouse and not the value of stored cargo.
 As such it is the perfect service to store high-value cargo.
 Depending on the warehouse size the cost will vary between 1 and 9 credits per cargo hold per month.
+Fleet warehousing costs between 10 and 90 credits per ordnance point per month.
 
 ### Vanilla and Nexerelin integration
 

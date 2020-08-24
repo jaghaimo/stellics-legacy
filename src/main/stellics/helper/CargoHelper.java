@@ -10,8 +10,7 @@ import com.fs.starfarer.api.fleet.FleetMemberAPI;
 public class CargoHelper {
 
     private static enum CostType {
-        CARGO,
-        FLEET
+        CARGO, FLEET
     }
 
     public static int calculateCargoUpkeep(CargoAPI cargo) {

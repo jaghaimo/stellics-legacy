@@ -17,15 +17,15 @@ import org.lwjgl.input.Keyboard;
 import stellics.Constants;
 import stellics.campaign.intel.BaseStellnetIntel;
 import stellics.filter.FilterManager;
-import stellics.filter.MarketNonHostile;
-import stellics.filter.SubmarketNonCustom;
 import stellics.helper.IntelHelper;
 
 public class StellnetDialogPlugin implements InteractionDialogPlugin {
 
     private FilterManager filterManager;
+
     private QueryMarketHandler queryMarketHandler;
     private ShipFinderHandler shipFinderHandler;
+    private FilterHandler filterHandler;
 
     private InteractionDialogAPI dialog;
     private TextPanelAPI textPanel;
@@ -34,8 +34,6 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
 
     public StellnetDialogPlugin() {
         filterManager = new FilterManager();
-        filterManager.add(new MarketNonHostile());
-        filterManager.add(new SubmarketNonCustom());
     }
 
     @Override
@@ -65,6 +63,7 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
 
         queryMarketHandler = new QueryMarketHandler(filterManager, d, this);
         shipFinderHandler = new ShipFinderHandler(filterManager, d, this);
+        filterHandler = new FilterHandler(filterManager, this);
 
         visual.showImagePortion("illustrations", "stellnet", 640, 400, 0, 0, 480, 300);
         dialog.setOptionOnEscape("Disconnect from StellNET", StellnetDialogOption.EXIT);
@@ -72,7 +71,7 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
         addTitle("StellNET");
         textPanel.addPara("Welcome to Stellar Network!");
         textPanel.addPara("Which of our services would you like to use?");
-        optionSelected(null, StellnetDialogOption.INIT);
+        showMenu();
     }
 
     @Override
@@ -89,7 +88,7 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
 
         switch (option) {
             case INIT:
-                showMenu();
+                askForMore();
                 break;
 
             case BRANCH:
@@ -97,14 +96,22 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
                 break;
 
             case OFFICER:
+                addTitle("Hire Officers");
+                textPanel.addPara("What personality should the officer have?");
                 hireOfficers();
                 break;
 
             case MARKET:
+                addTitle("Query Markets");
+                textPanel.addPara("What category of items are you interested in?");
+            case MARKET_BACK:
                 queryMarkets();
                 break;
 
             case SHIP:
+                addTitle("Search For Ships");
+                textPanel.addPara("What type of ships are you interested in?");
+            case SHIP_BACK:
                 shipFinder();
                 break;
 
@@ -134,8 +141,8 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
                 shipFinderHandler.handle(option);
                 break;
 
-            // else it is a filter
             default:
+                filterHandler.handle(option);
                 break;
         }
     }
@@ -151,7 +158,6 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
     public void addIntel(BaseStellnetIntel intel) {
         intel.trigger();
         intel.updateTextPanel(textPanel);
-        askForMore();
     }
 
     public void askForMore() {
@@ -160,9 +166,8 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
         textPanel.addPara("Are there any other services you would like to use?");
     }
 
-    public void askForMore(String update) {
+    public void addText(String update) {
         textPanel.addPara(update);
-        askForMore();
     }
 
     public void addTitle(String text) {
@@ -177,14 +182,10 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
     }
 
     private void locateBranch() {
-        addTitle("Locate Nearest Branch");
-        addIntel(IntelHelper.getIndustryIntel(filterManager.getMarketFiltersCopy(), Constants.BRANCH, true));
+        addIntel(IntelHelper.getIndustryIntel(filterManager.listMarketFilters(), Constants.BRANCH, true));
     }
 
     private void hireOfficers() {
-        addTitle("Hire Officers");
-        textPanel.addPara("What personality should the officer have?");
-
         addOptions(StellnetDialogOption.OFFICER_TIMID, StellnetDialogOption.OFFICER_CAUTIOUS,
                 StellnetDialogOption.OFFICER_STEADY, StellnetDialogOption.OFFICER_AGGRESSIVE,
                 StellnetDialogOption.OFFICER_RECKLESS, StellnetDialogOption.INIT);
@@ -193,24 +194,20 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
 
     private void hireOfficers(StellnetDialogOption option) {
         String personality = option.name().substring(8).toLowerCase();
-        addIntel(IntelHelper.getOfficerIntel(filterManager.getMarketFiltersCopy(), personality));
+        addIntel(IntelHelper.getOfficerIntel(filterManager.listMarketFilters(), personality));
     }
 
     private void queryMarkets() {
-        addTitle("Query Markets");
-        textPanel.addPara("What category of items are you interested in?");
-
-        addOptions(StellnetDialogOption.MARKET_WEAPON, StellnetDialogOption.MARKET_FIGHTER,
-                StellnetDialogOption.MARKET_MODSPEC, StellnetDialogOption.MARKET_BLUEPRINT, StellnetDialogOption.INIT);
+        addOptions(StellnetDialogOption.MARKET_FILTERS, StellnetDialogOption.MARKET_WEAPON,
+                StellnetDialogOption.MARKET_FIGHTER, StellnetDialogOption.MARKET_MODSPEC,
+                StellnetDialogOption.MARKET_BLUEPRINT, StellnetDialogOption.INIT);
         options.setShortcut(StellnetDialogOption.INIT, Keyboard.KEY_ESCAPE, false, false, false, false);
     }
 
     private void shipFinder() {
-        addTitle("Search For Ships");
-        textPanel.addPara("What type of ships are you interested in?");
-
-        addOptions(StellnetDialogOption.SHIP_FRIGATE, StellnetDialogOption.SHIP_DESTROYER,
-                StellnetDialogOption.SHIP_CRUISER, StellnetDialogOption.SHIP_CAPITAL, StellnetDialogOption.INIT);
+        addOptions(StellnetDialogOption.SHIP_FILTERS, StellnetDialogOption.SHIP_FRIGATE,
+                StellnetDialogOption.SHIP_DESTROYER, StellnetDialogOption.SHIP_CRUISER,
+                StellnetDialogOption.SHIP_CAPITAL, StellnetDialogOption.INIT);
         options.setShortcut(StellnetDialogOption.INIT, Keyboard.KEY_ESCAPE, false, false, false, false);
     }
 }

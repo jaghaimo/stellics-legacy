@@ -89,6 +89,6 @@ public class StellnetIntel extends BaseIntelPlugin implements BaseStellnetIntel 
     }
 
     public void updateTextPanel(TextPanelAPI textPanel) {
-        textPanel.addPara(intel.getIntelInfo());
+        textPanel.addPara(intel.getIntelInfo() + ".");
     }
 }
