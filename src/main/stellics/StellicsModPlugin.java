@@ -1,23 +1,15 @@
 package stellics;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.comm.IntelInfoPlugin;
-import com.fs.starfarer.api.campaign.comm.IntelManagerAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import stellics.campaign.intel.StellicsBranchIntel;
-import stellics.campaign.intel.StellicsLocationIntel;
-import stellics.campaign.intel.StellicsOfficerIntel;
-import stellics.campaign.intel.StellnetIntel;
 import stellics.helper.StorageHelper;
 
 public class StellicsModPlugin extends BaseModPlugin {
@@ -34,8 +26,7 @@ public class StellicsModPlugin extends BaseModPlugin {
 
     @Override
     public void onNewGameAfterEconomyLoad() {
-        stellicsSettings = new StellicsSettings(settings,
-                loadFactionList("data/config/stellics/faction_blacklist.csv"),
+        stellicsSettings = new StellicsSettings(settings, loadFactionList("data/config/stellics/faction_blacklist.csv"),
                 loadFactionList("data/config/stellics/faction_whitelist.csv"));
 
         seedPrism();
@@ -45,11 +36,6 @@ public class StellicsModPlugin extends BaseModPlugin {
     @Override
     public void onGameLoad(boolean newGame) {
         StorageHelper.registerFeeListener();
-
-        removeDeprecatedIntel(StellicsBranchIntel.class);
-        removeDeprecatedIntel(StellicsLocationIntel.class);
-        removeDeprecatedIntel(StellicsOfficerIntel.class);
-        removeDeprecatedIntel(StellnetIntel.class);
     }
 
     private Set<String> loadFactionList(String path) {
@@ -66,15 +52,6 @@ public class StellicsModPlugin extends BaseModPlugin {
         }
 
         return factionList;
-    }
-
-    private void removeDeprecatedIntel(Class<?> c) {
-        IntelManagerAPI manager = Global.getSector().getIntelManager();
-        List<IntelInfoPlugin> intels = new ArrayList<IntelInfoPlugin>(manager.getIntel(c));
-
-        for (IntelInfoPlugin i : intels) {
-            manager.removeIntel(i);
-        }
     }
 
     private boolean canSeed(MarketAPI market) {
@@ -99,7 +76,7 @@ public class StellicsModPlugin extends BaseModPlugin {
 
     private void seedFactions() {
         // spread branches and storages across the galaxy
-        for (MarketAPI market: Global.getSector().getEconomy().getMarketsCopy()) {
+        for (MarketAPI market : Global.getSector().getEconomy().getMarketsCopy()) {
             if (canSeed(market)) {
                 double seedProbability = stellicsSettings.getSeedProbability();
                 seedMarket(market, seedProbability);

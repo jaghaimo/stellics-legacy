@@ -1,4 +1,4 @@
-package stellics.campaign.econ;
+package stellics.comparator;
 
 import java.util.Comparator;
 
@@ -22,19 +22,13 @@ public class MarketComparator implements Comparator<MarketAPI> {
 
     @Override
     public int compare(MarketAPI m1, MarketAPI m2) {
-        int comparison = compare(
-                m1.getPrimaryEntity().getLocationInHyperspace(),
-                m2.getPrimaryEntity().getLocationInHyperspace(),
-                playerFleet.getLocationInHyperspace()
-                );
+        int comparison = compare(m1.getPrimaryEntity().getLocationInHyperspace(),
+                m2.getPrimaryEntity().getLocationInHyperspace(), playerFleet.getLocationInHyperspace());
 
         // same system, use local coordinates
         if (comparison == 0) {
-            comparison = compare(
-                    m1.getPrimaryEntity().getLocation(),
-                    m2.getPrimaryEntity().getLocation(),
-                    playerFleet.getLocation()
-                    );
+            comparison = compare(m1.getPrimaryEntity().getLocation(), m2.getPrimaryEntity().getLocation(),
+                    playerFleet.getLocation());
         }
 
         return comparison;

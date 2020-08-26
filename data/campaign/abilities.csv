@@ -1,3 +1,2 @@
 name,id,type,tags,activationDays,activationCooldown,durationDays,deactivationDays,deactivationCooldown,unlockedAtStart,defaultForAIFleet,musicSuppression,uiOn,uiOff,uiLoop,worldOn,worldOff,worldLoop,icon,plugin,ai,desc,sortOrder
-Connect to StellNET,stellics_location,DURATION,,0,,0.25,0.1,0.75,FALSE,FALSE,0.5,,,,,,,graphics/icons/abilities/stellnet.png,stellics.campaign.abilities.StellicsLocation,,"Connect to Stellar Logistics Network.",1000
 Connect to StellNET,stellics_network,DURATION,,0,,0.25,0.1,0.75,TRUE,FALSE,0.5,,,,,,,graphics/icons/abilities/stellnet.png,stellics.campaign.abilities.StellicsNetwork,,"Connect to Stellar Logistics Network.",1000

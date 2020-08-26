@@ -1,2 +1,2 @@
 id,name,cost mult,build time,income,upkeep,downgrade,upgrade,tags,data,image,plugin,desc,order
-STELLICS_BRANCH,Stellar Logistics Branch,10,30,2,1,,,structure,,graphics/icons/industry/stellics_branch.png,stellics.campaign.econ.impl.StellicsBranch,"Open a Stellar Logistics branch, enabling access to courier and warehousing services.",
+STELLICS_BRANCH,Stellar Logistics Branch,10,30,2,1,,,structure,,graphics/icons/industry/stellics_branch.png,stellics.campaign.econ.BranchIndustry,"Open a Stellar Logistics branch, enabling access to courier and warehousing services.",

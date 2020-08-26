@@ -73,6 +73,7 @@ public class StellnetIntel extends BaseIntelPlugin implements BaseStellnetIntel 
         endingTimeRemaining -= days;
 
         if (!isEnding() && endingTimeRemaining <= 0) {
+            endingTimeRemaining = 7f;
             ending = true;
         }
     }

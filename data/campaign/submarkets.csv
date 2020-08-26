@@ -1,3 +1,3 @@
 id,name,faction,desc,script,icon,order
 STELLICS_STORAGE,"Stellar Logistics
-Warehouse",player,"Store and retrieve items from Stellar Logistics warehouses located across the sector. Comes with a complimentary courier services.",stellics.campaign.submarkets.StellicsStorage,graphics/factions/stellics_storage.png,900
+Warehouse",player,"Store and retrieve items from Stellar Logistics warehouses located across the sector. Comes with a complimentary courier services.",stellics.campaign.econ.StorageSubmarket,graphics/factions/stellics_storage.png,900

@@ -1,6 +1,7 @@
-* unreleased - 0.9.2
+* unreleased - ?
 - Feature: Advanced search filters for query markets and ship finder
 - Improvement: Use different intel icons depending on intel type
+- Improvement: Code cleanup (breaks save compatiblity with 0.8.0)
 
 * Thu Aug 20 2020 - 0.9.1
 - Feature: Add ship (frigate, destroyer, cruiser, capital) search to StellNET

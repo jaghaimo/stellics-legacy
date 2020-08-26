@@ -1,4 +1,4 @@
-package stellics.campaign.econ;
+package stellics.comparator;
 
 import java.util.Comparator;
 

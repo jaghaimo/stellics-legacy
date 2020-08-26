@@ -11,9 +11,9 @@ import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.submarkets.BaseSubmarketPlugin;
 
 import stellics.campaign.StellnetDialogOption;
-import stellics.campaign.econ.FleetComparator;
-import stellics.campaign.econ.MarketComparator;
-import stellics.campaign.econ.SubmarketComparator;
+import stellics.comparator.FleetComparator;
+import stellics.comparator.MarketComparator;
+import stellics.comparator.SubmarketComparator;
 import stellics.filter.CargoStackFilter;
 import stellics.filter.FilterManager;
 import stellics.filter.FleetMemberFilter;
