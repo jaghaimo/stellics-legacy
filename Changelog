@@ -1,7 +1,8 @@
 * unreleased - ?
 - Feature: Advanced search filters for query markets and ship finder
 - Improvement: Use different intel icons depending on intel type
-- Improvement: Code cleanup (breaks save compatiblity with 0.8.0)
+- Improvement: Code cleanup (breaks save compatiblity with pre-0.8.0)
+- Improvement: Block StellNET access while using some abilities
 
 * Thu Aug 20 2020 - 0.9.1
 - Feature: Add ship (frigate, destroyer, cruiser, capital) search to StellNET
@@ -44,7 +45,7 @@
 
 * Thu Aug 06 2020 - 0.5.2
 - Improvement: Replace vanilla storage tab image with a custom one
-- Improvement: Raise upkeep fee slighly (1 to 9 per unit)
+- Improvement: Increase the storage upkeep fee (1 to 9 per unit)
 - Bugfix: Make upkeep cost persistent across save/load
 
 * Wed Aug 05 2020 - 0.5.1
