@@ -10,13 +10,13 @@ import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Ranks;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 
-public class Officer extends Stellnet {
+public class Administrator extends Stellnet {
 
-    private List<String> officers = new ArrayList<String>();
+    private List<String> administrators = new ArrayList<String>();
 
-    public Officer(String e, MarketAPI m) {
-        super(e + " officer", m);
-        addOfficers();
+    public Administrator(MarketAPI m) {
+        super("administrator", m);
+        addAdministrators();
     }
 
     @Override
@@ -26,31 +26,30 @@ public class Officer extends Stellnet {
 
     @Override
     public String getIntelTitle() {
-        return "StellNET Officer Intel";
+        return "StellNET Administrator Intel";
     }
 
     @Override
     public void createSmallDescription(TooltipMakerAPI info) {
         super.createSmallDescription(info);
 
-        if (officers.isEmpty()) {
+        if (administrators.isEmpty()) {
             return;
         }
 
-        info.addPara("This market has the following officers available for hire:", 10f);
+        info.addPara("This market has the following administrators available for hire:", 10f);
 
-        for (String officer : officers) {
-            info.addPara(" - " + officer, 3f);
+        for (String administrator : administrators) {
+            info.addPara(" - " + administrator, 3f);
         }
     }
 
-    private void addOfficers() {
+    private void addAdministrators() {
         for (CommDirectoryEntryAPI entry : market.getCommDirectory().getEntriesCopy()) {
             PersonAPI person = (PersonAPI) entry.getEntryData();
 
-            if (person.getPostId().equals(Ranks.POST_MERCENARY)) {
-                String curPersonality = person.getPersonalityAPI().getDisplayName().toLowerCase();
-                officers.add(person.getRank() + " " + person.getNameString() + ", " + curPersonality);
+            if (person.getPostId().equals(Ranks.POST_FREELANCE_ADMIN)) {
+                administrators.add(person.getRank() + " " + person.getNameString());
             }
         }
     }

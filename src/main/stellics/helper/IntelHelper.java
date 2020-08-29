@@ -14,17 +14,16 @@ import stellics.campaign.intel.BatchStellnetIntel;
 import stellics.campaign.intel.EmptyIntel;
 import stellics.campaign.intel.IntelEntity;
 import stellics.campaign.intel.StellnetIntel;
+import stellics.campaign.intel.entity.Administrator;
 import stellics.campaign.intel.entity.Cargo;
 import stellics.campaign.intel.entity.Industry;
 import stellics.campaign.intel.entity.Officer;
 import stellics.campaign.intel.entity.Ship;
 import stellics.filter.FilterManager;
 import stellics.filter.MarketFilter;
-import stellics.filter.MarketHasCargoStack;
-import stellics.filter.MarketHasIndustry;
-import stellics.filter.MarketHasOfficer;
-import stellics.filter.MarketHasShip;
 import stellics.filter.SubmarketFilter;
+import stellics.filter.SubmarketHasCargoStack;
+import stellics.filter.SubmarketHasShip;
 
 public class IntelHelper {
 
@@ -34,24 +33,22 @@ public class IntelHelper {
         }
 
         BatchStellnetIntel batchStellnetIntel = new BatchStellnetIntel();
-        List<SubmarketFilter> sFilter = filterManager.listSubmarketFilters();
+        List<MarketFilter> mFilter = filterManager.listMarketFilters();
 
         for (FleetMemberAPI ship : fleet) {
             String shipName = ship.getShipName();
-            List<MarketFilter> mFilter = filterManager.listMarketFilters();
-            mFilter.add(new MarketHasShip(ship));
+            List<SubmarketFilter> sFilter = filterManager.listSubmarketFilters();
+            sFilter.add(new SubmarketHasShip(ship));
+            List<MarketAPI> markets = EconomyHelper.getMarkets(mFilter);
+            List<SubmarketAPI> submarkets = EconomyHelper.getSubmarkets(markets, sFilter);
+            SubmarketAPI submarket = MarketHelper.getNearestSubmarket(submarkets);
 
             try {
-                List<MarketAPI> markets = EconomyHelper.getMarkets(mFilter);
-                List<SubmarketAPI> submarkets = EconomyHelper.getSubmarkets(markets, sFilter);
-                SubmarketAPI submarket = MarketHelper.getNearestSubmarket(submarkets);
                 MarketAPI market = submarket.getMarket();
                 IntelEntity entity = new Ship(shipName, ship, market);
                 BaseStellnetIntel intel = new StellnetIntel(market.getFaction(), market.getPrimaryEntity(), entity);
                 batchStellnetIntel.add(intel);
             } catch (Exception exception) {
-                BaseStellnetIntel intel = new EmptyIntel("Could not find any market selling " + shipName + ".");
-                batchStellnetIntel.add(intel);
             }
         }
 
@@ -65,34 +62,30 @@ public class IntelHelper {
 
         cargo.sort();
         BatchStellnetIntel batchStellnetIntel = new BatchStellnetIntel();
-        List<SubmarketFilter> sFilter = filterManager.listSubmarketFilters();
+        List<MarketFilter> mFilter = filterManager.listMarketFilters();
 
         for (CargoStackAPI cargoStack : cargo.getStacksCopy()) {
             String cargoName = cargoStack.getDisplayName();
-            List<MarketFilter> mFilter = filterManager.listMarketFilters();
-            mFilter.add(new MarketHasCargoStack(cargoStack));
+            List<SubmarketFilter> sFilter = filterManager.listSubmarketFilters();
+            sFilter.add(new SubmarketHasCargoStack(cargoStack));
+            List<MarketAPI> markets = EconomyHelper.getMarkets(mFilter);
+            List<SubmarketAPI> submarkets = EconomyHelper.getSubmarkets(markets, sFilter);
+            SubmarketAPI submarket = MarketHelper.getNearestSubmarket(submarkets);
 
             try {
-                List<MarketAPI> markets = EconomyHelper.getMarkets(mFilter);
-                List<SubmarketAPI> submarkets = EconomyHelper.getSubmarkets(markets, sFilter);
-                SubmarketAPI submarket = MarketHelper.getNearestSubmarket(submarkets);
                 MarketAPI market = submarket.getMarket();
                 IntelEntity entity = new Cargo(cargoName, market);
                 BaseStellnetIntel intel = new StellnetIntel(market.getFaction(), market.getPrimaryEntity(), entity);
                 batchStellnetIntel.add(intel);
             } catch (Exception exception) {
-                BaseStellnetIntel intel = new EmptyIntel("Could not find any market selling " + cargoName + ".");
-                batchStellnetIntel.add(intel);
             }
         }
 
         return batchStellnetIntel;
     }
 
-    public static BaseStellnetIntel getIndustryIntel(List<MarketFilter> filters, String industryId,
-            boolean notDisrupted) {
+    public static BaseStellnetIntel getIndustryIntel(List<MarketFilter> filters, String industryId) {
         try {
-            filters.add(new MarketHasIndustry(industryId, notDisrupted));
             List<MarketAPI> markets = EconomyHelper.getMarkets(filters);
             MarketAPI market = MarketHelper.getNearestMarket(markets);
             String industryName = market.getIndustry(industryId).getCurrentName();
@@ -107,9 +100,20 @@ public class IntelHelper {
         }
     }
 
+    public static BaseStellnetIntel getAdministratorIntel(List<MarketFilter> filters) {
+        try {
+            List<MarketAPI> markets = EconomyHelper.getMarkets(filters);
+            MarketAPI market = MarketHelper.getNearestMarket(markets);
+            IntelEntity intel = new Administrator(market);
+
+            return new StellnetIntel(market.getFaction(), market.getPrimaryEntity(), intel);
+        } catch (Exception exception) {
+            return new EmptyIntel("Could not find any administrators.");
+        }
+    }
+
     public static BaseStellnetIntel getOfficerIntel(List<MarketFilter> filters, String personality) {
         try {
-            filters.add(new MarketHasOfficer(personality));
             List<MarketAPI> markets = EconomyHelper.getMarkets(filters);
             MarketAPI market = MarketHelper.getNearestMarket(markets);
             IntelEntity intel = new Officer(personality, market);

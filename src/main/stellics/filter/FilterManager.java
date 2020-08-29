@@ -7,44 +7,55 @@ import stellics.campaign.StellnetDialogOption;
 
 public class FilterManager {
 
+    private StellnetDialogOption cargoType;
     private StellnetDialogOption cargoWeaponSize;
     private StellnetDialogOption cargoWeaponType;
     private StellnetDialogOption cargoWingType;
 
+    private StellnetDialogOption fleetShipSize;
     private StellnetDialogOption fleetShipDamaged;
     private StellnetDialogOption fleetShipCarrier;
     private StellnetDialogOption fleetShipCivilian;
 
+    private StellnetDialogOption marketFaction;
+
+    private StellnetDialogOption staffType;
+    private StellnetDialogOption staffOfficer;
+
     public FilterManager() {
-        // default cargo filters
-        cargoWeaponSize = StellnetDialogOption.MARKET_WEAPON_SIZE_ANY;
-        cargoWeaponType = StellnetDialogOption.MARKET_WEAPON_TYPE_ANY;
-        cargoWingType = StellnetDialogOption.MARKET_WING_TYPE_ANY;
-        // default ship filters
+        cargoType = StellnetDialogOption.CARGO_TYPE_WEAPON;
+        cargoWeaponSize = StellnetDialogOption.WEAPON_SIZE_ANY;
+        cargoWeaponType = StellnetDialogOption.WEAPON_TYPE_ANY;
+        cargoWingType = StellnetDialogOption.WING_TYPE_ANY;
+
+        fleetShipSize = StellnetDialogOption.SHIP_SIZE_FRIGATE;
         fleetShipDamaged = StellnetDialogOption.SHIP_DAMAGED_YES;
         fleetShipCarrier = StellnetDialogOption.SHIP_CARRIER_YES;
         fleetShipCivilian = StellnetDialogOption.SHIP_CIVILIAN_NO;
+
+        marketFaction = StellnetDialogOption.MARKET_FACTION_NON_HOSTILE;
+
+        staffType = StellnetDialogOption.STAFF_OFFICER;
+        staffOfficer = StellnetDialogOption.OFFICER_STEADY;
     }
 
-    public List<CargoStackFilter> listCargoFilters(StellnetDialogOption option) {
+    public List<CargoStackFilter> listCargoFilters() {
         List<CargoStackFilter> filters = new ArrayList<CargoStackFilter>();
-        filters.add(new CargoStackType(option));
+        filters.add(new CargoStackType(cargoType));
 
-        if (option.equals(StellnetDialogOption.MARKET_WEAPON)) {
+        if (cargoType == StellnetDialogOption.CARGO_TYPE_WEAPON) {
             filters.add(new CargoStackWeaponSize(cargoWeaponSize));
             filters.add(new CargoStackWeaponType(cargoWeaponType));
-        }
-
-        if (option.equals(StellnetDialogOption.MARKET_FIGHTER)) {
+        } else if (cargoType == StellnetDialogOption.CARGO_TYPE_FIGHTER) {
             filters.add(new CargoStackWingType(cargoWingType));
         }
 
         return filters;
     }
 
-    public List<FleetMemberFilter> listFleetFilters(StellnetDialogOption option) {
+    public List<FleetMemberFilter> listFleetFilters() {
         List<FleetMemberFilter> filters = new ArrayList<FleetMemberFilter>();
-        filters.add(new FleetMemberSize(option));
+        filters.add(new FleetMemberSize(fleetShipSize));
         filters.add(new FleetMemberDamaged(fleetShipDamaged));
         filters.add(new FleetMemberCarrier(fleetShipCarrier));
         filters.add(new FleetMemberCivilian(fleetShipCivilian));
@@ -54,7 +65,7 @@ public class FilterManager {
 
     public List<MarketFilter> listMarketFilters() {
         List<MarketFilter> filters = new ArrayList<MarketFilter>();
-        filters.add(new MarketNonHostile());
+        filters.add(new MarketNonHostile(marketFaction));
 
         return filters;
     }
@@ -66,19 +77,33 @@ public class FilterManager {
         return filters;
     }
 
+    public StellnetDialogOption getCargoType() {
+        return cargoType;
+    }
+
+    public void setCargoType(StellnetDialogOption option) {
+        if (option == StellnetDialogOption.CARGO_TYPE_WEAPON) {
+            cargoType = StellnetDialogOption.CARGO_TYPE_FIGHTER;
+        } else if (option == StellnetDialogOption.CARGO_TYPE_FIGHTER) {
+            cargoType = StellnetDialogOption.CARGO_TYPE_MODSPEC;
+        } else if (option == StellnetDialogOption.CARGO_TYPE_MODSPEC) {
+            cargoType = StellnetDialogOption.CARGO_TYPE_WEAPON;
+        }
+    }
+
     public StellnetDialogOption getCargoWeaponSize() {
         return cargoWeaponSize;
     }
 
     public void setCargoWeaponSize(StellnetDialogOption option) {
-        if (option == StellnetDialogOption.MARKET_WEAPON_SIZE_ANY) {
-            cargoWeaponSize = StellnetDialogOption.MARKET_WEAPON_SIZE_SMALL;
-        } else if (option == StellnetDialogOption.MARKET_WEAPON_SIZE_SMALL) {
-            cargoWeaponSize = StellnetDialogOption.MARKET_WEAPON_SIZE_MEDIUM;
-        } else if (option == StellnetDialogOption.MARKET_WEAPON_SIZE_MEDIUM) {
-            cargoWeaponSize = StellnetDialogOption.MARKET_WEAPON_SIZE_LARGE;
-        } else if (option == StellnetDialogOption.MARKET_WEAPON_SIZE_LARGE) {
-            cargoWeaponSize = StellnetDialogOption.MARKET_WEAPON_SIZE_ANY;
+        if (option == StellnetDialogOption.WEAPON_SIZE_ANY) {
+            cargoWeaponSize = StellnetDialogOption.WEAPON_SIZE_SMALL;
+        } else if (option == StellnetDialogOption.WEAPON_SIZE_SMALL) {
+            cargoWeaponSize = StellnetDialogOption.WEAPON_SIZE_MEDIUM;
+        } else if (option == StellnetDialogOption.WEAPON_SIZE_MEDIUM) {
+            cargoWeaponSize = StellnetDialogOption.WEAPON_SIZE_LARGE;
+        } else if (option == StellnetDialogOption.WEAPON_SIZE_LARGE) {
+            cargoWeaponSize = StellnetDialogOption.WEAPON_SIZE_ANY;
         }
     }
 
@@ -87,14 +112,14 @@ public class FilterManager {
     }
 
     public void setCargoWeaponType(StellnetDialogOption option) {
-        if (option == StellnetDialogOption.MARKET_WEAPON_TYPE_ANY) {
-            cargoWeaponType = StellnetDialogOption.MARKET_WEAPON_TYPE_BALLISTIC;
-        } else if (option == StellnetDialogOption.MARKET_WEAPON_TYPE_BALLISTIC) {
-            cargoWeaponType = StellnetDialogOption.MARKET_WEAPON_TYPE_ENERGY;
-        } else if (option == StellnetDialogOption.MARKET_WEAPON_TYPE_ENERGY) {
-            cargoWeaponType = StellnetDialogOption.MARKET_WEAPON_TYPE_MISSILE;
-        } else if (option == StellnetDialogOption.MARKET_WEAPON_TYPE_MISSILE) {
-            cargoWeaponType = StellnetDialogOption.MARKET_WEAPON_TYPE_ANY;
+        if (option == StellnetDialogOption.WEAPON_TYPE_ANY) {
+            cargoWeaponType = StellnetDialogOption.WEAPON_TYPE_BALLISTIC;
+        } else if (option == StellnetDialogOption.WEAPON_TYPE_BALLISTIC) {
+            cargoWeaponType = StellnetDialogOption.WEAPON_TYPE_ENERGY;
+        } else if (option == StellnetDialogOption.WEAPON_TYPE_ENERGY) {
+            cargoWeaponType = StellnetDialogOption.WEAPON_TYPE_MISSILE;
+        } else if (option == StellnetDialogOption.WEAPON_TYPE_MISSILE) {
+            cargoWeaponType = StellnetDialogOption.WEAPON_TYPE_ANY;
         }
     }
 
@@ -103,14 +128,30 @@ public class FilterManager {
     }
 
     public void setCargoWingType(StellnetDialogOption option) {
-        if (option == StellnetDialogOption.MARKET_WING_TYPE_ANY) {
-            cargoWingType = StellnetDialogOption.MARKET_WING_TYPE_INTERCEPTOR;
-        } else if (option == StellnetDialogOption.MARKET_WING_TYPE_INTERCEPTOR) {
-            cargoWingType = StellnetDialogOption.MARKET_WING_TYPE_FIGHTER;
-        } else if (option == StellnetDialogOption.MARKET_WING_TYPE_FIGHTER) {
-            cargoWingType = StellnetDialogOption.MARKET_WING_TYPE_BOMBER;
-        } else if (option == StellnetDialogOption.MARKET_WING_TYPE_BOMBER) {
-            cargoWingType = StellnetDialogOption.MARKET_WING_TYPE_ANY;
+        if (option == StellnetDialogOption.WING_TYPE_ANY) {
+            cargoWingType = StellnetDialogOption.WING_TYPE_INTERCEPTOR;
+        } else if (option == StellnetDialogOption.WING_TYPE_INTERCEPTOR) {
+            cargoWingType = StellnetDialogOption.WING_TYPE_FIGHTER;
+        } else if (option == StellnetDialogOption.WING_TYPE_FIGHTER) {
+            cargoWingType = StellnetDialogOption.WING_TYPE_BOMBER;
+        } else if (option == StellnetDialogOption.WING_TYPE_BOMBER) {
+            cargoWingType = StellnetDialogOption.WING_TYPE_ANY;
+        }
+    }
+
+    public StellnetDialogOption getFleetShipSize() {
+        return fleetShipSize;
+    }
+
+    public void setFleetShipSize(StellnetDialogOption option) {
+        if (option == StellnetDialogOption.SHIP_SIZE_CAPITAL) {
+            fleetShipSize = StellnetDialogOption.SHIP_SIZE_FRIGATE;
+        } else if (option == StellnetDialogOption.SHIP_SIZE_FRIGATE) {
+            fleetShipSize = StellnetDialogOption.SHIP_SIZE_DESTROYER;
+        } else if (option == StellnetDialogOption.SHIP_SIZE_DESTROYER) {
+            fleetShipSize = StellnetDialogOption.SHIP_SIZE_CRUISER;
+        } else if (option == StellnetDialogOption.SHIP_SIZE_CRUISER) {
+            fleetShipSize = StellnetDialogOption.SHIP_SIZE_CAPITAL;
         }
     }
 
@@ -153,6 +194,48 @@ public class FilterManager {
             fleetShipCivilian = StellnetDialogOption.SHIP_CIVILIAN_ONLY;
         } else if (option == StellnetDialogOption.SHIP_CIVILIAN_ONLY) {
             fleetShipCivilian = StellnetDialogOption.SHIP_CIVILIAN_NO;
+        }
+    }
+
+    public StellnetDialogOption getMarketFaction() {
+        return marketFaction;
+    }
+
+    public void setMarketFaction(StellnetDialogOption option) {
+        if (option == StellnetDialogOption.MARKET_FACTION_ANY) {
+            marketFaction = StellnetDialogOption.MARKET_FACTION_NON_HOSTILE;
+        } else if (option == StellnetDialogOption.MARKET_FACTION_NON_HOSTILE) {
+            marketFaction = StellnetDialogOption.MARKET_FACTION_ANY;
+        }
+    }
+
+    public StellnetDialogOption getStaffType() {
+        return staffType;
+    }
+
+    public void setStaffType(StellnetDialogOption option) {
+        if (option == StellnetDialogOption.STAFF_OFFICER) {
+            staffType = StellnetDialogOption.STAFF_ADMIN;
+        } else if (option == StellnetDialogOption.STAFF_ADMIN) {
+            staffType = StellnetDialogOption.STAFF_OFFICER;
+        }
+    }
+
+    public StellnetDialogOption getStaffOfficer() {
+        return staffOfficer;
+    }
+
+    public void setStaffOfficer(StellnetDialogOption option) {
+        if (option == StellnetDialogOption.OFFICER_TIMID) {
+            staffOfficer = StellnetDialogOption.OFFICER_CAUTIOUS;
+        } else if (option == StellnetDialogOption.OFFICER_CAUTIOUS) {
+            staffOfficer = StellnetDialogOption.OFFICER_STEADY;
+        } else if (option == StellnetDialogOption.OFFICER_STEADY) {
+            staffOfficer = StellnetDialogOption.OFFICER_AGGRESSIVE;
+        } else if (option == StellnetDialogOption.OFFICER_AGGRESSIVE) {
+            staffOfficer = StellnetDialogOption.OFFICER_RECKLESS;
+        } else if (option == StellnetDialogOption.OFFICER_RECKLESS) {
+            staffOfficer = StellnetDialogOption.OFFICER_TIMID;
         }
     }
 }

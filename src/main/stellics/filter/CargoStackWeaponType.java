@@ -22,13 +22,13 @@ public class CargoStackWeaponType implements CargoStackFilter {
         WeaponType weaponType = c.getWeaponSpecIfWeapon().getType();
 
         switch (option) {
-            case MARKET_WEAPON_TYPE_BALLISTIC:
+            case WEAPON_TYPE_BALLISTIC:
                 return weaponType.equals(WeaponType.BALLISTIC);
 
-            case MARKET_WEAPON_TYPE_ENERGY:
+            case WEAPON_TYPE_ENERGY:
                 return weaponType.equals(WeaponType.ENERGY);
 
-            case MARKET_WEAPON_TYPE_MISSILE:
+            case WEAPON_TYPE_MISSILE:
                 return weaponType.equals(WeaponType.MISSILE);
 
             default:

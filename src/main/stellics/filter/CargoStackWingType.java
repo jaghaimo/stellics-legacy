@@ -22,13 +22,13 @@ public class CargoStackWingType implements CargoStackFilter {
         WingRole wingRole = c.getFighterWingSpecIfWing().getRole();
 
         switch (option) {
-            case MARKET_WING_TYPE_BOMBER:
+            case WING_TYPE_BOMBER:
                 return wingRole.equals(WingRole.BOMBER);
 
-            case MARKET_WING_TYPE_FIGHTER:
+            case WING_TYPE_FIGHTER:
                 return wingRole.equals(WingRole.FIGHTER);
 
-            case MARKET_WING_TYPE_INTERCEPTOR:
+            case WING_TYPE_INTERCEPTOR:
                 return wingRole.equals(WingRole.INTERCEPTOR);
 
             default:

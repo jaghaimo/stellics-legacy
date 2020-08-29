@@ -10,7 +10,6 @@ import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.submarkets.BaseSubmarketPlugin;
 
-import stellics.campaign.StellnetDialogOption;
 import stellics.comparator.FleetComparator;
 import stellics.comparator.MarketComparator;
 import stellics.comparator.SubmarketComparator;
@@ -20,10 +19,10 @@ import stellics.filter.FleetMemberFilter;
 
 public class MarketHelper {
 
-    public static List<CargoStackAPI> findItems(FilterManager filterManager, StellnetDialogOption option) {
+    public static List<CargoStackAPI> findItems(FilterManager filterManager) {
         List<MarketAPI> markets = EconomyHelper.getMarkets(filterManager.listMarketFilters());
         List<SubmarketAPI> submarkets = EconomyHelper.getSubmarkets(markets, filterManager.listSubmarketFilters());
-        List<CargoStackFilter> cargoStackFilters = filterManager.listCargoFilters(option);
+        List<CargoStackFilter> cargoStackFilters = filterManager.listCargoFilters();
         List<CargoStackAPI> cargoStacks = new ArrayList<CargoStackAPI>();
 
         for (SubmarketAPI s : submarkets) {
@@ -39,10 +38,10 @@ public class MarketHelper {
         return cargoStacks;
     }
 
-    public static List<FleetMemberAPI> findShips(FilterManager filterManager, StellnetDialogOption option) {
+    public static List<FleetMemberAPI> findShips(FilterManager filterManager) {
         List<MarketAPI> markets = EconomyHelper.getMarkets(filterManager.listMarketFilters());
         List<SubmarketAPI> submarkets = EconomyHelper.getSubmarkets(markets, filterManager.listSubmarketFilters());
-        List<FleetMemberFilter> fleetMemeberFilters = filterManager.listFleetFilters(option);
+        List<FleetMemberFilter> fleetMemeberFilters = filterManager.listFleetFilters();
         List<FleetMemberAPI> fleetMembers = new ArrayList<FleetMemberAPI>();
 
         for (SubmarketAPI s : submarkets) {

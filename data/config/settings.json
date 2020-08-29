@@ -26,7 +26,7 @@
         "intel":{
             "branch":"graphics/icons/intel/branch.png",
             "cargo":"graphics/icons/intel/cargo.png",
-            "officer":"graphics/icons/intel/officer.png",
+            "staff":"graphics/icons/intel/staff.png",
             "ship":"graphics/icons/intel/ship.png"
         }
     }

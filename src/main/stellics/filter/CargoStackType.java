@@ -15,17 +15,14 @@ public class CargoStackType implements CargoStackFilter {
     @Override
     public boolean match(CargoStackAPI c) {
         switch (option) {
-            case MARKET_WEAPON:
+            case CARGO_TYPE_WEAPON:
                 return c.isWeaponStack();
 
-            case MARKET_FIGHTER:
+            case CARGO_TYPE_FIGHTER:
                 return c.isFighterWingStack();
 
-            case MARKET_MODSPEC:
+            case CARGO_TYPE_MODSPEC:
                 return c.isSpecialStack() && c.getSpecialDataIfSpecial().getId().equals("modspec");
-
-            case MARKET_BLUEPRINT:
-                return c.isSpecialStack() && c.getSpecialDataIfSpecial().getId().endsWith("_bp");
 
             default:
                 return false;

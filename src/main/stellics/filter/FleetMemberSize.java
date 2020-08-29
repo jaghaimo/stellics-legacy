@@ -15,16 +15,16 @@ public class FleetMemberSize implements FleetMemberFilter {
     @Override
     public boolean match(FleetMemberAPI f) {
         switch (option) {
-            case SHIP_FRIGATE:
+            case SHIP_SIZE_FRIGATE:
                 return f.isFrigate();
 
-            case SHIP_DESTROYER:
+            case SHIP_SIZE_DESTROYER:
                 return f.isDestroyer();
 
-            case SHIP_CRUISER:
+            case SHIP_SIZE_CRUISER:
                 return f.isCruiser();
 
-            case SHIP_CAPITAL:
+            case SHIP_SIZE_CAPITAL:
                 return f.isCapital();
 
             default:

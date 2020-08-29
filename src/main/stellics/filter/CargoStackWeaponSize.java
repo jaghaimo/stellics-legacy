@@ -22,13 +22,13 @@ public class CargoStackWeaponSize implements CargoStackFilter {
         WeaponSize weaponSize = c.getWeaponSpecIfWeapon().getSize();
 
         switch (option) {
-            case MARKET_WEAPON_SIZE_SMALL:
+            case WEAPON_SIZE_SMALL:
                 return weaponSize.equals(WeaponSize.SMALL);
 
-            case MARKET_WEAPON_SIZE_MEDIUM:
+            case WEAPON_SIZE_MEDIUM:
                 return weaponSize.equals(WeaponSize.MEDIUM);
 
-            case MARKET_WEAPON_SIZE_LARGE:
+            case WEAPON_SIZE_LARGE:
                 return weaponSize.equals(WeaponSize.LARGE);
 
             default:
