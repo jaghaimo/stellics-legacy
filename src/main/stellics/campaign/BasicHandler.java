@@ -10,6 +10,8 @@ abstract public class BasicHandler {
 
     public StellnetDialogOption handle(StellnetDialogOption option) {
         if (plugin.getLastOption().equals(StellnetDialogOption.INIT)) {
+            plugin.addTitle(option.getName());
+
             return init(option);
         }
 

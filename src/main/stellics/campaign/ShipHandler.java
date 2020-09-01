@@ -20,6 +20,7 @@ public class ShipHandler extends BasicHandler implements FleetMemberPickerListen
 
     @Override
     public void cancelledFleetMemberPicking() {
+        plugin.addText("Query cancelled...");
     }
 
     @Override

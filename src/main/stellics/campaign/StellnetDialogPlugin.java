@@ -69,8 +69,7 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
 
         visual.showImagePortion("illustrations", "stellnet", 640, 400, 0, 0, 480, 300);
 
-        Color colorHighlight = Misc.getHighlightColor();
-        textPanel.addPara("StellNET", colorHighlight);
+        addTitle("StellNET");
         textPanel.addPara("Welcome to Stellar Network!");
         textPanel.addPara("Which of our services would you like to use?");
         showMenu();
@@ -90,7 +89,10 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
 
         switch (option) {
             case INIT:
-                askForMore();
+                addText("Back to main menu...");
+                addTitle("StellNET");
+                addText("Are there any other services you would like to use?");
+                showMenu();
                 break;
 
             case BRANCH:
@@ -132,13 +134,13 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
         intel.updateTextPanel(textPanel);
     }
 
-    public void addText(String update) {
-        textPanel.addPara(update);
+    public void addTitle(String title) {
+        Color colorHighlight = Misc.getHighlightColor();
+        textPanel.addPara(title, colorHighlight);
     }
 
-    public void askForMore() {
-        showMenu();
-        textPanel.addPara("Are there any other services you would like to use?");
+    public void addText(String update) {
+        textPanel.addPara(update);
     }
 
     public InteractionDialogAPI getDialog() {
@@ -161,7 +163,7 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
         options.setShortcut(option, Keyboard.KEY_ESCAPE, false, false, false, false);
     }
 
-    private void showMenu() {
+    public void showMenu() {
         lastOption = StellnetDialogOption.INIT;
         addOptions(StellnetDialogOption.BRANCH, StellnetDialogOption.STAFF, StellnetDialogOption.CARGO,
                 StellnetDialogOption.SHIP, StellnetDialogOption.EXIT);

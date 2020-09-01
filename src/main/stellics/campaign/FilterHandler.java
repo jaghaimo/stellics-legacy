@@ -33,7 +33,7 @@ public class FilterHandler extends BasicHandler {
                 return shipHandler(o);
 
             default:
-                plugin.askForMore();
+                plugin.showMenu();
         }
 
         return option;
