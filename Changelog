@@ -1,7 +1,7 @@
-* unreleased - ?
+* Tue Sep 01 2020 - 0.10.0
 - Feature: Advanced search filters for query markets and ship finder
 - Improvement: Use different intel icons depending on intel type
-- Improvement: Code cleanup (breaks save compatiblity with pre-0.8.0)
+- Improvement: Code clean-up (breaks save compatibility with pre-0.8.0)
 - Improvement: Block StellNET access while using some abilities
 
 * Thu Aug 20 2020 - 0.9.1
