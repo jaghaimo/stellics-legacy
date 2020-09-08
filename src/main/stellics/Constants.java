@@ -2,18 +2,16 @@ package stellics;
 
 public class Constants {
 
+    // industry and submarket consts
     public final static String BRANCH = "STELLICS_BRANCH";
     public final static String STORAGE = "STELLICS_STORAGE";
 
-    public final static String BLUEPRINT = "blueprint";
+    // used in importer and exporter commands
     public final static String COMMODITY = "commodity";
-    public final static String MODSPEC = "modspec";
-    public final static String SPECIAL = "special";
     public final static String WEAPON = "weapon";
     public final static String FIGHTER = "fighter";
 
-    public final static String FRIGATE = "frigate";
-    public final static String DESTROYER = "destroyer";
-    public final static String CRUISER = "cruiser";
-    public final static String CAPITAL = "capital";
+    // intel tags
+    public final static String TAG_DARKNET = "DarkNET";
+    public final static String TAG_STELLNET = "StellNET";
 }

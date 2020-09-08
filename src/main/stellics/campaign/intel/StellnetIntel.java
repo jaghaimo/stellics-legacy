@@ -11,6 +11,8 @@ import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
+import stellics.Constants;
+
 public class StellnetIntel extends BaseIntelPlugin implements BaseStellnetIntel {
 
     private FactionAPI faction;
@@ -22,6 +24,9 @@ public class StellnetIntel extends BaseIntelPlugin implements BaseStellnetIntel 
         sectorEntityToken = s;
         intel = i;
         endingTimeRemaining = 14f;
+
+        Global.getSector().getIntelManager().addIntel(this);
+        Global.getSector().addScript(this);
     }
 
     @Override
@@ -62,7 +67,7 @@ public class StellnetIntel extends BaseIntelPlugin implements BaseStellnetIntel 
     public Set<String> getIntelTags(SectorMapAPI map) {
         Set<String> tags = super.getIntelTags(map);
         tags.add(faction.getId());
-        tags.add("StellNET");
+        tags.add(Constants.TAG_STELLNET);
 
         return tags;
     }
@@ -82,11 +87,6 @@ public class StellnetIntel extends BaseIntelPlugin implements BaseStellnetIntel 
     protected void notifyEnded() {
         Global.getSector().getIntelManager().removeIntel(this);
         Global.getSector().removeScript(this);
-    }
-
-    public void trigger() {
-        Global.getSector().getIntelManager().addIntel(this);
-        Global.getSector().addScript(this);
     }
 
     public void updateTextPanel(TextPanelAPI textPanel) {

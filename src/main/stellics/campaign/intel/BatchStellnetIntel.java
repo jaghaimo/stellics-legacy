@@ -18,13 +18,6 @@ public class BatchStellnetIntel implements BaseStellnetIntel {
     }
 
     @Override
-    public void trigger() {
-        for (BaseStellnetIntel i : intels) {
-            i.trigger();
-        }
-    }
-
-    @Override
     public void updateTextPanel(TextPanelAPI textPanel) {
         for (BaseStellnetIntel i : intels) {
             i.updateTextPanel(textPanel);

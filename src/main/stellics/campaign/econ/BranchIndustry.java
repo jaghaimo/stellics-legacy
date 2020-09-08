@@ -39,7 +39,7 @@ public class BranchIndustry extends BaseIndustry {
             return;
         }
 
-        queueIntel(Branch.Action.DISRUPT);
+        addIntel(Branch.Action.DISRUPT);
     }
 
     @Override
@@ -50,14 +50,14 @@ public class BranchIndustry extends BaseIndustry {
             return;
         }
 
-        queueIntel(Branch.Action.RESUME);
+        addIntel(Branch.Action.RESUME);
     }
 
     @Override
     public void finishBuildingOrUpgrading() {
         super.finishBuildingOrUpgrading();
 
-        queueIntel(Branch.Action.OPEN);
+        addIntel(Branch.Action.OPEN);
     }
 
     @Override
@@ -65,13 +65,12 @@ public class BranchIndustry extends BaseIndustry {
         super.notifyBeingRemoved(mode, forUpgrade);
 
         if (StorageHelper.remove(market)) {
-            queueIntel(Branch.Action.CLOSE);
+            addIntel(Branch.Action.CLOSE);
         }
     }
 
-    private void queueIntel(Branch.Action action) {
+    private void addIntel(Branch.Action action) {
         Branch branch = new Branch(market, action);
-        StellnetIntel intel = new StellnetIntel(market.getFaction(), market.getPrimaryEntity(), branch);
-        intel.trigger();
+        new StellnetIntel(market.getFaction(), market.getPrimaryEntity(), branch);
     }
 }

@@ -130,7 +130,6 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
     }
 
     public void addIntel(BaseStellnetIntel intel) {
-        intel.trigger();
         intel.updateTextPanel(textPanel);
     }
 

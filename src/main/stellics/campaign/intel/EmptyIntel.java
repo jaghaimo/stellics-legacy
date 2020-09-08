@@ -14,8 +14,4 @@ public class EmptyIntel implements BaseStellnetIntel {
     public void updateTextPanel(TextPanelAPI textPanel) {
         textPanel.addPara(intelInfo);
     }
-
-    @Override
-    public void trigger() {
-    }
 }
