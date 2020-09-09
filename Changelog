@@ -1,3 +1,6 @@
+* Wed Sep 09 2020 - 0.10.1
+- Bugfix: Add StellNET skill when enabling mod in an existing save
+
 * Tue Sep 01 2020 - 0.10.0
 - Feature: Advanced search filters for query markets and ship finder
 - Improvement: Use different intel icons depending on intel type

@@ -36,6 +36,9 @@ public class StellicsModPlugin extends BaseModPlugin {
     @Override
     public void onGameLoad(boolean newGame) {
         StorageHelper.registerFeeListener();
+
+        // add skills
+        Global.getSector().getCharacterData().addAbility(Constants.ABILITY_STELLNET);
     }
 
     private Set<String> loadFactionList(String path) {
