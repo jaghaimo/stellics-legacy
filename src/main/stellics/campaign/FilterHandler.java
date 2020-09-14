@@ -23,6 +23,9 @@ public class FilterHandler extends BasicHandler {
             case BRANCH:
                 return branchHandler(o);
 
+            case COURIER:
+                return courierHandler(o);
+
             case STAFF:
                 return staffHandler(o);
 
@@ -43,8 +46,20 @@ public class FilterHandler extends BasicHandler {
         filterManager.setMarketFaction(option);
 
         plugin.addOptions(StellnetDialogOption.BRANCH, filterManager.getMarketFaction(), StellnetDialogOption.INIT);
+        plugin.setEscShortcut(StellnetDialogOption.INIT);
 
         return StellnetDialogOption.BRANCH;
+    }
+
+    protected StellnetDialogOption courierHandler(StellnetDialogOption option) {
+        filterManager.setCourierDirection(option);
+        filterManager.setCourierTransfer(option);
+
+        plugin.addOptions(StellnetDialogOption.COURIER, filterManager.getCourierDirection(),
+                filterManager.getCourierTransfer(), StellnetDialogOption.INIT);
+        plugin.setEscShortcut(StellnetDialogOption.INIT);
+
+        return StellnetDialogOption.COURIER;
     }
 
     protected StellnetDialogOption staffHandler(StellnetDialogOption option) {

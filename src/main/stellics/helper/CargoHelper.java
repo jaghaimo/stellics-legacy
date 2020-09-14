@@ -14,22 +14,31 @@ public class CargoHelper {
     }
 
     public static int calculateCargoUpkeep(CargoAPI cargo) {
-        int spaceUsed = CargoHelper.calculateCargoSpace(cargo);
+        int spaceUsed = calculateCargoSpace(cargo);
 
         return getCost(spaceUsed, CostType.CARGO);
     }
 
     public static int calculateShipUpkeep(CargoAPI cargo) {
-        int spaceUsed = CargoHelper.calculateShipSpace(cargo);
+        int spaceUsed = calculateShipSpace(cargo);
 
         return getCost(spaceUsed, CostType.FLEET);
     }
 
-    // Space is a sum of ordenance points
+    public static int calculateShipUpkeep(List<FleetMemberAPI> fleet) {
+        int spaceUsed = calculateShipSpace(fleet);
+
+        return getCost(spaceUsed, CostType.FLEET);
+    }
+
     public static int calculateShipSpace(CargoAPI cargo) {
+        return calculateShipSpace(cargo.getMothballedShips().getMembersListCopy());
+    }
+
+    public static int calculateShipSpace(List<FleetMemberAPI> fleet) {
         int fleetCost = 0;
 
-        for (FleetMemberAPI ship : cargo.getMothballedShips().getMembersListCopy()) {
+        for (FleetMemberAPI ship : fleet) {
             fleetCost += ship.getHullSpec().getOrdnancePoints(null);
         }
 

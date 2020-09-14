@@ -3,7 +3,12 @@ package stellics.campaign;
 public enum StellnetDialogOption {
 
     INIT("Go back"), EXIT("Disconnect from StellNET"), BRANCH("Locate Stellar Logistics branches"),
-    STAFF("Find officers or administrators"), CARGO("Search for matching items"), SHIP("Search for specific ships"),
+    COURIER("Request courier services"), STAFF("Find officers or administrators"), CARGO("Search for matching items"),
+    SHIP("Search for specific ships"),
+
+    // courier filter
+    COURIER_DIRECTION_FROM("Direction: From the warehouse"), COURIER_DIRECTION_TO("Direction: To the warehouse"),
+    COURIER_TRANSFER_CARGO("Transfer: Cargo"), COURIER_TRANSFER_SHIP("Transfer: Ships"),
 
     // market faction filter
     MARKET_FACTION_ANY("Factions: Any"), MARKET_FACTION_NON_HOSTILE("Factions: Non-hostile"),

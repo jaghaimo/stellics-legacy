@@ -21,6 +21,7 @@ public class CargoHandler extends BasicHandler implements CargoPickerListener {
 
     @Override
     public void cancelledCargoSelection() {
+        plugin.addText("Query cancelled...");
     }
 
     @Override
@@ -31,7 +32,6 @@ public class CargoHandler extends BasicHandler implements CargoPickerListener {
     @Override
     public void recreateTextPanel(TooltipMakerAPI panel, CargoAPI cargo, CargoStackAPI pickedUp,
             boolean pickedUpFromSource, CargoAPI combined) {
-        plugin.addText("Query cancelled...");
     }
 
     @Override

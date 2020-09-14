@@ -23,6 +23,7 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
     private StellnetDialogOption lastOption;
 
     private CargoHandler cargoHandler;
+    private CourierHandler courierHandler;
     private FilterHandler filterHandler;
     private IndustryHandler industryHandler;
     private ShipHandler shipHandler;
@@ -36,6 +37,7 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
     public StellnetDialogPlugin() {
         filterManager = new FilterManager();
         cargoHandler = new CargoHandler(this);
+        courierHandler = new CourierHandler(this);
         filterHandler = new FilterHandler(this);
         industryHandler = new IndustryHandler(this);
         shipHandler = new ShipHandler(this);
@@ -95,6 +97,10 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
                 showMenu();
                 break;
 
+            case COURIER:
+                lastOption = courierHandler.handle(option);
+                break;
+
             case BRANCH:
                 lastOption = industryHandler.handle(option);
                 break;
@@ -142,6 +148,10 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
         textPanel.addPara(update);
     }
 
+    public void appendText(String update) {
+        textPanel.appendToLastParagraph(update);
+    }
+
     public InteractionDialogAPI getDialog() {
         return dialog;
     }
@@ -164,8 +174,8 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
 
     public void showMenu() {
         lastOption = StellnetDialogOption.INIT;
-        addOptions(StellnetDialogOption.BRANCH, StellnetDialogOption.STAFF, StellnetDialogOption.CARGO,
-                StellnetDialogOption.SHIP, StellnetDialogOption.EXIT);
+        addOptions(StellnetDialogOption.BRANCH, StellnetDialogOption.COURIER, StellnetDialogOption.STAFF,
+                StellnetDialogOption.CARGO, StellnetDialogOption.SHIP, StellnetDialogOption.EXIT);
         setEscShortcut(StellnetDialogOption.EXIT);
     }
 }

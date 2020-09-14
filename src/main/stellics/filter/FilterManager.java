@@ -7,36 +7,25 @@ import stellics.campaign.StellnetDialogOption;
 
 public class FilterManager {
 
-    private StellnetDialogOption cargoType;
-    private StellnetDialogOption cargoWeaponSize;
-    private StellnetDialogOption cargoWeaponType;
-    private StellnetDialogOption cargoWingType;
+    private StellnetDialogOption cargoType = StellnetDialogOption.CARGO_TYPE_WEAPON;
+    private StellnetDialogOption cargoWeaponSize = StellnetDialogOption.WEAPON_SIZE_ANY;
+    private StellnetDialogOption cargoWeaponType = StellnetDialogOption.WEAPON_TYPE_ANY;
+    private StellnetDialogOption cargoWingType = StellnetDialogOption.WING_TYPE_ANY;
 
-    private StellnetDialogOption fleetShipSize;
-    private StellnetDialogOption fleetShipDamaged;
-    private StellnetDialogOption fleetShipCarrier;
-    private StellnetDialogOption fleetShipCivilian;
+    private StellnetDialogOption courierDirection = StellnetDialogOption.COURIER_DIRECTION_FROM;
+    private StellnetDialogOption courierTransfer = StellnetDialogOption.COURIER_TRANSFER_CARGO;
 
-    private StellnetDialogOption marketFaction;
+    private StellnetDialogOption fleetShipSize = StellnetDialogOption.SHIP_SIZE_FRIGATE;
+    private StellnetDialogOption fleetShipDamaged = StellnetDialogOption.SHIP_DAMAGED_YES;
+    private StellnetDialogOption fleetShipCarrier = StellnetDialogOption.SHIP_CARRIER_YES;
+    private StellnetDialogOption fleetShipCivilian = StellnetDialogOption.SHIP_CIVILIAN_NO;
 
-    private StellnetDialogOption staffType;
-    private StellnetDialogOption staffOfficer;
+    private StellnetDialogOption marketFaction = StellnetDialogOption.MARKET_FACTION_NON_HOSTILE;
+
+    private StellnetDialogOption staffType = StellnetDialogOption.STAFF_OFFICER;
+    private StellnetDialogOption staffOfficer = StellnetDialogOption.OFFICER_STEADY;
 
     public FilterManager() {
-        cargoType = StellnetDialogOption.CARGO_TYPE_WEAPON;
-        cargoWeaponSize = StellnetDialogOption.WEAPON_SIZE_ANY;
-        cargoWeaponType = StellnetDialogOption.WEAPON_TYPE_ANY;
-        cargoWingType = StellnetDialogOption.WING_TYPE_ANY;
-
-        fleetShipSize = StellnetDialogOption.SHIP_SIZE_FRIGATE;
-        fleetShipDamaged = StellnetDialogOption.SHIP_DAMAGED_YES;
-        fleetShipCarrier = StellnetDialogOption.SHIP_CARRIER_YES;
-        fleetShipCivilian = StellnetDialogOption.SHIP_CIVILIAN_NO;
-
-        marketFaction = StellnetDialogOption.MARKET_FACTION_NON_HOSTILE;
-
-        staffType = StellnetDialogOption.STAFF_OFFICER;
-        staffOfficer = StellnetDialogOption.OFFICER_STEADY;
     }
 
     public List<CargoStackFilter> listCargoFilters() {
@@ -136,6 +125,30 @@ public class FilterManager {
             cargoWingType = StellnetDialogOption.WING_TYPE_BOMBER;
         } else if (option == StellnetDialogOption.WING_TYPE_BOMBER) {
             cargoWingType = StellnetDialogOption.WING_TYPE_ANY;
+        }
+    }
+
+    public StellnetDialogOption getCourierDirection() {
+        return courierDirection;
+    }
+
+    public void setCourierDirection(StellnetDialogOption option) {
+        if (option == StellnetDialogOption.COURIER_DIRECTION_TO) {
+            courierDirection = StellnetDialogOption.COURIER_DIRECTION_FROM;
+        } else if (option == StellnetDialogOption.COURIER_DIRECTION_FROM) {
+            courierDirection = StellnetDialogOption.COURIER_DIRECTION_TO;
+        }
+    }
+
+    public StellnetDialogOption getCourierTransfer() {
+        return courierTransfer;
+    }
+
+    public void setCourierTransfer(StellnetDialogOption option) {
+        if (option == StellnetDialogOption.COURIER_TRANSFER_SHIP) {
+            courierTransfer = StellnetDialogOption.COURIER_TRANSFER_CARGO;
+        } else if (option == StellnetDialogOption.COURIER_TRANSFER_CARGO) {
+            courierTransfer = StellnetDialogOption.COURIER_TRANSFER_SHIP;
         }
     }
 
