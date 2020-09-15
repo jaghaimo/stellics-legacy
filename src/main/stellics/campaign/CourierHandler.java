@@ -90,7 +90,10 @@ public class CourierHandler extends BasicHandler implements CargoPickerListener,
 
     @Override
     protected StellnetDialogOption run(StellnetDialogOption option) {
-        if (filterManager.getCourierDirection().equals(StellnetDialogOption.COURIER_DIRECTION_FROM)) {
+        boolean isFrom = filterManager.getCourierDirection().equals(StellnetDialogOption.COURIER_DIRECTION_FROM);
+        boolean isCargo = filterManager.getCourierTransfer().equals(StellnetDialogOption.COURIER_TRANSFER_CARGO);
+
+        if (isFrom) {
             sourceCargo = StorageHelper.get().getCargo();
             targetCargo = Global.getSector().getPlayerFleet().getCargo();
             sourceFleet = sourceCargo.getMothballedShips();
@@ -104,7 +107,13 @@ public class CourierHandler extends BasicHandler implements CargoPickerListener,
             dialogTitle = "to Stellar Logistics Warehouse";
         }
 
-        if (filterManager.getCourierTransfer().equals(StellnetDialogOption.COURIER_TRANSFER_CARGO)) {
+        if ((isCargo && sourceCargo.isEmpty()) || (!isCargo && sourceFleet.getMembersInPriorityOrder().isEmpty())) {
+            String what = isCargo ? "is no available cargo" : "are no available ships";
+            plugin.addText("There " + what + " to transfer " + dialogTitle + ".");
+            return option;
+        }
+
+        if (isCargo) {
             dialogTitle = "Transfer cargo " + dialogTitle;
             plugin.getDialog().showCargoPickerDialog(dialogTitle, "Transfer", "Cancel", false, 0f, sourceCargo, this);
         } else {

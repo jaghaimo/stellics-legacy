@@ -1,5 +1,6 @@
 * Tue Sep 15 2020 - 0.11.0
 - Feature: Request a courier to transfer cargo/ships from/to your warehouse
+- Improvement: Remove initial storage fee (5000)
 
 * Wed Sep 09 2020 - 0.10.1
 - Bugfix: Add StellNET skill when enabling mod in an existing save

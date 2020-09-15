@@ -14,13 +14,7 @@ public class StorageSubmarket extends StoragePlugin {
 
     @Override
     public OnClickAction getOnClickAction(CoreUIAPI ui) {
-        boolean isPlayerOwned = market.isPlayerOwned();
-
-        if (isPlayerOwned) {
-            return OnClickAction.OPEN_SUBMARKET;
-        }
-
-        return super.getOnClickAction(ui);
+        return OnClickAction.OPEN_SUBMARKET;
     }
 
     @Override
@@ -53,7 +47,6 @@ public class StorageSubmarket extends StoragePlugin {
             tooltip.addToGrid(0, 0, "Ships in storage", Misc.getDGSCredits(shipCost));
             tooltip.addToGrid(0, 1, "Cargo in storage", Misc.getDGSCredits(cargoCost));
             tooltip.addGrid(3f);
-
         }
     }
 }
