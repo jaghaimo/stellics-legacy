@@ -1,5 +1,6 @@
 package stellics.campaign;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fs.starfarer.api.Global;
@@ -41,20 +42,24 @@ public class CourierHandler extends BasicHandler implements CargoPickerListener,
 
     @Override
     public void pickedFleetMembers(List<FleetMemberAPI> fleet) {
-        if (fleet.isEmpty()) {
+        List<FleetMemberAPI> fleetCopy = new ArrayList<FleetMemberAPI>(fleet);
+        for (FleetMemberAPI f : fleet) {
+            // never transfer the player ship
+            if (f.getCaptain().isPlayer()) {
+                fleetCopy.remove(f);
+            }
+        }
+
+        if (fleetCopy.isEmpty()) {
             cancelledFleetMemberPicking();
             return;
         }
 
-        if (!handleTransferCost(CargoHelper.calculateShipUpkeep(fleet))) {
+        if (!handleTransferCost(CargoHelper.calculateShipUpkeep(fleetCopy))) {
             return;
         }
 
-        for (FleetMemberAPI f : fleet) {
-            // never transfer the flagship
-            if (f.getCaptain().isPlayer()) {
-                continue;
-            }
+        for (FleetMemberAPI f : fleetCopy) {
             sourceFleet.removeFleetMember(f);
             targetFleet.addFleetMember(f);
             plugin.appendText("\n- " + f.getShipName());
@@ -135,7 +140,8 @@ public class CourierHandler extends BasicHandler implements CargoPickerListener,
         }
 
         credits.subtract(cost);
-        plugin.addText("After paying the courier fee of " + fee + " you " + Misc.lcFirst(dialogTitle));
+        plugin.addText("After paying the fee of " + fee + " you "
+                + dialogTitle.replaceAll("Transfer", "transfer the following") + ":");
         return true;
     }
 }
