@@ -42,9 +42,9 @@ public class CourierHandler extends BasicHandler implements CargoPickerListener,
 
     @Override
     public void pickedFleetMembers(List<FleetMemberAPI> fleet) {
+        // filter out flagship
         List<FleetMemberAPI> fleetCopy = new ArrayList<FleetMemberAPI>(fleet);
         for (FleetMemberAPI f : fleet) {
-            // never transfer the player ship
             if (f.getCaptain().isPlayer()) {
                 fleetCopy.remove(f);
             }
@@ -73,6 +73,16 @@ public class CourierHandler extends BasicHandler implements CargoPickerListener,
 
     @Override
     public void pickedCargo(CargoAPI cargo) {
+        // filter invalid cargo
+        cargo.removeEmptyStacks();
+        for (CargoStackAPI c : cargo.getStacksCopy()) {
+            if (StorageHelper.get().isIllegalOnSubmarket(c, null)) {
+                // need to put it back where it was
+                cargo.removeStack(c);
+                sourceCargo.addFromStack(c);
+            }
+        }
+
         if (cargo.isEmpty()) {
             cancelledFleetMemberPicking();
             return;

@@ -1,8 +1,8 @@
 package stellics.campaign.econ;
 
 import com.fs.starfarer.api.campaign.CargoAPI;
+import com.fs.starfarer.api.campaign.CargoStackAPI;
 import com.fs.starfarer.api.campaign.CoreUIAPI;
-import com.fs.starfarer.api.campaign.SubmarketPlugin;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.submarkets.StoragePlugin;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -23,7 +23,18 @@ public class StorageSubmarket extends StoragePlugin {
     }
 
     @Override
-    public boolean isIllegalOnSubmarket(String commodityId, SubmarketPlugin.TransferAction action) {
+    public boolean isIllegalOnSubmarket(CargoStackAPI stack, TransferAction action) {
+        String commodityId = stack.getCommodityId();
+
+        return isIllegalOnSubmarket(commodityId, action);
+    }
+
+    @Override
+    public boolean isIllegalOnSubmarket(String commodityId, TransferAction action) {
+        if (commodityId.equals(Commodities.FUEL)) {
+            return true;
+        }
+
         if (commodityId.equals(Commodities.CREW)) {
             return true;
         }
