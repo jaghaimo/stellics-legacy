@@ -16,6 +16,7 @@ import org.lwjgl.input.Keyboard;
 
 import stellics.campaign.intel.BaseStellnetIntel;
 import stellics.filter.FilterManager;
+import stellics.helper.StorageHelper;
 
 public class StellnetDialogPlugin implements InteractionDialogPlugin {
 
@@ -176,6 +177,12 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
         lastOption = StellnetDialogOption.INIT;
         addOptions(StellnetDialogOption.BRANCH, StellnetDialogOption.COURIER, StellnetDialogOption.STAFF,
                 StellnetDialogOption.CARGO, StellnetDialogOption.SHIP, StellnetDialogOption.EXIT);
+
+        if (StorageHelper.get() == null) {
+            options.setEnabled(StellnetDialogOption.BRANCH, false);
+            options.setEnabled(StellnetDialogOption.COURIER, false);
+        }
+
         setEscShortcut(StellnetDialogOption.EXIT);
     }
 }
