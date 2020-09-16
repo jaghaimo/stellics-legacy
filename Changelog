@@ -1,3 +1,6 @@
+* Thu Sep 17 2020 - 0.11.1
+- Bugfix: Fix NPE crash on non-commodity transfer to the warehouse
+
 * Tue Sep 15 2020 - 0.11.0
 - Feature: Request a courier to transfer cargo/ships from/to your warehouse
 - Improvement: Remove initial storage fee (5000)

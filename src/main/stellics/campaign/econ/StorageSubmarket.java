@@ -31,15 +31,15 @@ public class StorageSubmarket extends StoragePlugin {
 
     @Override
     public boolean isIllegalOnSubmarket(String commodityId, TransferAction action) {
-        if (commodityId.equals(Commodities.FUEL)) {
+        if (Commodities.FUEL.equals(commodityId)) {
             return true;
         }
 
-        if (commodityId.equals(Commodities.CREW)) {
+        if (Commodities.CREW.equals(commodityId)) {
             return true;
         }
 
-        if (commodityId.equals(Commodities.MARINES)) {
+        if (Commodities.MARINES.equals(commodityId)) {
             return true;
         }
 
