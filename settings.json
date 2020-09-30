@@ -4,24 +4,24 @@
     "seedPrism": true,
 
     # Should the faction blacklist be considered?
-    # true: never consider blacklisted factions
-    # false: do not reject factions from blacklist
+    # true: never consider blacklisted factions, and
+    # false: do not reject factions from blacklist.
     "seedFactionsUseBlacklist": true,
 
     # Should the faction whitelists be considered?
-    # true: only consider whitelisted factions
-    # false: consider all factions
+    # true: only consider whitelisted factions, and
+    # false: consider all factions.
     "seedFactionsUseWhitelist": true,
 
-    # Minimal size for planet to have Branch and Storage put on
+    # Minimal size for planet to have Branch and Storage put on.
     "seedFactionsMinimalSize": 4,
 
-    # Probability of an eligibile market beeing seeded:
-    # 0.6 means 60% of eligibile markets will spawn with Stellar Logistics presence
+    # Probability of an eligible market being seeded:
+    # 0.6 means 60% of eligible markets will have Stellar Logistics presence.
     "seedFactionsProbability": 1,
 
     # Do not seed on markets with that many submarkets.
     # Avoids Storage overflowing to next line.
-    # Value will depend on your screen size.
+    # Maximal value will depend on your screen resolution.
     "seedFactionsMaxSubmarkets": 4
 }

@@ -1,8 +1,8 @@
 {
-	"StellNET":{
-	    "name":"StellNET",
-		"width":118,
-		"putFirst":true,
-		"sort":51,
-	}
+  "StellNET": {
+    "name": "StellNET",
+    "width": 118,
+    "putFirst": true,
+    "sort": 51
+  }
 }

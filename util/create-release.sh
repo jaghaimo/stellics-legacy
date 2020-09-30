@@ -9,7 +9,7 @@ RELEASE=$MOD-$VERSION
 rm -rf $MOD
 mkdir $MOD
 cp -R data/ graphics/ $MOD/
-cp mod_info.json ${MOD}.jar ${MOD}_settings.json ${MOD}.version $MOD/
+cp mod_info.json ${MOD}.jar settings.json ${MOD}.version $MOD/
 
 rm -f $RELEASE.zip
 zip -r $RELEASE.zip $MOD

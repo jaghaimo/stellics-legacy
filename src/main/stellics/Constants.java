@@ -15,6 +15,5 @@ public class Constants {
     public final static String FIGHTER = "fighter";
 
     // intel tags
-    public final static String TAG_DARKNET = "DarkNET";
     public final static String TAG_STELLNET = "StellNET";
 }

@@ -11,33 +11,42 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import stellics.helper.StorageHelper;
+import stellics.settings.Settings;
 
 public class StellicsModPlugin extends BaseModPlugin {
 
-    private final String SETTINGS_FILE = "stellics_settings.json";
+    private final String FACTION_BLACKLIST = "data/config/stellics/faction_blacklist.csv";
+    private final String FACTION_WHITELIST = "data/config/stellics/faction_whitelist.csv";
+    private final String SETTINGS_FILE = "settings.json";
 
-    private JSONObject settings;
-    private StellicsSettings stellicsSettings;
+    private Settings settings;
 
     @Override
     public void onApplicationLoad() throws Exception {
-        settings = Global.getSettings().loadJSON(SETTINGS_FILE);
+        JSONObject rawSettings;
+
+        try {
+            rawSettings = Global.getSettings().loadJSON(SETTINGS_FILE);
+        } catch (Exception exception) {
+            // use default settings
+            rawSettings = new JSONObject();
+        }
+
+        settings = new Settings(rawSettings, loadFactionList(FACTION_BLACKLIST), loadFactionList(FACTION_WHITELIST));
     }
 
     @Override
     public void onNewGameAfterEconomyLoad() {
-        stellicsSettings = new StellicsSettings(settings, loadFactionList("data/config/stellics/faction_blacklist.csv"),
-                loadFactionList("data/config/stellics/faction_whitelist.csv"));
-
         seedPrism();
         seedFactions();
     }
 
     @Override
     public void onGameLoad(boolean newGame) {
+        // add storage fee listener (monthly expense)
         StorageHelper.registerFeeListener();
 
-        // add skills
+        // add stellnet skill
         Global.getSector().getCharacterData().addAbility(Constants.ABILITY_STELLNET);
     }
 
@@ -62,15 +71,15 @@ public class StellicsModPlugin extends BaseModPlugin {
         int marketSize = market.getSize();
         int submarketCount = market.getSubmarketsCopy().size();
 
-        if (!stellicsSettings.canSeed(faction)) {
+        if (!settings.canSeed(faction)) {
             return false;
         }
 
-        if (stellicsSettings.getSeedMinimalSize() > marketSize) {
+        if (settings.getFactionMinSize() > marketSize) {
             return false;
         }
 
-        if (stellicsSettings.getSeedMaxSubmarkets() < submarketCount) {
+        if (settings.getFactionMaxSubmarkets() < submarketCount) {
             return false;
         }
 
@@ -81,7 +90,7 @@ public class StellicsModPlugin extends BaseModPlugin {
         // spread branches and storages across the galaxy
         for (MarketAPI market : Global.getSector().getEconomy().getMarketsCopy()) {
             if (canSeed(market)) {
-                double seedProbability = stellicsSettings.getSeedProbability();
+                double seedProbability = settings.getFactionProbability();
                 seedMarket(market, seedProbability);
             }
         }
@@ -102,7 +111,7 @@ public class StellicsModPlugin extends BaseModPlugin {
         }
 
         // we have a Nexerelin game with Prism Freeport enabled, and we want to use it
-        if (stellicsSettings.isSeedPrism() && !StorageHelper.has(market)) {
+        if (settings.hasPrism() && !StorageHelper.has(market)) {
             seedMarket(market, 1);
         }
     }

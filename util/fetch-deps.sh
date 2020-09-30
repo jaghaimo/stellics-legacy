@@ -6,7 +6,7 @@ set -eu
 if [ ! -f "libs/lw_Console.jar" ]; then
     tmp_dir=$(mktemp -d -t libs-cc-XXXXXXXXXX)
     pushd $tmp_dir
-    wget https://github.com/LazyWizard/console-commands/releases/download/dev-2020-07-12/Console_Commands_3.0_dev_2020-07-12.zip
+    wget https://github.com/LazyWizard/console-commands/releases/download/dev-2020-08-28/Console_Commands_3.0_dev_2020-08-28.zip
     unzip *
     popd
     cp $tmp_dir/*/jars/lw_Console.jar libs/
