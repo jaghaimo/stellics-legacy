@@ -1,5 +1,6 @@
 package stellics.campaign.intel;
 
+import java.awt.Color;
 import java.util.Set;
 
 import com.fs.starfarer.api.Global;
@@ -13,7 +14,7 @@ import com.fs.starfarer.api.util.Misc;
 
 import stellics.Constants;
 
-public class StellnetIntel extends BaseIntelPlugin implements BaseStellnetIntel {
+public class StellnetIntel extends BaseIntelPlugin implements TextPanelAwareIntel {
 
     private FactionAPI faction;
     private SectorEntityToken sectorEntityToken;
@@ -40,7 +41,7 @@ public class StellnetIntel extends BaseIntelPlugin implements BaseStellnetIntel 
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
         info.addImage(faction.getLogo(), width, 128, 10f);
-        intel.createSmallDescription(info);
+        intel.createSmallDescription(this, info);
     }
 
     @Override
@@ -70,6 +71,22 @@ public class StellnetIntel extends BaseIntelPlugin implements BaseStellnetIntel 
         tags.add(Constants.TAG_STELLNET);
 
         return tags;
+    }
+
+    public void addDays(TooltipMakerAPI info, String after, float days, Color c) {
+        super.addDays(info, after, days, c);
+    }
+
+    public void bullet(TooltipMakerAPI info) {
+        super.bullet(info);
+    }
+
+    public Color getBulletColorForMode(ListInfoMode mode) {
+        return super.getBulletColorForMode(mode);
+    }
+
+    public void unindent(TooltipMakerAPI info) {
+        super.unindent(info);
     }
 
     @Override

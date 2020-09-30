@@ -14,7 +14,7 @@ import com.fs.starfarer.api.util.Misc;
 
 import org.lwjgl.input.Keyboard;
 
-import stellics.campaign.intel.BaseStellnetIntel;
+import stellics.campaign.intel.TextPanelAwareIntel;
 import stellics.filter.FilterManager;
 import stellics.helper.StorageHelper;
 
@@ -136,7 +136,7 @@ public class StellnetDialogPlugin implements InteractionDialogPlugin {
         }
     }
 
-    public void addIntel(BaseStellnetIntel intel) {
+    public void addIntel(TextPanelAwareIntel intel) {
         intel.updateTextPanel(textPanel);
     }
 

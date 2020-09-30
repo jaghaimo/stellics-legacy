@@ -5,21 +5,21 @@ import java.util.List;
 
 import com.fs.starfarer.api.campaign.TextPanelAPI;
 
-public class BatchStellnetIntel implements BaseStellnetIntel {
+public class BatchStellnetIntel implements TextPanelAwareIntel {
 
-    private List<BaseStellnetIntel> intels;
+    private List<TextPanelAwareIntel> intels;
 
     public BatchStellnetIntel() {
-        intels = new ArrayList<BaseStellnetIntel>();
+        intels = new ArrayList<TextPanelAwareIntel>();
     }
 
-    public void add(BaseStellnetIntel intel) {
+    public void add(TextPanelAwareIntel intel) {
         intels.add(intel);
     }
 
     @Override
     public void updateTextPanel(TextPanelAPI textPanel) {
-        for (BaseStellnetIntel i : intels) {
+        for (TextPanelAwareIntel i : intels) {
             i.updateTextPanel(textPanel);
         }
     }

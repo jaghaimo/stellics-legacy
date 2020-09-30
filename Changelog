@@ -1,3 +1,6 @@
+* unreleased - 0.12.0
+- Improvement: Better intel info display (use actual bullet points)
+
 * Thu Sep 17 2020 - 0.11.1
 - Bugfix: Fix NPE crash on non-commodity transfer to the warehouse
 

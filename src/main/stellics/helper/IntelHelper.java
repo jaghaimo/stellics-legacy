@@ -9,7 +9,7 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 
-import stellics.campaign.intel.BaseStellnetIntel;
+import stellics.campaign.intel.TextPanelAwareIntel;
 import stellics.campaign.intel.BatchStellnetIntel;
 import stellics.campaign.intel.EmptyIntel;
 import stellics.campaign.intel.IntelEntity;
@@ -27,7 +27,7 @@ import stellics.filter.SubmarketHasShip;
 
 public class IntelHelper {
 
-    public static BaseStellnetIntel getFleetIntel(FilterManager filterManager, List<FleetMemberAPI> fleet) {
+    public static TextPanelAwareIntel getFleetIntel(FilterManager filterManager, List<FleetMemberAPI> fleet) {
         if (fleet.isEmpty()) {
             return new EmptyIntel("Query cancelled - no ships selected.");
         }
@@ -46,7 +46,7 @@ public class IntelHelper {
             try {
                 MarketAPI market = submarket.getMarket();
                 IntelEntity entity = new Ship(shipName, ship, market);
-                BaseStellnetIntel intel = new StellnetIntel(market.getFaction(), market.getPrimaryEntity(), entity);
+                TextPanelAwareIntel intel = new StellnetIntel(market.getFaction(), market.getPrimaryEntity(), entity);
                 batchStellnetIntel.add(intel);
             } catch (Exception exception) {
             }
@@ -55,7 +55,7 @@ public class IntelHelper {
         return batchStellnetIntel;
     }
 
-    public static BaseStellnetIntel getCargoIntel(FilterManager filterManager, CargoAPI cargo) {
+    public static TextPanelAwareIntel getCargoIntel(FilterManager filterManager, CargoAPI cargo) {
         if (cargo.isEmpty()) {
             return new EmptyIntel("Query cancelled - no items selected.");
         }
@@ -75,7 +75,7 @@ public class IntelHelper {
             try {
                 MarketAPI market = submarket.getMarket();
                 IntelEntity entity = new Cargo(cargoName, market);
-                BaseStellnetIntel intel = new StellnetIntel(market.getFaction(), market.getPrimaryEntity(), entity);
+                TextPanelAwareIntel intel = new StellnetIntel(market.getFaction(), market.getPrimaryEntity(), entity);
                 batchStellnetIntel.add(intel);
             } catch (Exception exception) {
             }
@@ -84,7 +84,7 @@ public class IntelHelper {
         return batchStellnetIntel;
     }
 
-    public static BaseStellnetIntel getIndustryIntel(List<MarketFilter> filters, String industryId) {
+    public static TextPanelAwareIntel getIndustryIntel(List<MarketFilter> filters, String industryId) {
         try {
             List<MarketAPI> markets = EconomyHelper.getMarkets(filters);
             MarketAPI market = MarketHelper.getNearestMarket(markets);
@@ -100,7 +100,7 @@ public class IntelHelper {
         }
     }
 
-    public static BaseStellnetIntel getAdministratorIntel(List<MarketFilter> filters) {
+    public static TextPanelAwareIntel getAdministratorIntel(List<MarketFilter> filters) {
         try {
             List<MarketAPI> markets = EconomyHelper.getMarkets(filters);
             MarketAPI market = MarketHelper.getNearestMarket(markets);
@@ -112,7 +112,7 @@ public class IntelHelper {
         }
     }
 
-    public static BaseStellnetIntel getOfficerIntel(List<MarketFilter> filters, String personality) {
+    public static TextPanelAwareIntel getOfficerIntel(List<MarketFilter> filters, String personality) {
         try {
             List<MarketAPI> markets = EconomyHelper.getMarkets(filters);
             MarketAPI market = MarketHelper.getNearestMarket(markets);

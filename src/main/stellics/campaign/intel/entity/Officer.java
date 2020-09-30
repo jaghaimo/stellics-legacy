@@ -10,6 +10,8 @@ import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Ranks;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 
+import stellics.campaign.intel.StellnetIntel;
+
 public class Officer extends Stellnet {
 
     private List<String> officers = new ArrayList<String>();
@@ -30,18 +32,21 @@ public class Officer extends Stellnet {
     }
 
     @Override
-    public void createSmallDescription(TooltipMakerAPI info) {
-        super.createSmallDescription(info);
+    public void createSmallDescription(StellnetIntel plugin, TooltipMakerAPI info) {
+        super.createSmallDescription(plugin, info);
 
         if (officers.isEmpty()) {
             return;
         }
 
         info.addPara("This market has the following officers available for hire:", 10f);
+        plugin.bullet(info);
 
         for (String officer : officers) {
-            info.addPara(" - " + officer, 3f);
+            info.addPara(officer, 3f);
         }
+
+        plugin.unindent(info);
     }
 
     private void addOfficers() {

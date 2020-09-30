@@ -8,6 +8,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
 import stellics.campaign.intel.IntelEntity;
+import stellics.campaign.intel.StellnetIntel;
 
 public class Stellnet implements IntelEntity {
 
@@ -35,7 +36,7 @@ public class Stellnet implements IntelEntity {
         return "Nearest " + entity + " can be found on " + market.getName() + getStarSystemName(" in ");
     }
 
-    public void createSmallDescription(TooltipMakerAPI info) {
+    public void createSmallDescription(StellnetIntel plugin, TooltipMakerAPI info) {
         LabelAPI label1 = info.addPara(getIntelInfo() + ".", 10f);
         label1.setHighlight(entity, market.getName(), getStarSystemName(""));
         label1.setHighlightColor(Misc.getHighlightColor());

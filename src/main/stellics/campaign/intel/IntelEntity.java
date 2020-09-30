@@ -14,5 +14,5 @@ public interface IntelEntity {
 
     public String getStarSystemName(String prefix);
 
-    public void createSmallDescription(TooltipMakerAPI info);
+    public void createSmallDescription(StellnetIntel plugin, TooltipMakerAPI info);
 }

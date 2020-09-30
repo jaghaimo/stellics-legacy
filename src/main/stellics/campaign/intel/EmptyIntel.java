@@ -2,7 +2,7 @@ package stellics.campaign.intel;
 
 import com.fs.starfarer.api.campaign.TextPanelAPI;
 
-public class EmptyIntel implements BaseStellnetIntel {
+public class EmptyIntel implements TextPanelAwareIntel {
 
     private String intelInfo;
 
